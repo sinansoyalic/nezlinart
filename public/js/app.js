@@ -170,8 +170,77 @@ const PRICING_OPTIONS = [
   { id: 'charm', label: 'Charm', hasCustomInput: true }
 ];
 
-// Document Ready
-document.addEventListener('DOMContentLoaded', async () => {
+// ==========================================
+// 0. SECURE ADMIN PASSWORD PROTECTION
+// ==========================================
+function togglePasswordVisibility() {
+  const input = document.getElementById('admin-password-input');
+  const icon = document.getElementById('password-eye-icon');
+  if (input) {
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.className = 'fa-regular fa-eye-slash';
+    } else {
+      input.type = 'password';
+      icon.className = 'fa-regular fa-eye';
+    }
+  }
+}
+
+async function handleAdminLogin() {
+  const input = document.getElementById('admin-password-input');
+  const errorMsg = document.getElementById('login-error-msg');
+  const submitBtn = document.getElementById('btn-login-submit');
+  
+  if (!input) return;
+  const password = input.value;
+  
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Giriş Yapılıyor...</span>';
+  }
+  if (errorMsg) errorMsg.style.display = 'none';
+  
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      sessionStorage.setItem('nfs_auth_token', data.token);
+      
+      const overlay = document.getElementById('admin-login-overlay');
+      if (overlay) {
+        overlay.classList.add('fade-out');
+        setTimeout(() => {
+          overlay.style.display = 'none';
+        }, 500);
+      }
+      
+      // Load application
+      await initializeApp();
+    } else {
+      throw new Error('Hatalı şifre.');
+    }
+  } catch (err) {
+    console.error(err);
+    if (errorMsg) errorMsg.style.display = 'flex';
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>Sisteme Giriş Yap</span>';
+    }
+  }
+}
+
+async function initializeApp() {
   initNavigation();
   initFilters();
   await loadConfig();
@@ -179,6 +248,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadCustomers();
   initSyncController();
   initHistoryController();
+}
+
+// Document Ready
+document.addEventListener('DOMContentLoaded', async () => {
+  const authToken = sessionStorage.getItem('nfs_auth_token');
+  if (authToken) {
+    const overlay = document.getElementById('admin-login-overlay');
+    if (overlay) overlay.style.display = 'none';
+    await initializeApp();
+  } else {
+    const input = document.getElementById('admin-password-input');
+    if (input) input.focus();
+  }
 });
 
 // ==========================================

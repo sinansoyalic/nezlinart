@@ -7,7 +7,9 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "@supabase/supabase-js": "^2.106.2",
+    "express": "^4.19.2",
+    "serverless-http": "^4.0.0"
   },
   "author": "Antigravity",
   "license": "ISC"

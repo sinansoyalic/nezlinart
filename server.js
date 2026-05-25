@@ -97,43 +97,231 @@ function slugToCode(url) {
 }
 
 // ==========================================
+// SUPABASE DATABASE CORE LAYER
+// ==========================================
+const { createClient } = require('@supabase/supabase-js');
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
+
+// We only activate Supabase mode if credentials are set in environment variables
+const isCloudMode = !!(supabaseUrl && supabaseKey);
+const supabase = isCloudMode ? createClient(supabaseUrl, supabaseKey) : null;
+
+if (isCloudMode) {
+  console.log('[Sistem] Bulut Modu Aktif (Supabase Bağlantısı Kuruldu).');
+} else {
+  console.log('[Sistem] Yerel Mod Aktif (JSON Dosya Tabanlı Depolama Kullanılıyor).');
+}
+
+// 1. Read Config
+async function getConfig() {
+  if (isCloudMode) {
+    try {
+      const { data, error } = await supabase.from('nfs_config').select('*');
+      if (error) throw error;
+      if (data && data.length > 0) {
+        const obj = {};
+        data.forEach(row => {
+          try {
+            obj[row.key] = JSON.parse(row.value);
+          } catch (e) {
+            const numVal = parseFloat(row.value);
+            obj[row.key] = isNaN(numVal) ? row.value : numVal;
+          }
+        });
+        return obj;
+      }
+    } catch (err) {
+      console.error('[Supabase Error] Failed to read nfs_config:', err);
+    }
+  }
+  
+  return readJsonFile(CONFIG_FILE, {
+    kargo: 50, tips: 50, base: 40, top: 40,
+    kalici1: 100, kalici2: 120, kalici3: 150,
+    nailart: 80, ombre: 100, french: 90, charm: 30,
+    karOrani: 40, toleransLimit: 10, yuvarlamaTipi: 'no'
+  });
+}
+
+// 2. Save Config
+async function saveConfig(config) {
+  if (isCloudMode) {
+    try {
+      const rows = Object.entries(config).map(([key, val]) => ({
+        key,
+        value: typeof val === 'object' ? JSON.stringify(val) : String(val)
+      }));
+      
+      const { error } = await supabase.from('nfs_config').upsert(rows);
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.error('[Supabase Error] Failed to save nfs_config:', err);
+      return false;
+    }
+  }
+  return writeJsonFile(CONFIG_FILE, config);
+}
+
+// 3. Read Products
+async function getProducts() {
+  if (isCloudMode) {
+    try {
+      const { data, error } = await supabase.from('nfs_products').select('*');
+      if (error) throw error;
+      return data || [];
+    } catch (err) {
+      console.error('[Supabase Error] Failed to read nfs_products:', err);
+    }
+  }
+  return readJsonFile(PRODUCTS_FILE, []);
+}
+
+// 4. Save Products
+async function saveProducts(products) {
+  if (isCloudMode) {
+    try {
+      if (products.length === 0) return true;
+      const { error } = await supabase.from('nfs_products').upsert(products);
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.error('[Supabase Error] Failed to save nfs_products:', err);
+      return false;
+    }
+  }
+  return writeJsonFile(PRODUCTS_FILE, products);
+}
+
+// 5. Read User Data
+async function getUserData() {
+  if (isCloudMode) {
+    try {
+      const { data, error } = await supabase.from('nfs_user_data').select('*');
+      if (error) throw error;
+      
+      const obj = {};
+      if (data) {
+        data.forEach(row => {
+          obj[row.code] = {
+            checkedOptions: row.checkedOptions || {},
+            customPrices: row.customPrices || {},
+            notes: row.notes || ''
+          };
+        });
+      }
+      return obj;
+    } catch (err) {
+      console.error('[Supabase Error] Failed to read nfs_user_data:', err);
+    }
+  }
+  return readJsonFile(USER_DATA_FILE, {});
+}
+
+// 6. Save Single User Product Selection
+async function saveSingleProductData(code, pricingData) {
+  if (isCloudMode) {
+    try {
+      const row = {
+        code,
+        checkedOptions: pricingData.checkedOptions || {},
+        customPrices: pricingData.customPrices || {},
+        notes: pricingData.notes || ''
+      };
+      const { error } = await supabase.from('nfs_user_data').upsert(row);
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.error('[Supabase Error] Failed to save nfs_user_data row:', err);
+      return false;
+    }
+  }
+  
+  const userData = readJsonFile(USER_DATA_FILE, {});
+  userData[code] = pricingData;
+  return writeJsonFile(USER_DATA_FILE, userData);
+}
+
+// 7. Read Customers
+async function getCustomers() {
+  if (isCloudMode) {
+    try {
+      const { data, error } = await supabase.from('nfs_customers').select('*');
+      if (error) throw error;
+      return data || [];
+    } catch (err) {
+      console.error('[Supabase Error] Failed to read nfs_customers:', err);
+    }
+  }
+  return readJsonFile(CUSTOMERS_FILE, []);
+}
+
+// 8. Save Customer
+async function saveCustomer(customer) {
+  if (isCloudMode) {
+    try {
+      const { error } = await supabase.from('nfs_customers').upsert(customer);
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.error('[Supabase Error] Failed to save nfs_customers:', err);
+      return false;
+    }
+  }
+  
+  const customers = readJsonFile(CUSTOMERS_FILE, []);
+  const idx = customers.findIndex(c => c.id === customer.id);
+  if (idx !== -1) {
+    customers[idx] = { ...customers[idx], ...customer };
+  } else {
+    customers.push(customer);
+  }
+  return writeJsonFile(CUSTOMERS_FILE, customers);
+}
+
+// 9. Delete Customer
+async function deleteCustomer(id) {
+  if (isCloudMode) {
+    try {
+      const { error } = await supabase.from('nfs_customers').delete().eq('id', id);
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.error('[Supabase Error] Failed to delete nfs_customers:', err);
+      return false;
+    }
+  }
+  
+  const customers = readJsonFile(CUSTOMERS_FILE, []);
+  const filtered = customers.filter(c => c.id !== id);
+  if (customers.length === filtered.length) return false;
+  return writeJsonFile(CUSTOMERS_FILE, filtered);
+}
+
+// ==========================================
 // REST API ROUTES
 // ==========================================
 
 // Müşteri CRM & Harita API Rotaları (CRUD)
 // 1. Tüm müşterileri getir
-app.get('/api/customers', (req, res) => {
-  const customers = readJsonFile(CUSTOMERS_FILE, []);
+app.get('/api/customers', async (req, res) => {
+  const customers = await getCustomers();
   res.json(customers);
 });
 
 // 2. Müşteri ekle veya güncelle
-app.post('/api/customers', (req, res) => {
+app.post('/api/customers', async (req, res) => {
   const customer = req.body;
-  const customers = readJsonFile(CUSTOMERS_FILE, []);
-
+  
   if (!customer.id) {
-    // Yeni müşteri oluştur
     customer.id = 'c-' + Date.now();
-    // Parmak beden ölçüleri eksikse varsayılan 10 mm tanımla
     if (!customer.sizes) {
       customer.sizes = { thumb: 10, index: 10, middle: 10, ring: 10, pinky: 10 };
     }
-    customers.push(customer);
-  } else {
-    // Mevcut müşteriyi güncelle
-    const idx = customers.findIndex(c => c.id === customer.id);
-    if (idx !== -1) {
-      customers[idx] = {
-        ...customers[idx],
-        ...customer
-      };
-    } else {
-      customers.push(customer);
-    }
   }
 
-  const success = writeJsonFile(CUSTOMERS_FILE, customers);
+  const success = await saveCustomer(customer);
   if (success) {
     res.json({ success: true, customer });
   } else {
@@ -142,16 +330,9 @@ app.post('/api/customers', (req, res) => {
 });
 
 // 3. Müşteri sil
-app.delete('/api/customers/:id', (req, res) => {
+app.delete('/api/customers/:id', async (req, res) => {
   const { id } = req.params;
-  const customers = readJsonFile(CUSTOMERS_FILE, []);
-  const filtered = customers.filter(c => c.id !== id);
-
-  if (customers.length === filtered.length) {
-    return res.status(404).json({ error: 'Müşteri bulunamadı.' });
-  }
-
-  const success = writeJsonFile(CUSTOMERS_FILE, filtered);
+  const success = await deleteCustomer(id);
   if (success) {
     res.json({ success: true });
   } else {
@@ -160,28 +341,13 @@ app.delete('/api/customers/:id', (req, res) => {
 });
 
 // 4. Get default prices (SoT)
-app.get('/api/config', (req, res) => {
-  const config = readJsonFile(CONFIG_FILE, {
-    kargo: 50, tips: 50, base: 40, top: 40,
-    kalici1: 100, kalici2: 120, kalici3: 150,
-    nailart: 80, ombre: 100, french: 90, charm: 30,
-    karOrani: 40, toleransLimit: 10, yuvarlamaTipi: 'no'
-  });
-  
-  // Ensure new fields exist even if file already existed with old schema
-  let updated = false;
-  if (config.karOrani === undefined) { config.karOrani = 40; updated = true; }
-  if (config.toleransLimit === undefined) { config.toleransLimit = 10; updated = true; }
-  if (config.yuvarlamaTipi === undefined) { config.yuvarlamaTipi = 'no'; updated = true; }
-  if (updated) {
-    writeJsonFile(CONFIG_FILE, config);
-  }
-  
+app.get('/api/config', async (req, res) => {
+  const config = await getConfig();
   res.json(config);
 });
 
 // 2. Save default prices (SoT)
-app.post('/api/config', (req, res) => {
+app.post('/api/config', async (req, res) => {
   const newConfig = req.body;
   // Convert values to numbers except yuvarlamaTipi which is string
   for (const key in newConfig) {
@@ -191,7 +357,7 @@ app.post('/api/config', (req, res) => {
       newConfig[key] = parseFloat(newConfig[key]) || 0;
     }
   }
-  const success = writeJsonFile(CONFIG_FILE, newConfig);
+  const success = await saveConfig(newConfig);
   if (success) {
     res.json({ success: true, config: newConfig });
   } else {
@@ -200,9 +366,9 @@ app.post('/api/config', (req, res) => {
 });
 
 // 3. Get products merged with user pricing selections
-app.get('/api/products', (req, res) => {
-  const products = readJsonFile(PRODUCTS_FILE, []);
-  const userData = readJsonFile(USER_DATA_FILE, {});
+app.get('/api/products', async (req, res) => {
+  const products = await getProducts();
+  const userData = await getUserData();
 
   const merged = products.map(product => {
     const userState = userData[product.code] || {
@@ -223,22 +389,25 @@ app.get('/api/products', (req, res) => {
 });
 
 // 4. Save user pricing state for a specific product code
-app.post('/api/products/:code', (req, res) => {
+app.post('/api/products/:code', async (req, res) => {
   const { code } = req.params;
   const pricingData = req.body; // Expects { checkedOptions, customPrices, notes }
-
-  const userData = readJsonFile(USER_DATA_FILE, {});
-  userData[code] = {
-    checkedOptions: pricingData.checkedOptions || {},
-    customPrices: pricingData.customPrices || {},
-    notes: pricingData.notes || ''
-  };
-
-  const success = writeJsonFile(USER_DATA_FILE, userData);
+  const success = await saveSingleProductData(code, pricingData);
   if (success) {
     res.json({ success: true });
   } else {
     res.status(500).json({ error: 'Ürün değişiklikleri kaydedilemedi.' });
+  }
+});
+
+// 4.1. Admin Password verification
+app.post('/api/login', (req, res) => {
+  const { password } = req.body;
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'nezlinart123';
+  if (password === ADMIN_PASSWORD) {
+    res.json({ success: true, token: 'auth-token-' + ADMIN_PASSWORD.slice(0, 4) });
+  } else {
+    res.status(401).json({ success: false, error: 'Hatalı şifre. Lütfen tekrar deneyin.' });
   }
 });
 
@@ -306,7 +475,7 @@ async function runScraper() {
     }
 
     // Load existing local products database
-    const existingProducts = readJsonFile(PRODUCTS_FILE, []);
+    const existingProducts = await getProducts();
     const existingProductsMap = new Map(existingProducts.map(p => [p.url, p]));
 
     // Eşleştir & Karşılaştır: Compare lastmod dates to find only new or updated products
@@ -512,9 +681,9 @@ async function runScraper() {
 
     // Save final combined lists to database
     if (finalProductsList.length > 0) {
-      writeJsonFile(PRODUCTS_FILE, finalProductsList);
+      await saveProducts(finalProductsList);
       crawlStatus.lastSync = new Date().toLocaleString('tr-TR');
-      console.log(`[Scraper] Smart sync complete. Local products: ${finalProductsList.length}`);
+      console.log(`[Scraper] Smart sync complete. Products: ${finalProductsList.length}`);
     } else {
       throw new Error('Hiçbir ürün bilgisi çekilemedi.');
     }
@@ -527,10 +696,14 @@ async function runScraper() {
   }
 }
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`===========================================================`);
-  console.log(`  Nezlin Fiyatlandırma Sistemi (NFS) - Sunucu Başlatıldı!`);
-  console.log(`  Adres: http://localhost:${PORT}`);
-  console.log(`===========================================================`);
-});
+// Start Server conditionally
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`===========================================================`);
+    console.log(`  Nezlin Fiyatlandırma Sistemi (NFS) - Sunucu Başlatıldı!`);
+    console.log(`  Adres: http://localhost:${PORT}`);
+    console.log(`===========================================================`);
+  });
+}
+
+module.exports = app;
