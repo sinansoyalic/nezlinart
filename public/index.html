@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nezlin Fiyatlandırma Sistemi (NFS)</title>
+  <!-- Google Fonts: Montserrat for Premium Elegance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Background Blur Orbs for Luxury Ambient Layout -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="glow-orb orb-3"></div>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">N</div>
+        <div class="brand-text">
+          <h1>NFS</h1>
+          <p>Pricing Engine</p>
+        </div>
+      </div>
+      
+      <nav class="nav-menu">
+        <a href="#" class="nav-item active" data-tab="pricing">
+          <i class="fa-solid fa-tags"></i>
+          <span>Fiyatlandırma</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="sot">
+          <i class="fa-solid fa-sliders"></i>
+          <span>Varsayılanlar (SoT)</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="sync">
+          <i class="fa-solid fa-rotate"></i>
+          <span>Veri Eşitleme</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="map">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span>Müşteri Haritası</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="customers">
+          <i class="fa-solid fa-users-gear"></i>
+          <span>Müşteri Detayları</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sync-badge">
+          <span class="pulse-dot"></span>
+          <span id="last-sync-time">Veri çekilmedi</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title">
+          <h2>Nezlin Fiyatlandırma Sistemi <span class="badge">v1.0</span></h2>
+          <p>nezlincollection.com için localhost yönetim paneli</p>
+        </div>
+        
+        <!-- Live Crawler Button in Header -->
+        <div class="header-actions">
+          <div class="history-controls">
+            <button id="undo-btn" class="btn-history" title="Geri Al (Ctrl+Z)" disabled>
+              <i class="fa-solid fa-arrow-rotate-left"></i>
+            </button>
+            <button id="redo-btn" class="btn-history" title="Yinele (Ctrl+Y)" disabled>
+              <i class="fa-solid fa-arrow-rotate-right"></i>
+            </button>
+          </div>
+          <button id="quick-sync-btn" class="btn btn-primary">
+            <i class="fa-solid fa-cloud-arrow-down"></i>
+            <span>Veri Çek</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Active View: Pricing Workspace -->
+      <section id="view-pricing" class="view-panel active">
+        
+        <!-- Filters Panel -->
+        <div class="filter-card">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search-input" placeholder="Ürün adı veya stok kodu ile ara...">
+          </div>
+          
+          <div class="select-box">
+            <i class="fa-solid fa-filter"></i>
+            <select id="category-filter">
+              <option value="all">Tüm Kategoriler</option>
+            </select>
+          </div>
+          
+          <div class="select-box">
+            <i class="fa-solid fa-arrow-down-wide-short"></i>
+            <select id="sort-order">
+              <option value="default">Varsayılan (NC > GS > TA)</option>
+              <option value="name-asc">Ürün Adı (A-Z)</option>
+              <option value="name-desc">Ürün Adı (Z-A)</option>
+              <option value="price-asc">Fiyat (En Düşük)</option>
+              <option value="price-desc">Fiyat (En Yüksek)</option>
+            </select>
+          </div>
+          
+          <div class="checkbox-toggle">
+            <label class="switch">
+              <input type="checkbox" id="mismatch-filter">
+              <span class="slider"></span>
+            </label>
+            <span>Sadece Uyuşmazlıkları Göster</span>
+          </div>
+          
+          <div class="results-counter">
+            <span id="filtered-count">0</span> / <span id="total-count">0</span> Ürün
+          </div>
+        </div>
+
+        <!-- Dynamic Product Grid -->
+        <div class="product-grid" id="product-list-container">
+          <!-- Loading State Spinner -->
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Ürün veritabanı yükleniyor...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active View: Source of Truth (SoT) Default Config Settings -->
+      <section id="view-sot" class="view-panel">
+        <div class="settings-container">
+          <div class="settings-card">
+            <div class="card-header">
+              <i class="fa-solid fa-sliders"></i>
+              <h3>Varsayılan Modüler Fiyat Ayarları (SoT)</h3>
+            </div>
+            
+            <p class="settings-desc">
+              Bu sayfadaki fiyatlar sistemin <strong>Temel Doğruluğudur (Source of Truth - SoT)</strong>. 
+              Ürünlerin modüler seçenekleri işaretlendiğinde, aşağıda belirttiğiniz varsayılan fiyatlar otomatik olarak işlenir. 
+              İstediğiniz zaman değiştirebilirsiniz; yaptığınız değişiklikler anında kaydedilir ve tüm ürünlerin hesaplamalarında güncellenir.
+            </p>
+
+            <form id="sot-form" class="sot-grid-form">
+              <!-- Form elements will be populated dynamically -->
+              <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Ayarlar yükleniyor...</p>
+              </div>
+            </form>
+
+            <div class="form-actions">
+              <button type="button" id="save-sot-btn" class="btn btn-success">
+                <i class="fa-solid fa-floppy-disk"></i> Varsayılan Fiyatları Kaydet
+              </button>
+              <span id="sot-save-status" class="save-status"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active View: Scraping & Sync Logs status -->
+      <section id="view-sync" class="view-panel">
+        <div class="sync-container">
+          <div class="sync-status-card">
+            <div class="card-header">
+              <i class="fa-solid fa-rotate"></i>
+              <h3>Canlı Veri Eşitleme Paneli</h3>
+            </div>
+            
+            <div class="sync-info-box">
+              <div class="sync-info-item">
+                <span class="label">Sistem Durumu:</span>
+                <span class="value" id="sync-status-badge"><span class="badge badge-success">Bağlı</span></span>
+              </div>
+              <div class="sync-info-item">
+                <span class="label">Toplam Kayıtlı Ürün:</span>
+                <span class="value" id="sync-total-count">0 Ürün</span>
+              </div>
+              <div class="sync-info-item">
+                <span class="label">Son Veri Çekme Zamanı:</span>
+                <span class="value" id="sync-last-time">Veri çekilmedi</span>
+              </div>
+            </div>
+
+            <div class="sync-actions-block">
+              <button id="trigger-sync-btn" class="btn btn-primary btn-large">
+                <i class="fa-solid fa-cloud-arrow-down"></i> nezlincollection.com Sitemden Veri Çek
+              </button>
+              
+              <div class="sync-progress-bar-container" id="sync-progress-container" style="display: none;">
+                <div class="progress-info">
+                  <span id="sync-progress-text">Hazırlanıyor...</span>
+                  <span id="sync-progress-percentage">0%</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" id="sync-progress-fill" style="width: 0%;"></div>
+                </div>
+                <div class="progress-subtext" id="sync-progress-subtext"></div>
+              </div>
+            </div>
+
+            <div class="scraper-logs-box">
+              <h4>Veri Çekme Günlüğü (Logs)</h4>
+              <div class="logs-console" id="sync-logs">
+                [Sistem] Sunucu hazır. nezlincollection.com'dan verileri çekmek için yukarıdaki butona basabilirsiniz.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active View: Turkey Map Dashboard -->
+      <section id="view-map" class="view-panel">
+        <div class="map-container">
+          <div class="map-card">
+            <div class="card-header">
+              <i class="fa-solid fa-map-location-dot"></i>
+              <h3>Müşteri Sipariş Coğrafyası</h3>
+              <span id="selected-city-title" class="selected-city-badge">Tüm Türkiye</span>
+            </div>
+            <p class="map-desc">
+              Aşağıdaki haritada sipariş aldığınız şehirler <strong>kadife bordo</strong> renkle gösterilmiştir. 
+              Üzerine tıklayarak seçtiğiniz şehre özel sipariş veren müşterilerinizin listesini harita altında süzebilirsiniz.
+            </p>
+            
+            <!-- Turkey SVG Container -->
+            <div id="turkey-map-container" class="turkey-map-svg-wrapper">
+              <!-- SVG Turkey map will be injected dynamically -->
+              <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Türkiye Haritası yükleniyor...</p>
+              </div>
+            </div>
+            
+            <!-- Clicked City Customer Listing -->
+            <div class="city-customers-block" id="city-customers-section">
+              <div class="block-title">
+                <i class="fa-solid fa-users"></i>
+                <h4 id="city-customers-title">Sipariş Veren Müşteriler</h4>
+              </div>
+              <div class="city-customers-table-wrapper">
+                <table class="crm-table">
+                  <thead>
+                    <tr>
+                      <th>Müşteri Adı</th>
+                      <th>Instagram</th>
+                      <th>Telefon</th>
+                      <th>Beden Ölçüleri (mm)</th>
+                      <th>Önceki Siparişler</th>
+                      <th>Adres</th>
+                    </tr>
+                  </thead>
+                  <tbody id="city-customers-list-tbody">
+                    <tr>
+                      <td colspan="6" class="table-empty">Haritadan bir şehre tıklayarak o ildeki siparişleri listeleyin.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </section>
+
+      <!-- Active View: Customer CRM Panel -->
+      <section id="view-customers" class="view-panel">
+        <div class="crm-container">
+          <div class="crm-card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+              <div class="header-left" style="display: flex; align-items: center; gap: 15px;">
+                <i class="fa-solid fa-users-gear" style="font-size: 24px; color: var(--color-accent-gold);"></i>
+                <h3>Müşteri Detayları & Ölçü Rehberi</h3>
+              </div>
+              <button id="add-customer-btn" class="btn btn-success">
+                <i class="fa-solid fa-user-plus"></i> Yeni Müşteri Ekle
+              </button>
+            </div>
+            
+            <p class="crm-desc" style="margin-top: 10px; color: var(--text-muted); font-size: 13px;">
+              Bu panelden müşterilerinizin adres, iletişim ve tırnak beden ölçülerini (Baş parmaktan serçe parmağa kadar milimetre cinsinden) detaylıca yönetebilirsiniz. Beden ölçüleri varsayılan olarak <strong>10 mm</strong> olarak tanımlanır.
+            </p>
+            
+            <!-- Customers Data Table -->
+            <div class="crm-table-wrapper" style="margin-top: 20px; overflow-x: auto;">
+              <table class="crm-table main-crm">
+                <thead>
+                  <tr>
+                    <th>Müşteri Adı</th>
+                    <th>İl</th>
+                    <th>Instagram</th>
+                    <th>Telefon</th>
+                    <th>Beden Ölçüleri (Baş - Serçe / mm)</th>
+                    <th>Önceki Sipariş Kodları</th>
+                    <th>Adres</th>
+                    <th>İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody id="main-customers-list-tbody">
+                  <!-- Will be populated dynamically -->
+                  <tr>
+                    <td colspan="8" class="table-empty">Yükleniyor...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Glassmorphic CRM Modal Form -->
+      <div id="customer-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3 id="modal-title">Yeni Müşteri Ekle</h3>
+            <button id="close-modal-btn" class="close-btn">&times;</button>
+          </div>
+          <form id="customer-form" class="modal-form">
+            <input type="hidden" id="customer-id-input">
+            
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="c-name">Müşteri Adı *</label>
+                <input type="text" id="c-name" placeholder="Ad Soyad" required>
+              </div>
+              <div class="form-group">
+                <label for="c-city">Şehir (İl Plaka Kodu) *</label>
+                <select id="c-city" required>
+                  <!-- Will be populated dynamically with 81 cities -->
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="c-instagram">Instagram Kullanıcı Adı</label>
+                <div class="input-prefix-wrapper">
+                  <span class="prefix">@</span>
+                  <input type="text" id="c-instagram" placeholder="kullaniciadi">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="c-phone">Telefon Numarası</label>
+                <input type="text" id="c-phone" placeholder="05XX XXX XX XX">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="c-orders">Geçmiş Sipariş Ürün Kodları (Virgülle Ayırın)</label>
+              <input type="text" id="c-orders" placeholder="NC101, TA02, GS108">
+            </div>
+
+            <div class="form-group">
+              <label for="c-address">Açık Adres</label>
+              <textarea id="c-address" rows="2" placeholder="Adres detaylarını girin..."></textarea>
+            </div>
+
+            <!-- Finger Sizes mm section -->
+            <div class="sizes-section">
+              <h5>Tırnak Beden Ölçüleri (mm cinsinden)</h5>
+              <div class="sizes-row-grid">
+                <div class="size-input-group">
+                  <label for="size-thumb">Baş Parmak</label>
+                  <input type="number" id="size-thumb" min="1" max="50" value="10" required>
+                  <span class="unit">mm</span>
+                </div>
+                <div class="size-input-group">
+                  <label for="size-index">İşaret</label>
+                  <input type="number" id="size-index" min="1" max="50" value="10" required>
+                  <span class="unit">mm</span>
+                </div>
+                <div class="size-input-group">
+                  <label for="size-middle">Orta</label>
+                  <input type="number" id="size-middle" min="1" max="50" value="10" required>
+                  <span class="unit">mm</span>
+                </div>
+                <div class="size-input-group">
+                  <label for="size-ring">Yüzük</label>
+                  <input type="number" id="size-ring" min="1" max="50" value="10" required>
+                  <span class="unit">mm</span>
+                </div>
+                <div class="size-input-group">
+                  <label for="size-pinky">Serçe</label>
+                  <input type="number" id="size-pinky" min="1" max="50" value="10" required>
+                  <span class="unit">mm</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-actions">
+              <button type="button" id="cancel-modal-btn" class="btn btn-secondary">İptal</button>
+              <button type="submit" class="btn btn-success">Müşteriyi Kaydet</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Custom Mouse-Following Interactive Tooltip -->
+  <div id="map-tooltip" class="map-tooltip-box" style="display: none; opacity: 0;"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

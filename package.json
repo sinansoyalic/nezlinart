@@ -1,0 +1,14 @@
+{
+  "name": "nezlin-pricing-system",
+  "version": "1.0.0",
+  "description": "Nezlin Fiyatlandırma Sistemi (NFS) - Localhost Pricing Management & E-Commerce Scraper",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "author": "Antigravity",
+  "license": "ISC"
+}

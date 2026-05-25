@@ -1,0 +1,29 @@
+{
+  "NC132": {
+    "checkedOptions": {},
+    "customPrices": {
+      "nailart": 1000
+    },
+    "notes": ""
+  },
+  "TA01": {
+    "checkedOptions": {
+      "charm": false,
+      "french": false,
+      "ombre": false,
+      "nailart": false,
+      "kalici3": false,
+      "kalici2": false,
+      "kalici1": false
+    },
+    "customPrices": {},
+    "notes": "Matckp sürdüm ters çevirdim\nnasdlansd\nadjaksnda"
+  },
+  "GS108": {
+    "checkedOptions": {
+      "tips": true
+    },
+    "customPrices": {},
+    "notes": ""
+  }
+}

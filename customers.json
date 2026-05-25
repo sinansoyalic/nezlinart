@@ -1,0 +1,82 @@
+[
+  {
+    "id": "c-1",
+    "name": "Sinan Nezlin",
+    "address": "Kadıköy, İstanbul",
+    "phone": "0555 123 45 67",
+    "instagram": "sinannezlin",
+    "cityCode": "34",
+    "previousOrders": ["NC129", "TA01"],
+    "sizes": {
+      "thumb": 14,
+      "index": 11,
+      "middle": 12,
+      "ring": 11,
+      "pinky": 9
+    }
+  },
+  {
+    "id": "c-2",
+    "name": "Ayşe Yılmaz",
+    "address": "Çankaya, Ankara",
+    "phone": "0532 987 65 43",
+    "instagram": "ayse_nails",
+    "cityCode": "06",
+    "previousOrders": ["TY501"],
+    "sizes": {
+      "thumb": 12,
+      "index": 10,
+      "middle": 11,
+      "ring": 10,
+      "pinky": 8
+    }
+  },
+  {
+    "id": "c-3",
+    "name": "Merve Demir",
+    "address": "Bornova, İzmir",
+    "phone": "0544 555 66 77",
+    "instagram": "merve_dmr",
+    "cityCode": "35",
+    "previousOrders": ["CND101", "TA02"],
+    "sizes": {
+      "thumb": 13,
+      "index": 11,
+      "middle": 11,
+      "ring": 10,
+      "pinky": 9
+    }
+  },
+  {
+    "id": "c-4",
+    "name": "Fatma Şahin",
+    "address": "Şahinbey, Gaziantep",
+    "phone": "0505 888 99 00",
+    "instagram": "fatma_sahin27",
+    "cityCode": "27",
+    "previousOrders": ["NC131"],
+    "sizes": {
+      "thumb": 15,
+      "index": 12,
+      "middle": 13,
+      "ring": 12,
+      "pinky": 10
+    }
+  },
+  {
+    "id": "c-5",
+    "name": "Zeynep Kaya",
+    "address": "Muratpaşa, Antalya",
+    "phone": "0533 111 22 33",
+    "instagram": "zeynep_kaya_coquette",
+    "cityCode": "07",
+    "previousOrders": ["NC132", "NC133"],
+    "sizes": {
+      "thumb": 11,
+      "index": 9,
+      "middle": 10,
+      "ring": 9,
+      "pinky": 8
+    }
+  }
+]
