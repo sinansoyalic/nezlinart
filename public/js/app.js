@@ -125,20 +125,30 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
     }
   });
 
-  const baseTotal = calculateProductTotal(product);
-  const kdvVal = baseTotal * 0.20;
-  const grandTotal = baseTotal * 1.20;
+  const pricing = calculateDetailedPricing(product);
   
-  const baseNode = document.getElementById(`base-total-${code}`);
+  const costNode = document.getElementById(`cost-total-${code}`);
+  const profitRow = document.getElementById(`profit-row-${code}`);
+  const profitNode = document.getElementById(`profit-total-${code}`);
   const kdvNode = document.getElementById(`kdv-total-${code}`);
   const grandNode = document.getElementById(`grand-total-${code}`);
   
-  if (baseNode) baseNode.textContent = `${baseTotal.toFixed(2)} ₺`;
-  if (kdvNode) kdvNode.textContent = `${kdvVal.toFixed(2)} ₺`;
-  if (grandNode) grandNode.textContent = `${grandTotal.toFixed(2)} ₺`;
+  if (costNode) costNode.textContent = `${pricing.cost.toFixed(2)} ₺`;
+  if (profitRow) {
+    profitRow.style.display = pricing.karOrani > 0 ? 'flex' : 'none';
+  }
+  if (profitNode) {
+    profitNode.textContent = `+ ${pricing.profit.toFixed(2)} ₺`;
+    // Update label text for karOrani
+    const labelNode = profitRow.querySelector('span:first-child');
+    if (labelNode) labelNode.textContent = `Net Kar (%${pricing.karOrani})`;
+  }
+  if (kdvNode) kdvNode.textContent = `${pricing.kdv.toFixed(2)} ₺`;
+  if (grandNode) grandNode.textContent = `${pricing.roundedGrandTotal.toFixed(2)} ₺`;
 
   const sellingPrice = product.discountedPrice > 0 ? product.discountedPrice : product.undiscountedPrice;
-  const isMismatch = Math.abs(grandTotal - sellingPrice) >= 10.0;
+  const tolerance = state.config.toleransLimit !== undefined ? parseFloat(state.config.toleransLimit) : 10.0;
+  const isMismatch = Math.abs(pricing.roundedGrandTotal - sellingPrice) >= tolerance;
   const warningBanner = document.getElementById(`mismatch-warning-${code}`);
   if (warningBanner) {
     warningBanner.style.display = isMismatch ? 'flex' : 'none';
@@ -332,8 +342,63 @@ function calculateProductTotal(product) {
 }
 
 function calculateProductGrandTotal(product) {
-  const base = calculateProductTotal(product);
-  return base * 1.20; // Options sum + 20% KDV
+  const detailed = calculateDetailedPricing(product);
+  return detailed.roundedGrandTotal;
+}
+
+// ==========================================
+// 3.1. AKILLI YUVARLAMA VE DETAYLI FİYATLANDIRMA MOTORU
+// ==========================================
+function roundPrice(price, type) {
+  if (!type || type === 'no') return price;
+  
+  if (type === 'nearest-1') {
+    return Math.round(price);
+  }
+  
+  if (type === 'nearest-5') {
+    return Math.round(price / 5) * 5;
+  }
+  
+  if (type === 'nearest-10') {
+    return Math.round(price / 10) * 10;
+  }
+  
+  if (type === 'ending-9') {
+    const val = Math.round(price);
+    return Math.round((val - 9) / 10) * 10 + 9;
+  }
+  
+  if (type === 'ending-90') {
+    return Math.round(price - 0.90) + 0.90;
+  }
+  
+  if (type === 'ending-99') {
+    return Math.round(price - 0.99) + 0.99;
+  }
+  
+  return price;
+}
+
+function calculateDetailedPricing(product) {
+  const cost = calculateProductTotal(product); // Seçilen modüllerin maliyeti
+  const karOrani = state.config.karOrani !== undefined ? parseFloat(state.config.karOrani) : 40;
+  const profit = cost * (karOrani / 100);
+  const netPrice = cost + profit;
+  const kdv = netPrice * 0.20;
+  const rawGrandTotal = netPrice * 1.20;
+  const yuvarlamaTipi = state.config.yuvarlamaTipi || 'no';
+  const roundedGrandTotal = roundPrice(rawGrandTotal, yuvarlamaTipi);
+  
+  return {
+    cost,
+    profit,
+    netPrice,
+    kdv,
+    rawGrandTotal,
+    roundedGrandTotal,
+    karOrani
+  };
 }
 
 // ==========================================
@@ -391,10 +456,11 @@ function renderProductGrid() {
     // 2. Category Match
     const matchesCategory = state.filters.category === 'all' || product.category === state.filters.category;
 
-    // 3. Calculated Grand Total and Selling Price Mismatch with a 10 TL tolerance limit
+    // 3. Calculated Grand Total and Selling Price Mismatch with a dynamic tolerance limit
     const grandTotal = calculateProductGrandTotal(product);
     const sellingPrice = product.discountedPrice > 0 ? product.discountedPrice : product.undiscountedPrice;
-    const hasMismatch = Math.abs(grandTotal - sellingPrice) >= 10.0;
+    const tolerance = state.config.toleransLimit !== undefined ? parseFloat(state.config.toleransLimit) : 10.0;
+    const hasMismatch = Math.abs(grandTotal - sellingPrice) >= tolerance;
     
     const matchesMismatch = !state.filters.onlyMismatch || hasMismatch;
 
@@ -460,11 +526,10 @@ function createProductCard(product) {
   card.className = 'product-card';
   card.setAttribute('data-code', product.code);
 
-  const baseTotal = calculateProductTotal(product);
-  const kdvVal = baseTotal * 0.20;
-  const grandTotal = baseTotal * 1.20;
+  const pricing = calculateDetailedPricing(product);
   const sellingPrice = product.discountedPrice > 0 ? product.discountedPrice : product.undiscountedPrice;
-  const isMismatch = Math.abs(grandTotal - sellingPrice) >= 10.0;
+  const tolerance = state.config.toleransLimit !== undefined ? parseFloat(state.config.toleransLimit) : 10.0;
+  const isMismatch = Math.abs(pricing.roundedGrandTotal - sellingPrice) >= tolerance;
   const userPricing = product.userPricing || { checkedOptions: {}, customPrices: {}, notes: '' };
 
   // 1. Build Top Section (2 Columns)
@@ -637,24 +702,32 @@ function createProductCard(product) {
     optionsTable.appendChild(row);
   });
 
-  // Calculate & add Total Pricing Display Row with breakdown (+20% KDV and GENEL TOPLAM)
+  // Calculate & add Total Pricing Display Row with breakdown (Seçenek Maliyeti, Kar Marjı, KDV and Önerilen Genel Toplam)
   const totalRow = document.createElement('div');
   totalRow.className = 'pricing-total-block';
   totalRow.style.flexDirection = 'column';
   totalRow.style.alignItems = 'stretch';
-  totalRow.style.gap = '8px';
+  totalRow.style.gap = '6px';
+  
+  const karOrani = pricing.karOrani || 0;
+  const showProfitRow = karOrani > 0;
+  
   totalRow.innerHTML = `
-    <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted);">
-      <span>Hesaplanan Toplam</span>
-      <span id="base-total-${product.code}">${baseTotal.toFixed(2)} ₺</span>
+    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+      <span>Seçenek Maliyeti</span>
+      <span id="cost-total-${product.code}">${pricing.cost.toFixed(2)} ₺</span>
     </div>
-    <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); padding-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.05);">
+    <div id="profit-row-${product.code}" style="display: ${showProfitRow ? 'flex' : 'none'}; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+      <span>Net Kar (%${karOrani})</span>
+      <span id="profit-total-${product.code}">+ ${pricing.profit.toFixed(2)} ₺</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); padding-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.05);">
       <span>+%20 KDV</span>
-      <span id="kdv-total-${product.code}">${kdvVal.toFixed(2)} ₺</span>
+      <span id="kdv-total-${product.code}">${pricing.kdv.toFixed(2)} ₺</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
-      <span class="label" style="font-size: 14px; font-weight: 700; color: var(--text-main);">GENEL TOPLAM</span>
-      <span class="value" id="grand-total-${product.code}" style="font-size: 22px; font-weight: 800; color: var(--color-accent-gold);">${grandTotal.toFixed(2)} ₺</span>
+      <span class="label" style="font-size: 13px; font-weight: 700; color: var(--text-main);">ÖNERİLEN TOPLAM</span>
+      <span class="value" id="grand-total-${product.code}" style="font-size: 20px; font-weight: 800; color: var(--color-accent-gold); text-shadow: 0 0 10px rgba(199,163,108,0.2);">${pricing.roundedGrandTotal.toFixed(2)} ₺</span>
     </div>
   `;
   optionsTable.appendChild(totalRow);
@@ -714,44 +787,7 @@ function createProductCard(product) {
 // 5. REACTIVE WORKSPACE UTILITIES
 // ==========================================
 function recalculateCardTotalAndSave(product, cardNode, debounced = false) {
-  const code = product.code;
-  const userPricing = product.userPricing;
-
-  // 1. Recalculate options pricing displays
-  PRICING_OPTIONS.forEach(opt => {
-    const rightVal = document.getElementById(`price-val-${code}-${opt.id}`);
-    if (rightVal) {
-      const isChecked = userPricing.checkedOptions[opt.id] !== false;
-      let price = state.config[opt.id] || 0;
-      if (opt.hasCustomInput && userPricing.customPrices[opt.id] !== undefined) {
-        price = userPricing.customPrices[opt.id];
-      }
-      rightVal.textContent = isChecked ? `+ ${price.toFixed(2)} ₺` : '—';
-    }
-  });
-
-  // 2. Recalculate computed totals with KDV and Grand Total
-  const baseTotal = calculateProductTotal(product);
-  const kdvVal = baseTotal * 0.20;
-  const grandTotal = baseTotal * 1.20;
-  
-  const baseNode = document.getElementById(`base-total-${code}`);
-  const kdvNode = document.getElementById(`kdv-total-${code}`);
-  const grandNode = document.getElementById(`grand-total-${code}`);
-  
-  if (baseNode) baseNode.textContent = `${baseTotal.toFixed(2)} ₺`;
-  if (kdvNode) kdvNode.textContent = `${kdvVal.toFixed(2)} ₺`;
-  if (grandNode) grandNode.textContent = `${grandTotal.toFixed(2)} ₺`;
-
-  // 3. Mismatch warning display comparing GENEL TOPLAM with a 10 TL tolerance limit
-  const sellingPrice = product.discountedPrice > 0 ? product.discountedPrice : product.undiscountedPrice;
-  const isMismatch = Math.abs(grandTotal - sellingPrice) >= 10.0;
-  const warningBanner = document.getElementById(`mismatch-warning-${code}`);
-  if (warningBanner) {
-    warningBanner.style.display = isMismatch ? 'flex' : 'none';
-  }
-
-  // 4. Auto-save trigger
+  recalculateCardTotalAndSaveDisplay(product, cardNode);
   triggerProductAutoSave(product, debounced);
 }
 
@@ -821,10 +857,33 @@ function renderSoTSettingsForm() {
     nailart: 'Nail Art (Default)',
     ombre: 'Ombre',
     french: 'French Çizimi',
-    charm: 'Charm Takısı (Default)'
+    charm: 'Charm Takısı (Default)',
+    karOrani: 'Hedeflenen Net Kar Oranı',
+    toleransLimit: 'Uyuşmazlık Tolerans Limiti',
+    yuvarlamaTipi: 'Küsurat Yuvarlama Seçeneği'
   };
 
+  // Create Sub-Sections
+  const compSection = document.createElement('div');
+  compSection.className = 'sot-section-wrapper';
+  compSection.innerHTML = '<h4 class="sot-section-title"><i class="fa-solid fa-layer-group"></i> Bileşen Taban Fiyatları</h4>';
+  
+  const compGrid = document.createElement('div');
+  compGrid.className = 'sot-section-grid';
+  compSection.appendChild(compGrid);
+
+  const smartSection = document.createElement('div');
+  smartSection.className = 'sot-section-wrapper settings-section-divider';
+  smartSection.innerHTML = '<h4 class="sot-section-title"><i class="fa-solid fa-brain"></i> Akıllı Fiyatlandırma Parametreleri (Zekâ Modülleri)</h4>';
+  
+  const smartGrid = document.createElement('div');
+  smartGrid.className = 'sot-section-grid';
+  smartSection.appendChild(smartGrid);
+
   Object.entries(state.config).forEach(([key, val]) => {
+    const isSmart = ['karOrani', 'toleransLimit', 'yuvarlamaTipi'].includes(key);
+    const targetGrid = isSmart ? smartGrid : compGrid;
+
     const group = document.createElement('div');
     group.className = 'form-group';
 
@@ -836,24 +895,54 @@ function renderSoTSettingsForm() {
     const inputWrapper = document.createElement('div');
     inputWrapper.className = 'form-input-wrapper';
 
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.id = `sot-input-${key}`;
-    input.name = key;
-    input.value = val;
-    input.min = '0';
-    input.step = '1';
-    input.required = true;
+    if (key === 'yuvarlamaTipi') {
+      const input = document.createElement('select');
+      input.id = `sot-input-${key}`;
+      input.name = key;
+      input.className = 'sot-select-control';
+      
+      const roundingModes = [
+        { val: 'no', txt: 'Yuvarlama Yok (Kuruşlar Kalır)' },
+        { val: 'nearest-1', txt: 'En Yakın 1 ₺ (Örn: 493.20 ➔ 493.00)' },
+        { val: 'nearest-5', txt: 'En Yakın 5 ₺ (Örn: 493.20 ➔ 495.00)' },
+        { val: 'nearest-10', txt: 'En Yakın 10 ₺ (Örn: 493.20 ➔ 490.00)' },
+        { val: 'ending-9', txt: 'En Yakın 9 ile Biten (Örn: 493.20 ➔ 489.00)' },
+        { val: 'ending-90', txt: 'En Yakın .90 ile Biten (Örn: 493.20 ➔ 492.90)' },
+        { val: 'ending-99', txt: 'En Yakın .99 ile Biten (Örn: 493.20 ➔ 492.99)' }
+      ];
 
-    const span = document.createElement('span');
-    span.textContent = '₺';
+      roundingModes.forEach(mode => {
+        const option = document.createElement('option');
+        option.value = mode.val;
+        option.textContent = mode.txt;
+        if (val === mode.val) option.selected = true;
+        input.appendChild(option);
+      });
 
-    inputWrapper.appendChild(input);
-    inputWrapper.appendChild(span);
+      inputWrapper.appendChild(input);
+    } else {
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.id = `sot-input-${key}`;
+      input.name = key;
+      input.value = val;
+      input.min = '0';
+      input.step = key === 'toleransLimit' ? '1' : '1';
+      input.required = true;
+
+      const span = document.createElement('span');
+      span.textContent = key === 'karOrani' ? '%' : '₺';
+
+      inputWrapper.appendChild(input);
+      inputWrapper.appendChild(span);
+    }
+
     group.appendChild(inputWrapper);
-
-    form.appendChild(group);
+    targetGrid.appendChild(group);
   });
+
+  form.appendChild(compSection);
+  form.appendChild(smartSection);
 
   // Attach Save Action
   const saveBtn = document.getElementById('save-sot-btn');
@@ -861,7 +950,13 @@ function renderSoTSettingsForm() {
     const formData = {};
     Object.keys(state.config).forEach(key => {
       const input = document.getElementById(`sot-input-${key}`);
-      if (input) formData[key] = parseFloat(input.value) || 0;
+      if (input) {
+        if (key === 'yuvarlamaTipi') {
+          formData[key] = input.value;
+        } else {
+          formData[key] = parseFloat(input.value) || 0;
+        }
+      }
     });
 
     const statusNode = document.getElementById('sot-save-status');

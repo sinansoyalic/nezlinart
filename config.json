@@ -9,5 +9,8 @@
   "nailart": 10,
   "ombre": 300,
   "french": 400,
-  "charm": 100
+  "charm": 100,
+  "karOrani": 40,
+  "toleransLimit": 10,
+  "yuvarlamaTipi": "no"
 }

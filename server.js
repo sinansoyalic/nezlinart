@@ -164,17 +164,32 @@ app.get('/api/config', (req, res) => {
   const config = readJsonFile(CONFIG_FILE, {
     kargo: 50, tips: 50, base: 40, top: 40,
     kalici1: 100, kalici2: 120, kalici3: 150,
-    nailart: 80, ombre: 100, french: 90, charm: 30
+    nailart: 80, ombre: 100, french: 90, charm: 30,
+    karOrani: 40, toleransLimit: 10, yuvarlamaTipi: 'no'
   });
+  
+  // Ensure new fields exist even if file already existed with old schema
+  let updated = false;
+  if (config.karOrani === undefined) { config.karOrani = 40; updated = true; }
+  if (config.toleransLimit === undefined) { config.toleransLimit = 10; updated = true; }
+  if (config.yuvarlamaTipi === undefined) { config.yuvarlamaTipi = 'no'; updated = true; }
+  if (updated) {
+    writeJsonFile(CONFIG_FILE, config);
+  }
+  
   res.json(config);
 });
 
 // 2. Save default prices (SoT)
 app.post('/api/config', (req, res) => {
   const newConfig = req.body;
-  // Convert values to numbers
+  // Convert values to numbers except yuvarlamaTipi which is string
   for (const key in newConfig) {
-    newConfig[key] = parseFloat(newConfig[key]) || 0;
+    if (key === 'yuvarlamaTipi') {
+      newConfig[key] = String(newConfig[key]);
+    } else {
+      newConfig[key] = parseFloat(newConfig[key]) || 0;
+    }
   }
   const success = writeJsonFile(CONFIG_FILE, newConfig);
   if (success) {
