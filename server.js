@@ -13,6 +13,7 @@ const CONFIG_FILE = path.join(__dirname, 'config.json');
 const PRODUCTS_FILE = path.join(__dirname, 'products.json');
 const USER_DATA_FILE = path.join(__dirname, 'user_data.json');
 const CUSTOMERS_FILE = path.join(__dirname, 'customers.json');
+const AUDIT_TRAIL_FILE = path.join(__dirname, 'audit_trail.jsonl');
 
 // Real-Time Crawl Status State
 let crawlStatus = {
@@ -365,6 +366,33 @@ app.post('/api/config', async (req, res) => {
       newConfig[key] = parseFloat(newConfig[key]) || 0;
     }
   }
+
+  const oldConfig = await getConfig();
+  
+  // Compare to see if there is an actual difference
+  let isChanged = false;
+  for (const key in newConfig) {
+    if (oldConfig[key] !== newConfig[key]) {
+      isChanged = true;
+      break;
+    }
+  }
+
+  if (isChanged) {
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      code: "SOT_CONFIG",
+      editor: "Yönetici",
+      oldPricing: oldConfig,
+      newPricing: newConfig
+    };
+    try {
+      fs.appendFileSync(AUDIT_TRAIL_FILE, JSON.stringify(logEntry) + '\n', 'utf8');
+    } catch (err) {
+      console.error('[Audit Log] Failed to append config audit trail:', err);
+    }
+  }
+
   const success = await saveConfig(newConfig);
   if (success) {
     res.json({ success: true, config: newConfig });
@@ -400,11 +428,65 @@ app.get('/api/products', async (req, res) => {
 app.post('/api/products/:code', async (req, res) => {
   const { code } = req.params;
   const pricingData = req.body; // Expects { checkedOptions, customPrices, notes }
+  
+  // Read current userData state before saving
+  const userData = await getUserData();
+  const oldPricing = userData[code] || { checkedOptions: {}, customPrices: {}, notes: '' };
+  
+  // Compare choices
+  const oldChecked = oldPricing.checkedOptions || {};
+  const newChecked = pricingData.checkedOptions || {};
+  const oldCustom = oldPricing.customPrices || {};
+  const newCustom = pricingData.customPrices || {};
+  
+  const isChanged = JSON.stringify(oldChecked) !== JSON.stringify(newChecked) ||
+                    JSON.stringify(oldCustom) !== JSON.stringify(newCustom) ||
+                    (oldPricing.notes || '') !== (pricingData.notes || '');
+                    
+  if (isChanged) {
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      code,
+      editor: pricingData.editor || "Yönetici",
+      oldPricing: {
+        checkedOptions: oldChecked,
+        customPrices: oldCustom,
+        notes: oldPricing.notes || ''
+      },
+      newPricing: {
+        checkedOptions: newChecked,
+        customPrices: newCustom,
+        notes: pricingData.notes || ''
+      }
+    };
+    try {
+      fs.appendFileSync(AUDIT_TRAIL_FILE, JSON.stringify(logEntry) + '\n', 'utf8');
+    } catch (err) {
+      console.error('[Audit Log] Failed to append product pricing audit trail:', err);
+    }
+  }
+
   const success = await saveSingleProductData(code, pricingData);
   if (success) {
     res.json({ success: true });
   } else {
     res.status(500).json({ error: 'Ürün değişiklikleri kaydedilemedi.' });
+  }
+});
+
+// 4.05. Get Audit Trail logs
+app.get('/api/audit-trail', (req, res) => {
+  if (!fs.existsSync(AUDIT_TRAIL_FILE)) {
+    return res.json([]);
+  }
+  try {
+    const fileContent = fs.readFileSync(AUDIT_TRAIL_FILE, 'utf8');
+    const lines = fileContent.split('\n').filter(line => line.trim().length > 0);
+    const logs = lines.map(line => JSON.parse(line));
+    res.json(logs.reverse()); // Newest first
+  } catch (err) {
+    console.error('Audit trail read failed:', err);
+    res.status(500).json({ error: 'Değişiklik günlüğü okunamadı.' });
   }
 });
 
@@ -772,6 +854,22 @@ if (require.main === module) {
     console.log(`  Nezlin Fiyatlandırma Sistemi (NFS) - Sunucu Başlatıldı!`);
     console.log(`  Adres: http://localhost:${PORT}`);
     console.log(`===========================================================`);
+
+    // Suggestion 38: Otomatik Senkronizasyon Zamanlayıcısı (Automated background sync every 30 mins)
+    const AUTO_SYNC_INTERVAL = 30 * 60 * 1000;
+    setInterval(() => {
+      console.log('[Zamanlayıcı] Otomatik arka plan senkronizasyonu kontrol ediliyor...');
+      if (!crawlStatus.isCrawling) {
+        console.log('[Zamanlayıcı] Sessiz otomatik senkronizasyon başlatılıyor...');
+        runScraper().then(() => {
+          console.log('[Zamanlayıcı] Otomatik arka plan senkronizasyonu tamamlandı.');
+        }).catch(err => {
+          console.error('[Zamanlayıcı Hata] Otomatik senkronizasyon başarısız:', err);
+        });
+      } else {
+        console.log('[Zamanlayıcı] Aktif bir senkronizasyon zaten çalışıyor, atlandı.');
+      }
+    }, AUTO_SYNC_INTERVAL);
   });
 }
 

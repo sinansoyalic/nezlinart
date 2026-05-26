@@ -32,5 +32,15 @@
     },
     "customPrices": {},
     "notes": ""
+  },
+  "NC101": {
+    "checkedOptions": {
+      "kargo": true,
+      "nailart": false
+    },
+    "customPrices": {
+      "nailart": 95
+    },
+    "notes": "Test log note"
   }
 }

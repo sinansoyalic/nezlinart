@@ -260,6 +260,11 @@ async function initializeApp() {
   await loadConfig();
   await loadProducts();
   await loadCustomers();
+  try {
+    await loadAuditTrail();
+  } catch (e) {
+    console.error('Audit trail load failed during init:', e);
+  }
   initSyncController();
   initHistoryController();
 }
@@ -305,6 +310,7 @@ function initNavigation() {
       // Special Tab Actions
       if (tabId === 'sot') {
         renderSoTSettingsForm();
+        loadAuditTrail(); // Refresh logs when SOT tab is visited
       } else if (tabId === 'pricing') {
         renderProductGrid();
       } else if (tabId === 'map') {
@@ -967,6 +973,9 @@ function triggerProductAutoSave(product, debounced) {
             if (badge.className.includes('saved')) badge.style.opacity = '0';
           }, 2000);
         }
+        
+        // Refresh audit logs
+        loadAuditTrail().catch(e => console.error(e));
       } else {
         throw new Error('Save API returned error status.');
       }
@@ -1129,6 +1138,9 @@ function renderSoTSettingsForm() {
         
         // Reload in-memory product details calculations
         await loadProducts();
+        
+        // Refresh audit logs
+        loadAuditTrail().catch(e => console.error(e));
       } else {
         throw new Error('Save settings endpoint failed.');
       }
@@ -1959,4 +1971,197 @@ window.applyBulkPricingActions = async function() {
   document.getElementById('bulk-option-id').value = '';
   document.getElementById('bulk-action-custom-value').value = '';
   window.handleBulkOptionChange();
+};
+
+// ==========================================================================
+// 11. AUDIT TRAIL LOG VIEWER CONTROLLER (SUGGESTION 29)
+// ==========================================================================
+window.loadAuditTrail = async function() {
+  const tbody = document.getElementById('audit-logs-tbody');
+  const countSpan = document.getElementById('audit-log-count');
+  if (!tbody) return;
+  
+  try {
+    const res = await fetch('/api/audit-trail');
+    if (!res.ok) throw new Error('Audit trail API fetch failed.');
+    const logs = await res.json();
+    
+    if (countSpan) countSpan.textContent = logs.length;
+    
+    if (logs.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="table-empty">Henüz kaydedilmiş bir fiyat değişikliği bulunmuyor.</td>
+        </tr>
+      `;
+      return;
+    }
+    
+    const keyMap = {
+      kargo: 'Kargo Gönderimi',
+      tips: 'Tips Şekillendirme',
+      base: 'Base Coat',
+      top: 'Top Coat',
+      kalici1: 'Kalıcı Oje Seviye 1',
+      kalici2: 'Kalıcı Oje Seviye 2',
+      kalici3: 'Kalıcı Oje Seviye 3',
+      nailart: 'Nail Art',
+      ombre: 'Ombre',
+      french: 'French Çizimi',
+      charm: 'Charm',
+      sticker: 'Sticker',
+      karOrani: 'Net Kar Oranı',
+      toleransLimit: 'Uyuşmazlık Toleransı',
+      yuvarlamaTipi: 'Yuvarlama Seçeneği'
+    };
+
+    const roundingNames = {
+      'no': 'Yuvarlama Yok',
+      'nearest-1': 'En Yakın 1 ₺',
+      'nearest-5': 'En Yakın 5 ₺',
+      'nearest-10': 'En Yakın 10 ₺',
+      'ending-9': 'En Yakın 9 ile Biten',
+      'ending-90': 'En Yakın .90 ile Biten',
+      'ending-99': 'En Yakın .99 ile Biten'
+    };
+    
+    tbody.innerHTML = '';
+    logs.forEach(log => {
+      const tr = document.createElement('tr');
+      
+      const date = new Date(log.timestamp);
+      const dateStr = date.toLocaleString('tr-TR');
+      
+      let targetHtml = '';
+      if (log.code === 'SOT_CONFIG') {
+        targetHtml = `<span class="badge" style="background: rgba(199, 163, 108, 0.15); color: var(--color-accent-gold); font-weight:700; border: 1px solid rgba(199, 163, 108, 0.25);">SoT Ayarları</span>`;
+      } else {
+        targetHtml = `<span class="badge" style="background: rgba(255, 255, 255, 0.05); color: var(--text-main); font-weight:700; border: 1px solid var(--border-glass);">${log.code}</span>`;
+      }
+      
+      let detailsHtml = '<div style="display: flex; flex-direction: column; gap: 6px; padding: 2px 0;">';
+      let changedAny = false;
+      
+      if (log.code === 'SOT_CONFIG') {
+        const keys = new Set([...Object.keys(log.oldPricing || {}), ...Object.keys(log.newPricing || {})]);
+        keys.forEach(k => {
+          const oldVal = log.oldPricing?.[k];
+          const newVal = log.newPricing?.[k];
+          if (oldVal !== newVal) {
+            changedAny = true;
+            const label = keyMap[k] || k.toUpperCase();
+            
+            let oldDisp = oldVal;
+            let newDisp = newVal;
+            if (k === 'yuvarlamaTipi') {
+              oldDisp = roundingNames[oldVal] || oldVal;
+              newDisp = roundingNames[newVal] || newVal;
+            } else if (k === 'karOrani') {
+              oldDisp = `%${oldVal}`;
+              newDisp = `%${newVal}`;
+            } else {
+              oldDisp = `${oldVal} ₺`;
+              newDisp = `${newVal} ₺`;
+            }
+            
+            detailsHtml += `
+              <div style="font-size: 11px; line-height: 1.4;">
+                <span style="color: var(--text-muted); font-weight: 500;">${label}:</span>
+                <span style="color: #d9534f; text-decoration: line-through; margin-left: 4px;">${oldDisp}</span>
+                <i class="fa-solid fa-arrow-right" style="font-size: 10px; margin: 0 6px; color: var(--text-muted);"></i>
+                <span style="color: #4e9f3d; font-weight: 700;">${newDisp}</span>
+              </div>
+            `;
+          }
+        });
+      } else {
+        // Options checkboxes comparison
+        const oldChecked = log.oldPricing?.checkedOptions || {};
+        const newChecked = log.newPricing?.checkedOptions || {};
+        const allOpts = new Set([...Object.keys(oldChecked), ...Object.keys(newChecked)]);
+        
+        allOpts.forEach(optId => {
+          const wasChecked = oldChecked[optId] !== false;
+          const isNowChecked = newChecked[optId] !== false;
+          
+          if (wasChecked !== isNowChecked) {
+            changedAny = true;
+            const label = keyMap[optId] || optId;
+            detailsHtml += `
+              <div style="font-size: 11px; line-height: 1.4;">
+                <span style="color: var(--text-muted); font-weight: 500;">${label} Modülü:</span>
+                <span class="badge" style="background: ${wasChecked ? 'rgba(78, 159, 61, 0.1)' : 'rgba(217, 83, 79, 0.1)'}; color: ${wasChecked ? '#4e9f3d' : '#d9534f'}; font-size: 10px; padding: 2px 6px; border: 1px solid ${wasChecked ? 'rgba(78, 159, 61, 0.2)' : 'rgba(217, 83, 79, 0.2)'};">${wasChecked ? 'Aktif' : 'Pasif'}</span>
+                <i class="fa-solid fa-arrow-right" style="font-size: 9px; margin: 0 6px; color: var(--text-muted);"></i>
+                <span class="badge" style="background: ${isNowChecked ? 'rgba(78, 159, 61, 0.15)' : 'rgba(217, 83, 79, 0.15)'}; color: ${isNowChecked ? '#4e9f3d' : '#d9534f'}; font-size: 10px; padding: 2px 6px; border: 1px solid ${isNowChecked ? 'rgba(78, 159, 61, 0.3)' : 'rgba(217, 83, 79, 0.3)'}; font-weight: 700;">${isNowChecked ? 'Aktif' : 'Pasif'}</span>
+              </div>
+            `;
+          }
+        });
+        
+        // Custom option prices comparison
+        const oldPrices = log.oldPricing?.customPrices || {};
+        const newPrices = log.newPricing?.customPrices || {};
+        const allCustomKeys = new Set([...Object.keys(oldPrices), ...Object.keys(newPrices)]);
+        
+        allCustomKeys.forEach(optId => {
+          const oldPr = oldPrices[optId];
+          const newPr = newPrices[optId];
+          if (oldPr !== newPr) {
+            changedAny = true;
+            const label = keyMap[optId] || optId;
+            const oldDisp = oldPr !== undefined ? `${oldPr} ₺` : 'Varsayılan';
+            const newDisp = newPr !== undefined ? `${newPr} ₺` : 'Varsayılan';
+            
+            detailsHtml += `
+              <div style="font-size: 11px; line-height: 1.4;">
+                <span style="color: var(--text-muted); font-weight: 500;">Özel ${label} Fiyatı:</span>
+                <span style="color: #d9534f; text-decoration: line-through; margin-left: 4px;">${oldDisp}</span>
+                <i class="fa-solid fa-arrow-right" style="font-size: 10px; margin: 0 6px; color: var(--text-muted);"></i>
+                <span style="color: #4e9f3d; font-weight: 700;">${newDisp}</span>
+              </div>
+            `;
+          }
+        });
+        
+        // Notes comparison
+        const oldNotes = log.oldPricing?.notes || '';
+        const newNotes = log.newPricing?.notes || '';
+        if (oldNotes !== newNotes) {
+          changedAny = true;
+          const oldShort = oldNotes.length > 25 ? oldNotes.substring(0, 25) + '...' : oldNotes || 'Boş';
+          const newShort = newNotes.length > 25 ? newNotes.substring(0, 25) + '...' : newNotes || 'Boş';
+          
+          detailsHtml += `
+            <div style="font-size: 11px; line-height: 1.4;" title="Eski: ${oldNotes}\nYeni: ${newNotes}">
+              <span style="color: var(--text-muted); font-weight: 500;">Fiyatlandırma Notu:</span>
+              <span style="color: #d9534f; font-style: italic; margin-left: 4px;">"${oldShort}"</span>
+              <i class="fa-solid fa-arrow-right" style="font-size: 10px; margin: 0 6px; color: var(--text-muted);"></i>
+              <span style="color: #4e9f3d; font-weight: 700; font-style: italic;">"${newShort}"</span>
+            </div>
+          `;
+        }
+      }
+      
+      if (!changedAny) {
+        detailsHtml += `<div style="font-size: 11px; color: var(--text-muted); font-style: italic;">Seçenek değerleri değiştirilmedi.</div>`;
+      }
+      
+      detailsHtml += '</div>';
+      
+      tr.innerHTML = `
+        <td style="padding: 12px 10px; color: var(--text-muted); font-family: monospace; font-size: 11px; vertical-align: top;">${dateStr}</td>
+        <td style="padding: 12px 10px; vertical-align: top;">${targetHtml}</td>
+        <td style="padding: 12px 10px; font-weight: 600; color: var(--text-main); vertical-align: top; display: inline-flex; align-items: center; gap: 6px;"><i class="fa-solid fa-user-gear" style="font-size:11px; color: var(--color-accent-gold);"></i> ${log.editor || 'Yönetici'}</td>
+        <td style="padding: 12px 10px; vertical-align: top;">${detailsHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error('Audit trail render failed:', err);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" class="table-empty" style="color: var(--color-danger);"><i class="fa-solid fa-triangle-exclamation"></i> Değişiklik geçmişi yüklenirken hata oluştu.</td>
+      </tr>
+    `;
+  }
 };

@@ -290,6 +290,46 @@
               </div>
             </div>
           </div>
+
+          <!-- Audit Trail Log Card -->
+          <div class="settings-card settings-section-divider" style="margin-top: 35px;">
+            <div class="card-header">
+              <i class="fa-solid fa-clock-rotate-left" style="color: var(--color-accent-gold); font-size: 24px; margin-right: 12px;"></i>
+              <h3>Fiyat Değişiklik Günlüğü (Audit Trail)</h3>
+            </div>
+            
+            <p class="settings-desc" style="margin-top: 10px; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+              Yerelde yapılan tüm ürün fiyat ve SoT parametre değişikliklerinin geçmişini tarih, saat, değiştiren kişi ve eski-yeni değerleriyle buradan takip edebilirsiniz.
+            </p>
+            
+            <div class="audit-log-console-wrapper" style="margin-top: 20px;">
+              <div class="audit-log-controls" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <span style="font-size: 12px; color: var(--text-muted);"><i class="fa-solid fa-database"></i> <span id="audit-log-count">0</span> kayıt bulundu</span>
+                <button type="button" id="btn-refresh-audit" class="btn btn-secondary" onclick="loadAuditTrail()" style="padding: 8px 16px; font-size: 12px; height: 36px; display: inline-flex; align-items: center; border-radius: var(--radius-medium);">
+                  <i class="fa-solid fa-arrows-rotate" style="margin-right: 6px;"></i> <span>Yenile</span>
+                </button>
+              </div>
+              
+              <div class="audit-logs-table-wrapper" style="max-height: 350px; overflow-y: auto; border: 1px solid var(--border-glass); border-radius: var(--radius-large); background: rgba(0,0,0,0.2);">
+                <table class="crm-table main-crm" style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                  <thead>
+                    <tr style="position: sticky; top: 0; background: var(--bg-card); z-index: 5;">
+                      <th style="padding: 10px; text-align: left;">Tarih & Saat</th>
+                      <th style="padding: 10px; text-align: left;">Ürün / Alan</th>
+                      <th style="padding: 10px; text-align: left;">Düzenleyen</th>
+                      <th style="padding: 10px; text-align: left;">Değişiklik Detayları (Eski ➔ Yeni)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="audit-logs-tbody">
+                    <tr>
+                      <td colspan="4" class="table-empty">Değişiklik günlüğü yükleniyor...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -314,6 +354,15 @@
               <div class="sync-info-item">
                 <span class="label">Son Veri Çekme Zamanı:</span>
                 <span class="value" id="sync-last-time">Veri çekilmedi</span>
+              </div>
+              <div class="sync-info-item">
+                <span class="label">Otomatik Zamanlayıcı:</span>
+                <span class="value" style="display: inline-flex; align-items: center; gap: 8px;">
+                  <span class="badge" style="background: rgba(78, 159, 61, 0.15); color: #4e9f3d; font-weight: 700; border: 1px solid rgba(78, 159, 61, 0.25);">
+                    <i class="fa-solid fa-clock" style="margin-right: 4px;"></i> Aktif (30 dk)
+                  </span>
+                  <span style="font-size: 11px; color: var(--text-muted);">Arka planda sessiz eşitleme yapar</span>
+                </span>
               </div>
             </div>
 
