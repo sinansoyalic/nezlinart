@@ -1,458 +1,394 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nezlin Fiyatlandırma Sistemi (NFS)</title>
-  <!-- Google Fonts: Montserrat for Premium Elegance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- FontAwesome Icons -->
+  
+  <!-- Premium SEO Architecture -->
+  <title>Nezlin Art | Luxury Handcrafted Wearable Art Exhibition</title>
+  <meta name="description" content="Enter the permanent digital exhibition of handcrafted luxury press-on nails by Nezlin Art. Discover bespoke, 100% hand-painted fine art pieces conceptualized for your fingertips.">
+  <meta name="keywords" content="press-on nails, luxury nail art, hand-painted extensions, premium nail exhibition, wearable nail art, Nezlin Collection, nail design gallery">
+  <meta name="author" content="Nezlin Art">
+  
+  <!-- Open Graph Luxury Tags -->
+  <meta property="og:title" content="Nezlin Art | Luxury Wearable Art Exhibition">
+  <meta property="og:description" content="Discover bespoke fine art press-on nails that redefine beauty. Enter the permanent digital gallery.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nezlin.art">
+  
+  <!-- FontAwesome Icons & Stylesheets -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/portfolio.css">
 </head>
 <body>
 
-  <!-- Secure Coquette Glassmorphic Admin Login Overlay -->
-  <div id="admin-login-overlay" class="login-overlay-container">
-    <div class="login-card">
-      <div class="login-brand">
-        <div class="login-logo">N</div>
-        <div class="login-brand-text">
-          <h1>NEZLIN</h1>
-          <p>Fiyatlandırma Sistemi</p>
+  <!-- Custom Trailing Cursor Follower (Visual Elegance) -->
+  <div id="cursor" class="custom-cursor"></div>
+  <div id="cursor-dot" class="custom-cursor-dot"></div>
+
+  <!-- Ambient Light Orbs for Backdrops -->
+  <div class="ambient-orb orb-rose"></div>
+  <div class="ambient-orb orb-gold"></div>
+
+  <!-- Floating Glassmorphic Header Navigation -->
+  <header id="main-header">
+    <div class="nav-container">
+      <!-- Integrated Brand Seal Logo in Header Flow (Most Left) -->
+      <a href="#" class="logo hoverable-element">
+        <img src="/img/NezlinLogoWhite2.png" alt="Nezlin Art Logo">
+      </a>
+      
+      <nav class="nav-links">
+        <a href="#exhibition" class="hoverable-element">Exhibition</a>
+        <a href="#philosophy" class="hoverable-element">Philosophy</a>
+        <a href="#prep-kit" class="hoverable-element">Prep Kit</a>
+        <a href="#sizing" class="hoverable-element">Sizing</a>
+        <a href="#faq" class="hoverable-element">Inquiries</a>
+        <a href="/admin/" class="hoverable-element" style="color: var(--color-accent-rose);"><i class="fa-solid fa-lock" style="font-size: 11px; margin-right: 4px;"></i> NFS Admin</a>
+      </nav>
+      
+      <div class="nav-actions">
+        <div class="nav-socials">
+          <a href="https://instagram.com/nezlin.art" target="_blank" class="nav-social-link hoverable-element" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://tiktok.com/@nezlincollection" target="_blank" class="nav-social-link hoverable-element" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+        <a href="https://nezlincollection.com" target="_blank" class="nav-cta hoverable-element" id="nav-cta-shop">Enter Boutique</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Interactive Hero Section (Digital Exhibition Hall) -->
+  <section class="hero" id="hero-section">
+    <!-- Drifting Gold Dust Canvas will be dynamically injected here before visual elements -->
+    <div class="hero-content">
+      <span class="hero-badge reveal">Fine Art Nails Exhibition</span>
+      <h1 class="hero-title title-serif reveal">
+        Wearable Art
+        <span>For Your Fingertips</span>
+      </h1>
+      <p class="hero-desc reveal">
+        A sanctuary of bespoke, 100% hand-painted wearable masterpieces. Every set is conceptualized as an individual canvas, designed to capture light and redefine elegance.
+      </p>
+      <div class="hero-actions reveal">
+        <a href="#exhibition" class="btn-luxury btn-gold hoverable-element">Enter Exhibition</a>
+        <a href="#sizing" class="btn-luxury btn-outline hoverable-element">Exhibition Sizing</a>
+      </div>
+    </div>
+    
+    <a href="#exhibition" class="hero-scroll hoverable-element">
+      <span>Curate</span>
+      <div class="scroll-line"></div>
+    </a>
+  </section>
+
+  <!-- Portfolio Showcase Gallery Section (The Exhibition) -->
+  <section class="showcase-section" id="exhibition">
+    <div class="section-header reveal">
+      <span class="section-subtitle">Active Exhibition</span>
+      <h2 class="section-title title-serif">Curated Masterpieces</h2>
+      <p class="section-desc" style="margin-bottom: 40px;">
+        Explore our permanent digital curation of fine nail designs. Move your cursor to light up the 3D canvases, revealing their custom medium, code, and conceptual detailing.
+      </p>
+    </div>
+
+    <!-- Dynamic masonry-style grid populated by JS -->
+    <div class="gallery-grid" id="gallery-container">
+      <!-- Cards will load dynamically via portfolio.js -->
+    </div>
+  </section>
+
+  <!-- Craftsmanship / Philosophy Section -->
+  <section class="craftsmanship-section" id="philosophy">
+    <div class="craft-container">
+      
+      <!-- Visual Split -->
+      <div class="craft-images reveal">
+        <div class="craft-img-box">
+          <img src="/img/custom-nail-design.png" alt="Artistic hand painting close-up">
+        </div>
+        <div class="craft-img-box">
+          <img src="https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/bat-blood-2051-4.jpg" alt="Exquisite dark coquette nails application">
         </div>
       </div>
       
-      <p class="login-desc">Sisteme erişmek için lütfen yönetici şifrenizi girin.</p>
-      
-      <form id="admin-login-form" onsubmit="event.preventDefault(); handleAdminLogin();">
-        <div class="login-form-group">
-          <label for="admin-password-input"><i class="fa-solid fa-lock"></i> Yönetici Şifresi</label>
-          <div class="password-input-wrapper">
-            <input type="password" id="admin-password-input" placeholder="••••••••" required autocomplete="current-password">
-            <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility()" title="Şifreyi Göster/Gizle">
-              <i class="fa-regular fa-eye" id="password-eye-icon"></i>
-            </button>
+      <!-- Text Split -->
+      <div class="craft-text reveal">
+        <span class="section-subtitle">Our Philosophy</span>
+        <h2 class="section-title title-serif">Pure Curation, Flawless Medium</h2>
+        <p class="section-desc">
+          We reject mass manufacture. Nezlin Art treats press-on extensions as high-end canvases, hand-detailing every curve under curation to offer gallery-level luxury directly to your home.
+        </p>
+        
+        <div class="craft-list">
+          <div class="craft-item">
+            <div class="craft-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <div class="craft-item-details">
+              <h4>Fine Art Gel Lacquers</h4>
+              <p>Each masterpiece is hand-detailed layer-upon-layer using premier salon-grade Japanese and Korean gel media, achieving exceptional visual depth.</p>
+            </div>
+          </div>
+          
+          <div class="craft-item">
+            <div class="craft-icon"><i class="fa-solid fa-arrows-left-right-to-line"></i></div>
+            <div class="craft-item-details">
+              <h4>Curator Scale Fittings</h4>
+              <p>No generic sizing. We utilize our Nail Fitting System (NFS) to match every nail plate width precisely, ensuring an indistinguishable natural contour.</p>
+            </div>
+          </div>
+          
+          <div class="craft-item">
+            <div class="craft-icon"><i class="fa-solid fa-rotate-left"></i></div>
+            <div class="craft-item-details">
+              <h4>Reusable Masterpiece Durability</h4>
+              <p>Reinforced with double UV-top coats and builder base gels, our curator sets are designed to be worn, safely stored, and reused repeatedly.</p>
+            </div>
           </div>
         </div>
-        
-        <button type="submit" id="btn-login-submit" class="btn btn-primary btn-large login-btn">
-          <i class="fa-solid fa-circle-check"></i>
-          <span>Sisteme Giriş Yap</span>
-        </button>
-        
-        <div id="login-error-msg" class="login-error-alert" style="display: none;">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          <span>Hatalı şifre. Lütfen tekrar deneyin.</span>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- The Complimentary Collector's Prep Kit Section -->
+  <section class="prep-section" id="prep-kit">
+    <div class="prep-grid">
+      
+      <div class="prep-text reveal">
+        <span class="section-subtitle">Exhibition Inclusion</span>
+        <h2 class="section-title title-serif">The Complimentary Sizing & Prep Kit</h2>
+        <p class="section-desc" style="margin-bottom: 25px;">
+          Every single masterpiece collection acquired from our boutique is accompanied by a complimentary, high-end **Collector's Prep Kit**. 
+        </p>
+        <p class="section-desc">
+          This comprehensive set includes professional-grade prep tools and adhesives, ensuring that home application is as durable, fast, and secure as a professional salon extensions treatment.
+        </p>
+        <div class="hero-actions" style="margin-top: 40px;">
+          <a href="#sizing" class="btn-luxury btn-outline hoverable-element">Read Prep Guide</a>
         </div>
-      </form>
+      </div>
+      
+      <!-- Interactive Grid of Prep Kit items -->
+      <div class="prep-visual-box reveal">
+        <div class="prep-card-item">
+          <div class="prep-card-icon"><i class="fa-solid fa-droplet"></i></div>
+          <div class="prep-card-title">High-Strength Glue</div>
+          <div class="prep-card-desc">Non-toxic, high-tensile custom formula. Guarantees 3+ weeks of secure and solid wear.</div>
+        </div>
+        
+        <div class="prep-card-item">
+          <div class="prep-card-icon"><i class="fa-solid fa-square-minus"></i></div>
+          <div class="prep-card-title">Sticky Gel Pads</div>
+          <div class="prep-card-desc">24 double-sided temporary pads. Ideal for quick weekend wear or event-based presentation.</div>
+        </div>
+        
+        <div class="prep-card-item">
+          <div class="prep-card-icon"><i class="fa-solid fa-wand-magic"></i></div>
+          <div class="prep-card-title">Cuticle Wooden Stick</div>
+          <div class="prep-card-desc">Natural wood cuticle pushers. Shapes the base line contour for seamless blending.</div>
+        </div>
+        
+        <div class="prep-card-item">
+          <div class="prep-card-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+          <div class="prep-card-title">Professional Buffer</div>
+          <div class="prep-card-desc">Double-grit mini nail file. Smooths edges and prepares natural plates for adhesives.</div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Interactive Sizing Guide Section (Museum Sizing) -->
+  <section class="guide-section" id="sizing">
+    <div class="section-header reveal" style="margin: 0 auto 60px; text-align: center;">
+      <span class="section-subtitle">Exhibition Guidelines</span>
+      <h2 class="section-title title-serif">Bespoke Size Sensation</h2>
+      <p class="section-desc" style="max-width: 600px; margin: 0 auto;">
+        Acquiring your custom artwork requires precise measurements. Confirm your fit in 4 simple steps to ensure a flawless presentation.
+      </p>
+    </div>
+    
+    <div class="guide-steps-grid">
+      <div class="guide-step-card reveal">
+        <span class="step-num">01</span>
+        <h3>Canvas Prep</h3>
+        <p>Gently prep your natural nail surface. Lightly buff to remove natural oils and wipe clean using alcohol pads for maximum adhesive bond.</p>
+      </div>
+      
+      <div class="guide-step-card reveal" style="transition-delay: 0.1s;">
+        <span class="step-num">02</span>
+        <h3>Scale Width</h3>
+        <p>Apply soft tape across your nail bed. Mark the lateral edges with a fine tip pen, remove, and measure the span in millimeters (mm).</p>
+      </div>
+      
+      <div class="guide-step-card reveal" style="transition-delay: 0.2s;">
+        <span class="step-num">03</span>
+        <h3>Acquisition Size</h3>
+        <p>Repeat for all ten nails. Cross-reference with our NFS categories or supply your custom millimeter dimensions during collection acquisition.</p>
+      </div>
+      
+      <div class="guide-step-card reveal" style="transition-delay: 0.3s;">
+        <span class="step-num">04</span>
+        <h3>Presentation</h3>
+        <p>Apply gel pads or boutique nail adhesive. Press the master plate at a 45° angle from the cuticle line, holding for 20 seconds.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bespoke Commissions Section (Custom Nail Designs) -->
+  <section class="commission-section">
+    <div class="commission-container">
+      
+      <div class="commission-visual-card reveal">
+        <img src="/img/custom-nail-design.png" alt="Collaborative custom commission sketch">
+      </div>
+      
+      <div class="commission-text reveal">
+        <span class="section-subtitle">Exhibition Commission</span>
+        <h2 class="section-title title-serif">Bespoke Design Commissions</h2>
+        <p class="section-desc" style="margin-bottom: 25px;">
+          Have a unique conceptual vision? Commission the artist directly to bring your customized nail art masterpiece to life.
+        </p>
+        <p class="section-desc" style="margin-bottom: 40px;">
+          Collaborate closely to define precise shapes, sizes, dynamic colorways, and luxury embedded ornaments. Your imagination is the only canvas limit.
+        </p>
+        <a href="https://nezlincollection.com/custom-nail-design-cnd101" target="_blank" class="btn-luxury btn-gold hoverable-element">
+          <i class="fa-solid fa-feather" style="margin-right: 8px;"></i> Request Commission
+        </a>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Curated Curation FAQ (Exhibition Inquiries) -->
+  <section class="faq-section" id="faq">
+    <div class="section-header reveal" style="margin: 0 auto 50px; text-align: center;">
+      <span class="section-subtitle">Inquiries & Provenance</span>
+      <h2 class="section-title title-serif">Exhibition Inquiries</h2>
+      <p class="section-desc" style="max-width: 600px; margin: 0 auto;">
+        Discover the technical curation behind our hand-crafted wear. Read our official curator answers to common collector inquiries.
+      </p>
+    </div>
+    
+    <div class="faq-container reveal">
+      <div class="faq-item">
+        <div class="faq-header hoverable-element">
+          <span>Are Nezlin Art pieces healthy for my natural nails?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-content">
+          Yes, we prioritize natural plate integrity. By completely avoiding abrasive drilling, harsh chemicals, and acrylic damages typical in traditional nail salons, your natural nail remains completely healthy, breathing, and protected under the artwork.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-header hoverable-element">
+          <span>How can home-applied sets be as durable as salon extensions?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-content">
+          The secret lies in the professional curation of materials and our complimentary Prep Kit. Using our high-strength non-toxic adhesive combined with the structured builder bases of Nezlin tips, the wearable art merges flawlessly with your natural nail plate, yielding 3+ weeks of extreme durability in just 10 minutes.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-header hoverable-element">
+          <span>How long do the masterpieces last, and are they reusable?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-content">
+          Every set is built to be reusable. Temporary wear with sticky gel pads lasts 2-3 days (perfect for events), while standard wear with our premium glue lasts up to 21+ days. The sets can be safely removed, stored, and reused up to 5+ times, offering unmatched value compared to traditional salon treatments.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-header hoverable-element">
+          <span>Can I request a bespoke custom design?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-content">
+          Absolutely. We accept custom commissions to bring your unique design visions to life. Engage the artist via our Custom Design plaque section above to define a bespoke canvas profile tailored exclusively for you.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call To Action (Acquire Masterpiece) -->
+  <section class="cta-section" id="shop-redirect">
+    <div class="cta-box reveal">
+      <span class="section-subtitle">Acquire a Masterpiece</span>
+      <h2 class="cta-title title-serif">Secure Your Curator Set</h2>
+      <p class="cta-desc">
+        Every masterpiece is hand-detailed to order by the artist. Click below to browse active collections on our live boutique and acquire your bespoke creations.
+      </p>
+      <a href="https://nezlincollection.com" target="_blank" class="btn-luxury btn-pulse-gold hoverable-element" id="btn-main-checkout">
+        <i class="fa-solid fa-gem" style="margin-right: 10px;"></i> Enter Live Boutique to Acquire
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-text-group">
+        <div class="footer-text">
+          &copy; 2026 NEZLIN.ART. All Rights Reserved. Permanent Exhibition of Handcrafted Masterpieces.
+        </div>
+        <div class="footer-socials">
+          <a href="https://instagram.com/nezlin.art" target="_blank" class="footer-social-link hoverable-element" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i> Instagram
+          </a>
+          <a href="https://tiktok.com/@nezlincollection" target="_blank" class="footer-social-link hoverable-element" aria-label="TikTok">
+            <i class="fa-brands fa-tiktok"></i> TikTok
+          </a>
+        </div>
+      </div>
+      <a href="/admin/" class="footer-admin-link hoverable-element">
+        <i class="fa-solid fa-screwdriver-wrench"></i> Administrative Console (NFS)
+      </a>
+    </div>
+  </footer>
+
+  <!-- Editorial Full Screen Lightbox Modal Markup (Museum Plaque Mode) -->
+  <div id="lightbox" class="lightbox">
+    <button class="lightbox-close hoverable-element" id="lightbox-close" aria-label="Close Lightbox">&times;</button>
+    
+    <div class="lightbox-container">
+      
+      <!-- Visual Gallery (Main Photo + Carousel list) -->
+      <div class="lightbox-visual">
+        <div class="lightbox-main-img-box">
+          <img src="" alt="" id="lightbox-main-img" class="lightbox-main-img">
+        </div>
+        <!-- Scrollable details thumbnails carousel -->
+        <div class="lightbox-thumbs" id="lightbox-thumbs">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      
+      <!-- Information Panel -->
+      <div class="lightbox-info">
+        <span class="lightbox-code" id="lightbox-code">NC123</span>
+        <h2 class="lightbox-name title-serif" id="lightbox-name">Bat Blood</h2>
+        <span class="lightbox-category" id="lightbox-category">Gothic Romance</span>
+        
+        <!-- Museum Plaque Meta Details -->
+        <div class="lightbox-plaque" id="lightbox-plaque">
+          <!-- Populated by JS -->
+        </div>
+        
+        <div class="lightbox-spec-list" id="lightbox-spec-list">
+          <!-- Populated by JS -->
+        </div>
+        
+        <a href="" target="_blank" class="btn-luxury btn-gold lightbox-btn hoverable-element" id="lightbox-shop-btn">
+          <i class="fa-solid fa-bag-shopping"></i> Acquire Piece on Boutique
+        </a>
+      </div>
+      
     </div>
   </div>
 
-  <!-- Background Blur Orbs for Luxury Ambient Layout -->
-  <div class="glow-orb orb-1"></div>
-  <div class="glow-orb orb-2"></div>
-  <div class="glow-orb orb-3"></div>
-
-  <div class="app-container">
-    
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-logo">N</div>
-        <div class="brand-text">
-          <h1>NFS</h1>
-          <p>Pricing Engine</p>
-        </div>
-      </div>
-      
-      <nav class="nav-menu">
-        <a href="#" class="nav-item active" data-tab="pricing">
-          <i class="fa-solid fa-tags"></i>
-          <span>Fiyatlandırma</span>
-        </a>
-        <a href="#" class="nav-item" data-tab="sot">
-          <i class="fa-solid fa-sliders"></i>
-          <span>Varsayılanlar (SoT)</span>
-        </a>
-        <a href="#" class="nav-item" data-tab="sync">
-          <i class="fa-solid fa-rotate"></i>
-          <span>Veri Eşitleme</span>
-        </a>
-        <a href="#" class="nav-item" data-tab="map">
-          <i class="fa-solid fa-map-location-dot"></i>
-          <span>Müşteri Haritası</span>
-        </a>
-        <a href="#" class="nav-item" data-tab="customers">
-          <i class="fa-solid fa-users-gear"></i>
-          <span>Müşteri Detayları</span>
-        </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="sync-badge">
-          <span class="pulse-dot"></span>
-          <span id="last-sync-time">Veri çekilmedi</span>
-        </div>
-      </div>
-    </aside>
-
-    <!-- Main Content Area -->
-    <main class="main-content">
-      
-      <!-- Top Header -->
-      <header class="top-header">
-        <div class="header-title">
-          <h2>Nezlin Fiyatlandırma Sistemi <span class="badge">v1.0</span></h2>
-          <p>nezlincollection.com için localhost yönetim paneli</p>
-        </div>
-        
-        <!-- Live Crawler Button in Header -->
-        <div class="header-actions">
-          <div class="history-controls">
-            <button id="undo-btn" class="btn-history" title="Geri Al (Ctrl+Z)" disabled>
-              <i class="fa-solid fa-arrow-rotate-left"></i>
-            </button>
-            <button id="redo-btn" class="btn-history" title="Yinele (Ctrl+Y)" disabled>
-              <i class="fa-solid fa-arrow-rotate-right"></i>
-            </button>
-          </div>
-          <button id="quick-sync-btn" class="btn btn-primary">
-            <i class="fa-solid fa-cloud-arrow-down"></i>
-            <span>Veri Çek</span>
-          </button>
-        </div>
-      </header>
-
-      <!-- Active View: Pricing Workspace -->
-      <section id="view-pricing" class="view-panel active">
-        
-        <!-- Filters Panel -->
-        <div class="filter-card">
-          <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="search-input" placeholder="Ürün adı veya stok kodu ile ara...">
-          </div>
-          
-          <div class="select-box">
-            <i class="fa-solid fa-filter"></i>
-            <select id="category-filter">
-              <option value="all">Tüm Kategoriler</option>
-            </select>
-          </div>
-          
-          <div class="select-box">
-            <i class="fa-solid fa-arrow-down-wide-short"></i>
-            <select id="sort-order">
-              <option value="default">Varsayılan (NC > GS > TA)</option>
-              <option value="name-asc">Ürün Adı (A-Z)</option>
-              <option value="name-desc">Ürün Adı (Z-A)</option>
-              <option value="price-asc">Fiyat (En Düşük)</option>
-              <option value="price-desc">Fiyat (En Yüksek)</option>
-            </select>
-          </div>
-          
-          <div class="checkbox-toggle">
-            <label class="switch">
-              <input type="checkbox" id="mismatch-filter">
-              <span class="slider"></span>
-            </label>
-            <span>Sadece Uyuşmazlıkları Göster</span>
-          </div>
-          
-          <div class="results-counter">
-            <span id="filtered-count">0</span> / <span id="total-count">0</span> Ürün
-          </div>
-        </div>
-
-        <!-- Dynamic Product Grid -->
-        <div class="product-grid" id="product-list-container">
-          <!-- Loading State Spinner -->
-          <div class="loading-state">
-            <div class="spinner"></div>
-            <p>Ürün veritabanı yükleniyor...</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Active View: Source of Truth (SoT) Default Config Settings -->
-      <section id="view-sot" class="view-panel">
-        <div class="settings-container">
-          <div class="settings-card">
-            <div class="card-header">
-              <i class="fa-solid fa-sliders"></i>
-              <h3>Varsayılan Modüler Fiyat Ayarları (SoT)</h3>
-            </div>
-            
-            <p class="settings-desc">
-              Bu sayfadaki fiyatlar sistemin <strong>Temel Doğruluğudur (Source of Truth - SoT)</strong>. 
-              Ürünlerin modüler seçenekleri işaretlendiğinde, aşağıda belirttiğiniz varsayılan fiyatlar otomatik olarak işlenir. 
-              İstediğiniz zaman değiştirebilirsiniz; yaptığınız değişiklikler anında kaydedilir ve tüm ürünlerin hesaplamalarında güncellenir.
-            </p>
-
-            <form id="sot-form" class="sot-grid-form">
-              <!-- Form elements will be populated dynamically -->
-              <div class="loading-state">
-                <div class="spinner"></div>
-                <p>Ayarlar yükleniyor...</p>
-              </div>
-            </form>
-
-            <div class="form-actions">
-              <button type="button" id="save-sot-btn" class="btn btn-success">
-                <i class="fa-solid fa-floppy-disk"></i> Varsayılan Fiyatları Kaydet
-              </button>
-              <span id="sot-save-status" class="save-status"></span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Active View: Scraping & Sync Logs status -->
-      <section id="view-sync" class="view-panel">
-        <div class="sync-container">
-          <div class="sync-status-card">
-            <div class="card-header">
-              <i class="fa-solid fa-rotate"></i>
-              <h3>Canlı Veri Eşitleme Paneli</h3>
-            </div>
-            
-            <div class="sync-info-box">
-              <div class="sync-info-item">
-                <span class="label">Sistem Durumu:</span>
-                <span class="value" id="sync-status-badge"><span class="badge badge-success">Bağlı</span></span>
-              </div>
-              <div class="sync-info-item">
-                <span class="label">Toplam Kayıtlı Ürün:</span>
-                <span class="value" id="sync-total-count">0 Ürün</span>
-              </div>
-              <div class="sync-info-item">
-                <span class="label">Son Veri Çekme Zamanı:</span>
-                <span class="value" id="sync-last-time">Veri çekilmedi</span>
-              </div>
-            </div>
-
-            <div class="sync-actions-block">
-              <button id="trigger-sync-btn" class="btn btn-primary btn-large">
-                <i class="fa-solid fa-cloud-arrow-down"></i> nezlincollection.com Sitemden Veri Çek
-              </button>
-              
-              <div class="sync-progress-bar-container" id="sync-progress-container" style="display: none;">
-                <div class="progress-info">
-                  <span id="sync-progress-text">Hazırlanıyor...</span>
-                  <span id="sync-progress-percentage">0%</span>
-                </div>
-                <div class="progress-track">
-                  <div class="progress-fill" id="sync-progress-fill" style="width: 0%;"></div>
-                </div>
-                <div class="progress-subtext" id="sync-progress-subtext"></div>
-              </div>
-            </div>
-
-            <div class="scraper-logs-box">
-              <h4>Veri Çekme Günlüğü (Logs)</h4>
-              <div class="logs-console" id="sync-logs">
-                [Sistem] Sunucu hazır. nezlincollection.com'dan verileri çekmek için yukarıdaki butona basabilirsiniz.
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Active View: Turkey Map Dashboard -->
-      <section id="view-map" class="view-panel">
-        <div class="map-container">
-          <div class="map-card">
-            <div class="card-header">
-              <i class="fa-solid fa-map-location-dot"></i>
-              <h3>Müşteri Sipariş Coğrafyası</h3>
-              <span id="selected-city-title" class="selected-city-badge">Tüm Türkiye</span>
-            </div>
-            <p class="map-desc">
-              Aşağıdaki haritada sipariş aldığınız şehirler <strong>kadife bordo</strong> renkle gösterilmiştir. 
-              Üzerine tıklayarak seçtiğiniz şehre özel sipariş veren müşterilerinizin listesini harita altında süzebilirsiniz.
-            </p>
-            
-            <!-- Turkey SVG Container -->
-            <div id="turkey-map-container" class="turkey-map-svg-wrapper">
-              <!-- SVG Turkey map will be injected dynamically -->
-              <div class="loading-state">
-                <div class="spinner"></div>
-                <p>Türkiye Haritası yükleniyor...</p>
-              </div>
-            </div>
-            
-            <!-- Clicked City Customer Listing -->
-            <div class="city-customers-block" id="city-customers-section">
-              <div class="block-title">
-                <i class="fa-solid fa-users"></i>
-                <h4 id="city-customers-title">Sipariş Veren Müşteriler</h4>
-              </div>
-              <div class="city-customers-table-wrapper">
-                <table class="crm-table">
-                  <thead>
-                    <tr>
-                      <th>Müşteri Adı</th>
-                      <th>Instagram</th>
-                      <th>Telefon</th>
-                      <th>Beden Ölçüleri (mm)</th>
-                      <th>Önceki Siparişler</th>
-                      <th>Adres</th>
-                    </tr>
-                  </thead>
-                  <tbody id="city-customers-list-tbody">
-                    <tr>
-                      <td colspan="6" class="table-empty">Haritadan bir şehre tıklayarak o ildeki siparişleri listeleyin.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </section>
-
-      <!-- Active View: Customer CRM Panel -->
-      <section id="view-customers" class="view-panel">
-        <div class="crm-container">
-          <div class="crm-card">
-            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-              <div class="header-left" style="display: flex; align-items: center; gap: 15px;">
-                <i class="fa-solid fa-users-gear" style="font-size: 24px; color: var(--color-accent-gold);"></i>
-                <h3>Müşteri Detayları & Ölçü Rehberi</h3>
-              </div>
-              <button id="add-customer-btn" class="btn btn-success">
-                <i class="fa-solid fa-user-plus"></i> Yeni Müşteri Ekle
-              </button>
-            </div>
-            
-            <p class="crm-desc" style="margin-top: 10px; color: var(--text-muted); font-size: 13px;">
-              Bu panelden müşterilerinizin adres, iletişim ve tırnak beden ölçülerini (Baş parmaktan serçe parmağa kadar milimetre cinsinden) detaylıca yönetebilirsiniz. Beden ölçüleri varsayılan olarak <strong>10 mm</strong> olarak tanımlanır.
-            </p>
-            
-            <!-- Customers Data Table -->
-            <div class="crm-table-wrapper" style="margin-top: 20px; overflow-x: auto;">
-              <table class="crm-table main-crm">
-                <thead>
-                  <tr>
-                    <th>Müşteri Adı</th>
-                    <th>İl</th>
-                    <th>Instagram</th>
-                    <th>Telefon</th>
-                    <th>Beden Ölçüleri (Baş - Serçe / mm)</th>
-                    <th>Önceki Sipariş Kodları</th>
-                    <th>Adres</th>
-                    <th>İşlemler</th>
-                  </tr>
-                </thead>
-                <tbody id="main-customers-list-tbody">
-                  <!-- Will be populated dynamically -->
-                  <tr>
-                    <td colspan="8" class="table-empty">Yükleniyor...</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Glassmorphic CRM Modal Form -->
-      <div id="customer-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-card">
-          <div class="modal-header">
-            <h3 id="modal-title">Yeni Müşteri Ekle</h3>
-            <button id="close-modal-btn" class="close-btn">&times;</button>
-          </div>
-          <form id="customer-form" class="modal-form">
-            <input type="hidden" id="customer-id-input">
-            
-            <div class="form-row-2">
-              <div class="form-group">
-                <label for="c-name">Müşteri Adı *</label>
-                <input type="text" id="c-name" placeholder="Ad Soyad" required>
-              </div>
-              <div class="form-group">
-                <label for="c-city">Şehir (İl Plaka Kodu) *</label>
-                <select id="c-city" required>
-                  <!-- Will be populated dynamically with 81 cities -->
-                </select>
-              </div>
-            </div>
-            
-            <div class="form-row-2">
-              <div class="form-group">
-                <label for="c-instagram">Instagram Kullanıcı Adı</label>
-                <div class="input-prefix-wrapper">
-                  <span class="prefix">@</span>
-                  <input type="text" id="c-instagram" placeholder="kullaniciadi">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="c-phone">Telefon Numarası</label>
-                <input type="text" id="c-phone" placeholder="05XX XXX XX XX">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="c-orders">Geçmiş Sipariş Ürün Kodları (Virgülle Ayırın)</label>
-              <input type="text" id="c-orders" placeholder="NC101, TA02, GS108">
-            </div>
-
-            <div class="form-group">
-              <label for="c-address">Açık Adres</label>
-              <textarea id="c-address" rows="2" placeholder="Adres detaylarını girin..."></textarea>
-            </div>
-
-            <!-- Finger Sizes mm section -->
-            <div class="sizes-section">
-              <h5>Tırnak Beden Ölçüleri (mm cinsinden)</h5>
-              <div class="sizes-row-grid">
-                <div class="size-input-group">
-                  <label for="size-thumb">Baş Parmak</label>
-                  <input type="number" id="size-thumb" min="1" max="50" value="10" required>
-                  <span class="unit">mm</span>
-                </div>
-                <div class="size-input-group">
-                  <label for="size-index">İşaret</label>
-                  <input type="number" id="size-index" min="1" max="50" value="10" required>
-                  <span class="unit">mm</span>
-                </div>
-                <div class="size-input-group">
-                  <label for="size-middle">Orta</label>
-                  <input type="number" id="size-middle" min="1" max="50" value="10" required>
-                  <span class="unit">mm</span>
-                </div>
-                <div class="size-input-group">
-                  <label for="size-ring">Yüzük</label>
-                  <input type="number" id="size-ring" min="1" max="50" value="10" required>
-                  <span class="unit">mm</span>
-                </div>
-                <div class="size-input-group">
-                  <label for="size-pinky">Serçe</label>
-                  <input type="number" id="size-pinky" min="1" max="50" value="10" required>
-                  <span class="unit">mm</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="modal-actions">
-              <button type="button" id="cancel-modal-btn" class="btn btn-secondary">İptal</button>
-              <button type="submit" class="btn btn-success">Müşteriyi Kaydet</button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-    </main>
-  </div>
-
-  <!-- Custom Mouse-Following Interactive Tooltip -->
-  <div id="map-tooltip" class="map-tooltip-box" style="display: none; opacity: 0;"></div>
-
-  <script src="js/app.js"></script>
+  <!-- Portfolio Scripts -->
+  <script src="/js/portfolio.js"></script>
 </body>
 </html>

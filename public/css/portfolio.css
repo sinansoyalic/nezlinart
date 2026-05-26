@@ -1,0 +1,1419 @@
+/* ==========================================================================
+   NEZLIN ART PORTFOLIO - LUXURY DESIGN SYSTEM
+   ========================================================================== */
+
+/* Google Fonts: Outfit (sans) & Cormorant Garamond (luxury serif) */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Harmonious Color Palette */
+  --bg-onyx: #070708;
+  --bg-obsidian: #0e0e10;
+  --color-accent-gold: #cda250;
+  --color-accent-rose: #e5b3bc;
+  --color-gold-glow: rgba(205, 162, 80, 0.35);
+  --color-gold-dim: rgba(205, 162, 80, 0.08);
+  --text-primary: #f5f5f7;
+  --text-secondary: #a1a1a6;
+  --text-muted: #626266;
+  
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Outfit', sans-serif;
+  
+  /* Transitions & Shadows */
+  --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-medium: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --glass-bg: rgba(14, 14, 16, 0.4);
+  --glass-border: rgba(205, 162, 80, 0.12);
+  --glass-border-hover: rgba(205, 162, 80, 0.35);
+  --shadow-luxury: 0 30px 60px rgba(0, 0, 0, 0.8);
+  --shadow-subtle-glow: 0 0 25px rgba(205, 162, 80, 0.05);
+}
+
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-onyx);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  background-color: var(--bg-onyx);
+}
+
+/* Custom Interactive Cursor Follower */
+.custom-cursor {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--color-accent-gold);
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  mix-blend-mode: difference;
+}
+
+.custom-cursor-dot {
+  width: 4px;
+  height: 4px;
+  background-color: var(--color-accent-gold);
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10000;
+}
+
+/* Cursor Hover States */
+.hoverable-element:hover ~ .custom-cursor {
+  width: 55px;
+  height: 55px;
+  background-color: rgba(205, 162, 80, 0.08);
+  border-color: var(--color-accent-rose);
+}
+
+/* Background Particle Canvas */
+#hero-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Ambient Background Orbs */
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.18;
+}
+
+.orb-rose {
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, var(--color-accent-rose) 0%, transparent 70%);
+  top: -10vw;
+  right: -5vw;
+  animation: floatOrb 22s infinite alternate ease-in-out;
+}
+
+.orb-gold {
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, var(--color-accent-gold) 0%, transparent 70%);
+  bottom: 15%;
+  left: -8vw;
+  animation: floatOrb 28s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(3vw, 4vw) scale(1.08); }
+}
+
+/* Typography Helpers */
+.title-serif {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  letter-spacing: 0.03em;
+}
+
+/* Header & Navigation */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(7, 7, 8, 0.7);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  transition: var(--transition-smooth);
+}
+
+.nav-container {
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between; /* Restore left-aligned logo and right-aligned links */
+  align-items: center;
+}
+
+.logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 52px; /* Prominent, elegant height that fits perfectly in header flow */
+  width: auto;
+  object-fit: contain;
+  transition: var(--transition-medium);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+.logo img:hover {
+  transform: scale(1.03);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: var(--transition-fast);
+  position: relative;
+  padding: 4px 0;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--color-accent-gold);
+  transition: var(--transition-fast);
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-cta {
+  background: transparent;
+  border: 1px solid var(--color-accent-gold);
+  color: var(--color-accent-gold);
+  padding: 10px 26px;
+  border-radius: 40px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  text-decoration: none;
+}
+
+.nav-cta:hover {
+  background: var(--color-accent-gold);
+  color: var(--bg-onyx);
+  box-shadow: 0 0 20px var(--color-gold-glow);
+  transform: translateY(-2px);
+}
+
+/* Sleek Social Links in Header & Footer */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.nav-socials {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-social-link {
+  color: var(--text-secondary);
+  font-size: 16px;
+  transition: var(--transition-fast);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-social-link:hover {
+  color: var(--color-accent-gold);
+  transform: translateY(-2px);
+}
+
+.footer-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.footer-socials {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-social-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-fast);
+  font-weight: 500;
+}
+
+.footer-social-link i {
+  font-size: 15px;
+}
+
+.footer-social-link:hover {
+  color: var(--color-accent-gold);
+}
+
+/* Hero Section (Digital Exhibition Hall) */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 160px 40px 100px;
+  z-index: 10;
+}
+
+.hero-content {
+  max-width: 1100px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 5;
+}
+
+.hero-badge {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: var(--color-accent-gold);
+  margin-bottom: 25px;
+  border: 1px solid var(--glass-border);
+  padding: 8px 22px;
+  border-radius: 30px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+.hero-title {
+  font-size: clamp(3.8rem, 6.5vw, 7.5rem);
+  line-height: 1.02;
+  margin-bottom: 30px;
+  color: var(--text-primary);
+}
+
+.hero-title span {
+  display: block;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--color-accent-rose);
+  background: linear-gradient(135deg, var(--color-accent-rose) 0%, var(--color-accent-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-desc {
+  max-width: 700px;
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  font-family: var(--font-serif);
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 45px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 20px;
+}
+
+.btn-luxury {
+  padding: 16px 40px;
+  border-radius: 40px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-gold {
+  background: var(--color-accent-gold);
+  color: var(--bg-onyx);
+  border: none;
+  box-shadow: 0 10px 30px rgba(205, 162, 80, 0.25);
+}
+
+.btn-gold:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px var(--color-gold-glow);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-accent-gold);
+  color: var(--color-accent-gold);
+  transform: translateY(-3px);
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  text-decoration: none;
+  z-index: 5;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, var(--color-accent-gold), transparent);
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: var(--text-primary);
+  animation: scrollDown 2.2s infinite ease-in-out;
+}
+
+@keyframes scrollDown {
+  0% { transform: translateY(-100%); }
+  80% { transform: translateY(200%); }
+  100% { transform: translateY(200%); }
+}
+
+/* Minimalist Museum Filter Navigation */
+.filter-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  padding: 10px 22px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: var(--transition-medium);
+}
+
+.filter-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(205, 162, 80, 0.3);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.filter-btn.active {
+  color: var(--color-accent-gold);
+  border-color: var(--color-accent-gold);
+  background: var(--color-gold-dim);
+  box-shadow: var(--shadow-subtle-glow);
+}
+
+/* Portfolio Gallery Showcase */
+.showcase-section {
+  padding: 140px 40px;
+  position: relative;
+  z-index: 10;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.section-header {
+  max-width: 800px;
+  margin: 0 auto 80px;
+  text-align: center;
+}
+
+.section-subtitle {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--color-accent-gold);
+  margin-bottom: 18px;
+  display: block;
+}
+
+.section-title {
+  font-size: clamp(2.6rem, 4.5vw, 4.2rem);
+  line-height: 1.15;
+  margin-bottom: 25px;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+/* Museum Wall Art Gallery Masonry (Varying Ratios) */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 50px;
+}
+
+/* 3D Tilt Art Piece Plaque Card */
+.art-card-container {
+  perspective: 1200px;
+  will-change: transform;
+}
+
+.art-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.1s ease;
+  display: flex;
+  flex-direction: column;
+  transform-style: preserve-3d;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.art-card:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--shadow-luxury);
+}
+
+.art-image-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 5; /* Beautiful portrait ratio */
+  overflow: hidden;
+  position: relative;
+  background-color: #0b0b0c;
+  transform: translateZ(25px); /* push out for 3D depth */
+}
+
+.art-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.art-card:hover .art-img {
+  transform: scale(1.08);
+}
+
+/* Card Museum Overlay */
+.art-hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(7, 7, 8, 0.95) 0%, rgba(7, 7, 8, 0.4) 60%, transparent 100%);
+  opacity: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 35px;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+}
+
+.art-card:hover .art-hover-overlay {
+  opacity: 1;
+}
+
+.art-details {
+  transform: translateY(25px) translateZ(10px);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.art-card:hover .art-details {
+  transform: translateY(0) translateZ(10px);
+}
+
+.art-code {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--color-accent-gold);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.art-name {
+  font-size: 28px;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+}
+
+.art-action {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-accent-rose);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.art-action i {
+  transition: transform 0.3s ease;
+}
+
+.art-card:hover .art-action i {
+  transform: translateX(5px);
+}
+
+/* Static Card Museum Plaque Label (Clean editorial elegance) */
+.art-info-panel {
+  padding: 24px 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.02);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(11, 11, 13, 0.35);
+  transform: translateZ(15px);
+}
+
+.art-info-title h4 {
+  font-size: 19px;
+  margin-bottom: 4px;
+}
+
+.art-info-title span {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.art-info-tag {
+  border: 1px solid rgba(205, 162, 80, 0.15);
+  background: rgba(205, 162, 80, 0.04);
+  color: var(--color-accent-gold);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Craftsmanship & Exhibition Philosophy */
+.craftsmanship-section {
+  padding: 150px 40px;
+  position: relative;
+  z-index: 10;
+  background-color: var(--bg-obsidian);
+  border-top: 1px solid rgba(255, 255, 255, 0.01);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.01);
+}
+
+.craft-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.craft-images {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  position: relative;
+}
+
+.craft-img-box {
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--glass-border);
+  position: relative;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+.craft-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition-smooth);
+}
+
+.craft-img-box:hover img {
+  transform: scale(1.06);
+}
+
+.craft-img-box:nth-child(even) {
+  transform: translateY(50px);
+}
+
+.craft-text {
+  padding-left: 20px;
+}
+
+.craft-list {
+  margin-top: 45px;
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+
+.craft-item {
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+}
+
+.craft-icon {
+  background: var(--color-gold-dim);
+  border: 1px solid rgba(205, 162, 80, 0.18);
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent-gold);
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+.craft-item-details h4 {
+  font-size: 21px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.craft-item-details p {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* Sizing Guide */
+.guide-section {
+  padding: 150px 40px;
+  position: relative;
+  z-index: 10;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.guide-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-top: 80px;
+}
+
+.guide-step-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 45px 35px;
+  border-radius: 20px;
+  position: relative;
+  transition: var(--transition-smooth);
+}
+
+.guide-step-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--shadow-luxury);
+}
+
+.step-num {
+  font-family: var(--font-serif);
+  font-size: 54px;
+  font-weight: 300;
+  color: var(--color-gold-dim);
+  line-height: 1;
+  margin-bottom: 22px;
+  display: block;
+  transition: var(--transition-smooth);
+}
+
+.guide-step-card:hover .step-num {
+  color: var(--color-accent-gold);
+}
+
+.guide-step-card h3 {
+  font-size: 21px;
+  margin-bottom: 12px;
+}
+
+.guide-step-card p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* Call To Action (Exhibition Checkout) */
+.cta-section {
+  padding: 200px 40px;
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  background: linear-gradient(to bottom, transparent, rgba(205, 162, 80, 0.04) 100%);
+}
+
+.cta-box {
+  max-width: 950px;
+  margin: 0 auto;
+  background: radial-gradient(circle at center, rgba(205, 162, 80, 0.08) 0%, transparent 80%);
+  padding: 90px 40px;
+  border-radius: 40px;
+  border: 1px solid rgba(205, 162, 80, 0.04);
+}
+
+.cta-title {
+  font-size: clamp(2.6rem, 5.5vw, 5.2rem);
+  margin-bottom: 25px;
+}
+
+.cta-desc {
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  font-family: var(--font-serif);
+  color: var(--text-secondary);
+  max-width: 650px;
+  margin: 0 auto 50px;
+  line-height: 1.65;
+}
+
+.btn-pulse-gold {
+  background: var(--color-accent-gold);
+  color: var(--bg-onyx);
+  padding: 22px 55px;
+  font-size: 15px;
+  border-radius: 50px;
+  box-shadow: 0 0 35px var(--color-gold-glow);
+  animation: pulseGold 2.2s infinite ease-in-out;
+}
+
+.btn-pulse-gold:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 0 50px rgba(205, 162, 80, 0.6);
+  animation: none;
+}
+
+@keyframes pulseGold {
+  0% { box-shadow: 0 0 15px var(--color-gold-glow); }
+  50% { box-shadow: 0 0 35px rgba(205, 162, 80, 0.5); }
+  100% { box-shadow: 0 0 15px var(--color-gold-glow); }
+}
+
+/* Footer Section */
+footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.02);
+  padding: 60px 40px;
+  background-color: #040405;
+  position: relative;
+  z-index: 10;
+}
+
+.footer-content {
+  max-width: 1450px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-text {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.footer-admin-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-fast);
+}
+
+.footer-admin-link:hover {
+  color: var(--color-accent-gold);
+}
+
+/* Full Screen Lightbox Modal - Luxury Museum Layout */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(6, 6, 7, 0.99);
+  z-index: 9999;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.lightbox.active {
+  display: flex;
+  opacity: 1;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 36px;
+  font-weight: 200;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  z-index: 10;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.lightbox-close:hover {
+  color: var(--color-accent-gold);
+  border-color: var(--color-accent-gold);
+  transform: rotate(90deg);
+}
+
+.lightbox-container {
+  width: 100%;
+  max-width: 1300px;
+  height: 80vh;
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 70px;
+  align-items: center;
+  transform: scale(0.92);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lightbox.active .lightbox-container {
+  transform: scale(1);
+}
+
+/* Lightbox Visual Area */
+.lightbox-visual {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  position: relative;
+}
+
+.lightbox-main-img-box {
+  width: 100%;
+  height: 65vh;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  background-color: #0a0a0b;
+  position: relative;
+}
+
+.lightbox-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition-smooth);
+}
+
+/* Carousel/Secondary thumbnails */
+.lightbox-thumbs {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+.lightbox-thumbs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.lightbox-thumbs::-webkit-scrollbar-thumb {
+  background: var(--color-gold-dim);
+  border-radius: 2px;
+}
+
+.lightbox-thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  opacity: 0.55;
+  transition: var(--transition-fast);
+}
+
+.lightbox-thumb:hover {
+  opacity: 0.9;
+}
+
+.lightbox-thumb.active {
+  border-color: var(--color-accent-gold);
+  opacity: 1;
+  box-shadow: 0 0 12px var(--color-gold-glow);
+}
+
+.lightbox-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lightbox Info Panel */
+.lightbox-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: var(--text-primary);
+  max-width: 500px;
+}
+
+.lightbox-code {
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  color: var(--color-accent-gold);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.lightbox-name {
+  font-size: clamp(2.5rem, 4vw, 3.8rem);
+  margin-bottom: 20px;
+  line-height: 1.1;
+}
+
+.lightbox-category {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 18px;
+  border-radius: 30px;
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Museum Plaque Spec Label */
+.lightbox-plaque {
+  border-left: 2px solid var(--color-accent-gold);
+  padding-left: 20px;
+  margin-bottom: 35px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lightbox-plaque-item {
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+}
+
+.lightbox-plaque-item strong {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  display: inline-block;
+  width: 100px;
+}
+
+.lightbox-spec-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 45px;
+  width: 100%;
+}
+
+.lightbox-spec-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.lightbox-spec-icon {
+  color: var(--color-accent-rose);
+  font-size: 15px;
+}
+
+.lightbox-spec-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.lightbox-btn {
+  width: 100%;
+  text-align: center;
+  padding: 18px 40px;
+  border-radius: 40px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Dynamic Reveal Anim triggers */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   EXHIBITION COLLATERALS: PREP KIT, CUSTOM COMMISSIONS & CURATION FAQ
+   ========================================================================== */
+
+/* Prep Kit Highlights */
+.prep-section {
+  padding: 130px 40px;
+  position: relative;
+  z-index: 10;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.prep-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 80px;
+  align-items: center;
+}
+
+.prep-visual-box {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: var(--shadow-luxury);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+
+.prep-card-item {
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.01);
+  padding: 24px;
+  border-radius: 16px;
+  text-align: center;
+  transition: var(--transition-medium);
+}
+
+.prep-card-item:hover {
+  border-color: var(--glass-border-hover);
+  background: var(--color-gold-dim);
+  transform: translateY(-5px);
+}
+
+.prep-card-icon {
+  font-size: 26px;
+  color: var(--color-accent-gold);
+  margin-bottom: 12px;
+}
+
+.prep-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.prep-card-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Custom Commission Plaque */
+.commission-section {
+  padding: 140px 40px;
+  position: relative;
+  z-index: 10;
+  background-color: var(--bg-obsidian);
+  border-top: 1px solid rgba(255, 255, 255, 0.01);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.01);
+}
+
+.commission-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.commission-visual-card {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-luxury);
+}
+
+.commission-visual-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition-smooth);
+}
+
+.commission-visual-card:hover img {
+  transform: scale(1.04);
+}
+
+/* Curation FAQ Accordion */
+.faq-section {
+  padding: 130px 40px;
+  position: relative;
+  z-index: 10;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.faq-container {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.faq-item {
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: var(--transition-medium);
+}
+
+.faq-item:hover {
+  border-color: var(--glass-border-hover);
+}
+
+.faq-header {
+  padding: 24px 30px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0.02em;
+  transition: var(--transition-fast);
+}
+
+.faq-header:hover {
+  color: var(--color-accent-gold);
+}
+
+.faq-icon {
+  font-size: 14px;
+  color: var(--color-accent-gold);
+  transition: transform 0.4s ease;
+}
+
+.faq-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+  padding: 0 30px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.faq-item.active .faq-content {
+  max-height: 500px; /* arbitrary height to slide down */
+  transition: max-height 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  padding-bottom: 24px;
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(180deg);
+}
+
+.faq-item.active {
+  border-color: var(--glass-border-hover);
+  background: rgba(255, 255, 255, 0.01);
+}
+
+/* Responsive Grid Adaptation */
+@media (max-width: 1200px) {
+  .craft-container {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  .craft-img-box:nth-child(even) {
+    transform: translateY(0);
+  }
+  .lightbox-container {
+    grid-template-columns: 1fr;
+    height: 90vh;
+    gap: 40px;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+  .lightbox-main-img-box {
+    height: 40vh;
+  }
+  .lightbox-visual {
+    height: auto;
+  }
+  .lightbox-info {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .guide-steps-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+  }
+  .nav-links {
+    display: none;
+  }
+  .nav-container {
+    padding: 15px 30px;
+  }
+  .logo img {
+    height: 44px; /* Scaled down for tablet */
+  }
+}
+
+@media (max-width: 600px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+  .guide-steps-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero {
+    padding: 120px 20px 60px;
+  }
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+  }
+  .btn-luxury {
+    width: 100%;
+    text-align: center;
+  }
+  .showcase-section, .craftsmanship-section, .guide-section, .cta-section {
+    padding: 80px 20px;
+  }
+  .cta-box {
+    padding: 50px 20px;
+  }
+  .logo img {
+    height: 38px; /* Scaled down for mobile */
+  }
+  .nav-socials {
+    display: none;
+  }
+}

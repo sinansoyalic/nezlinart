@@ -28,7 +28,12 @@ let crawlStatus = {
 function readJsonFile(filePath, defaultData = {}) {
   try {
     if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, JSON.stringify(defaultData, null, 2));
+      try {
+        fs.writeFileSync(filePath, JSON.stringify(defaultData, null, 2));
+      } catch (writeErr) {
+        // Silently catch write errors in serverless read-only file systems (like Netlify / AWS Lambda)
+        console.warn(`[Dosya Uyarısı] Salt-okunur ortam nedeniyle varsayılan dosya oluşturulamadı: ${filePath}`);
+      }
       return defaultData;
     }
     const content = fs.readFileSync(filePath, 'utf8');
@@ -129,6 +134,9 @@ async function getConfig() {
             obj[row.key] = isNaN(numVal) ? row.value : numVal;
           }
         });
+        if (obj['sticker'] === undefined) {
+          obj['sticker'] = 20;
+        }
         return obj;
       }
     } catch (err) {
@@ -139,7 +147,7 @@ async function getConfig() {
   return readJsonFile(CONFIG_FILE, {
     kargo: 50, tips: 50, base: 40, top: 40,
     kalici1: 100, kalici2: 120, kalici3: 150,
-    nailart: 80, ombre: 100, french: 90, charm: 30,
+    nailart: 80, ombre: 100, french: 90, charm: 30, sticker: 20,
     karOrani: 40, toleransLimit: 10, yuvarlamaTipi: 'no'
   });
 }

@@ -167,7 +167,8 @@ const PRICING_OPTIONS = [
   { id: 'nailart', label: 'Nail Art', hasCustomInput: true },
   { id: 'ombre', label: 'Ombre', hasCustomInput: true },
   { id: 'french', label: 'French', hasCustomInput: true },
-  { id: 'charm', label: 'Charm', hasCustomInput: true }
+  { id: 'charm', label: 'Charm', hasCustomInput: true },
+  { id: 'sticker', label: 'Sticker', hasCustomInput: true }
 ];
 
 // ==========================================
@@ -940,6 +941,7 @@ function renderSoTSettingsForm() {
     ombre: 'Ombre',
     french: 'French Çizimi',
     charm: 'Charm Takısı (Default)',
+    sticker: 'Sticker (Default)',
     karOrani: 'Hedeflenen Net Kar Oranı',
     toleransLimit: 'Uyuşmazlık Tolerans Limiti',
     yuvarlamaTipi: 'Küsurat Yuvarlama Seçeneği'
@@ -1298,7 +1300,7 @@ async function initTurkeyMap() {
 
   try {
     container.innerHTML = `<div class="loading-state"><div class="spinner"></div><p>Türkiye Haritası yükleniyor...</p></div>`;
-    const res = await fetch('img/turkey.svg');
+    const res = await fetch('/img/turkey.svg');
     if (!res.ok) throw new Error('Harita SVG dosyası yüklenemedi.');
     const svgText = await res.text();
     
