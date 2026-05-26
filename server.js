@@ -440,6 +440,67 @@ app.post('/api/fetch-data', (req, res) => {
   res.json({ success: true, message: 'Veri çekme işlemi arka planda başlatıldı.' });
 });
 
+// 7. Backup all system configurations, user selection states and CRM customers
+app.get('/api/backup', async (req, res) => {
+  try {
+    const config = await getConfig();
+    const userData = await getUserData();
+    const customers = await getCustomers();
+    const backupData = {
+      config,
+      userData,
+      customers,
+      timestamp: new Date().toISOString(),
+      source: 'Nezlin Pricing System (NFS)'
+    };
+    
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename=nfs_backup_${Date.now()}.json`);
+    res.json(backupData);
+  } catch (err) {
+    console.error('Backup generation failed:', err);
+    res.status(500).json({ error: 'Yedekleme oluşturulamadı.' });
+  }
+});
+
+// 8. Restore system backup dataset
+app.post('/api/restore', async (req, res) => {
+  try {
+    const { config, userData, customers } = req.body;
+    if (!config || !userData || !customers) {
+      return res.status(400).json({ error: 'Geçersiz yedekleme dosyası formatı.' });
+    }
+    
+    // Save Config
+    await saveConfig(config);
+    
+    // Save User Data (selections, prices, notes)
+    if (isCloudMode) {
+      const rows = Object.entries(userData).map(([code, data]) => ({
+        code,
+        checkedOptions: data.checkedOptions || {},
+        customPrices: data.customPrices || {},
+        notes: data.notes || ''
+      }));
+      await supabase.from('nfs_user_data').upsert(rows);
+    } else {
+      writeJsonFile(USER_DATA_FILE, userData);
+    }
+    
+    // Save Customers
+    if (isCloudMode) {
+      await supabase.from('nfs_customers').upsert(customers);
+    } else {
+      writeJsonFile(CUSTOMERS_FILE, customers);
+    }
+    
+    res.json({ success: true, message: 'Yedekleme başarıyla geri yüklendi.' });
+  } catch (err) {
+    console.error('Error during restore operation:', err);
+    res.status(500).json({ error: 'Yedekleme geri yüklenirken sistemsel hata oluştu.' });
+  }
+});
+
 // ==========================================
 // E-COMMERCE SCRAPER ENGINE
 // ==========================================

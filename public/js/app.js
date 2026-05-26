@@ -152,6 +152,19 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   const warningBanner = document.getElementById(`mismatch-warning-${code}`);
   if (warningBanner) {
     warningBanner.style.display = isMismatch ? 'flex' : 'none';
+    if (isMismatch) {
+      const pNode = warningBanner.querySelector('.mismatch-banner-content p');
+      if (pNode) {
+        pNode.innerHTML = `Eşleşmiyor! Sitedeki: <strong>${sellingPrice.toFixed(2)} ₺</strong> | Önerilen: <strong>${pricing.roundedGrandTotal.toFixed(2)} ₺</strong>`;
+      }
+      const copyBtn = warningBanner.querySelector('.btn-copy-price');
+      if (copyBtn) {
+        copyBtn.onclick = (e) => {
+          e.stopPropagation();
+          copyToClipboard(pricing.roundedGrandTotal.toFixed(2), product.code);
+        };
+      }
+    }
   }
 }
 
@@ -609,6 +622,29 @@ function createProductCard(product) {
   card.className = 'product-card';
   card.setAttribute('data-code', product.code);
 
+  // Bulk selection checkbox (Top Right overlay)
+  const bulkSelectWrapper = document.createElement('div');
+  bulkSelectWrapper.className = 'bulk-select-wrapper';
+  bulkSelectWrapper.style.position = 'absolute';
+  bulkSelectWrapper.style.top = '15px';
+  bulkSelectWrapper.style.right = '15px';
+  bulkSelectWrapper.style.zIndex = '10';
+
+  const bulkCheckbox = document.createElement('input');
+  bulkCheckbox.type = 'checkbox';
+  bulkCheckbox.className = 'bulk-select-checkbox';
+  bulkCheckbox.setAttribute('data-bulk-code', product.code);
+  bulkCheckbox.style.width = '18px';
+  bulkCheckbox.style.height = '18px';
+  bulkCheckbox.style.cursor = 'pointer';
+  
+  bulkCheckbox.addEventListener('change', () => {
+    updateBulkActionsBarState();
+  });
+
+  bulkSelectWrapper.appendChild(bulkCheckbox);
+  card.appendChild(bulkSelectWrapper);
+
   const pricing = calculateDetailedPricing(product);
   const sellingPrice = product.discountedPrice > 0 ? product.discountedPrice : product.undiscountedPrice;
   const tolerance = state.config.toleransLimit !== undefined ? parseFloat(state.config.toleransLimit) : 10.0;
@@ -817,15 +853,46 @@ function createProductCard(product) {
   pricingSection.appendChild(optionsTable);
   card.appendChild(pricingSection);
 
-  // 3. Price Mismatch Warning alert box
+  // 3. Price Mismatch Warning alert box (with "Kopyala ve Git" Copy & Edit actions)
   const warningBanner = document.createElement('div');
   warningBanner.className = 'mismatch-alert-banner';
   warningBanner.id = `mismatch-warning-${product.code}`;
   warningBanner.style.display = isMismatch ? 'flex' : 'none';
-  warningBanner.innerHTML = `
+  
+  const bannerContent = document.createElement('div');
+  bannerContent.className = 'mismatch-banner-content';
+  bannerContent.innerHTML = `
     <i class="fa-solid fa-triangle-exclamation"></i>
-    <p>Ürün fiyatları eşleşmiyor! Lütfen sitedeki fiyatı <strong>güncelleyin</strong>.</p>
+    <p>Eşleşmiyor! Sitedeki: <strong>${sellingPrice.toFixed(2)} ₺</strong> | Önerilen: <strong>${pricing.roundedGrandTotal.toFixed(2)} ₺</strong></p>
   `;
+  warningBanner.appendChild(bannerContent);
+
+  const bannerActions = document.createElement('div');
+  bannerActions.className = 'mismatch-actions';
+  
+  const copyBtn = document.createElement('button');
+  copyBtn.type = 'button';
+  copyBtn.className = 'btn-mismatch-action btn-copy-price';
+  copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> Kopyala';
+  copyBtn.title = 'Yeni Fiyatı Panoya Kopyala';
+  copyBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    copyToClipboard(pricing.roundedGrandTotal.toFixed(2), product.code);
+  });
+  bannerActions.appendChild(copyBtn);
+
+  const editLink = document.createElement('a');
+  editLink.href = `https://nezlincollection.com/admin/Urunler/UrunListele.aspx?kelime=${product.code}`;
+  editLink.target = '_blank';
+  editLink.className = 'btn-mismatch-action btn-edit-site';
+  editLink.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Sitede Düzenle';
+  editLink.title = 'Ticimax Panelinde Bu Ürünü Ara';
+  editLink.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+  bannerActions.appendChild(editLink);
+
+  warningBanner.appendChild(bannerActions);
   card.appendChild(warningBanner);
 
   // 4. Notes Custom Text Area
@@ -1682,4 +1749,214 @@ window.deleteCustomerRecord = async function(id) {
     console.error(err);
     showNotification('Müşteri silinirken hata oluştu.', 'danger');
   }
+};
+
+// ==========================================
+// 10. PRESET NEW MODULE INTEGRATIONS (ADDITIONS)
+// ==========================================
+
+// A. Copy prices to clipboard safely
+window.copyToClipboard = function(text, code) {
+  navigator.clipboard.writeText(text).then(() => {
+    showNotification(`${code} için yeni fiyat (${text} ₺) panoya kopyalandı!`, 'success');
+  }).catch(err => {
+    console.error('Failed to copy: ', err);
+    showNotification('Kopyalama başarısız oldu.', 'danger');
+  });
+};
+
+// B. Excel/CSV Formatında Dışa Aktarma
+window.exportProductsToCSV = function() {
+  const bom = "\uFEFF";
+  let csvContent = bom + "Ürün Kodu;Ürün Adı;Kategori;Normal Fiyat (Site);Satış Fiyatı (Site);Seçenek Maliyeti;Net Kar;KDV;Önerilen Genel Toplam;Fiyat Farkı;Fiyatlandırma Notları\n";
+  
+  state.products.forEach(product => {
+    const pricing = calculateDetailedPricing(product);
+    const sellingPrice = product.discountedPrice > 0 ? product.discountedPrice : product.undiscountedPrice;
+    const diff = pricing.roundedGrandTotal - sellingPrice;
+    const userPricing = product.userPricing || { notes: '' };
+    const notesClean = (userPricing.notes || '').replace(/[\n\r;]/g, ' ');
+    
+    csvContent += `"${product.code}";"${product.title.replace(/"/g, '""')}";"${(product.category || 'Genel').replace(/"/g, '""')}";${product.undiscountedPrice};${product.discountedPrice};${pricing.cost};${pricing.profit};${pricing.kdv};${pricing.roundedGrandTotal};${diff};"${notesClean}"\n`;
+  });
+  
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `nfs_urun_raporu_${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showNotification('CSV Raporu başarıyla indirildi!', 'success');
+};
+
+// C. Yedekten Geri Yükleme (JSON Restore)
+window.handleRestoreBackup = async function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const statusNode = document.getElementById('restore-status');
+  statusNode.textContent = 'Yükleniyor...';
+  statusNode.style.color = 'var(--color-accent-gold)';
+  
+  try {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const backupData = JSON.parse(e.target.result);
+        const res = await fetch('/api/restore', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(backupData)
+        });
+        
+        if (res.ok) {
+          statusNode.textContent = 'Yedekleme başarıyla yüklendi! ✔️';
+          statusNode.style.color = 'var(--color-success)';
+          showNotification('Yedekleme başarıyla geri yüklendi.', 'success');
+          
+          // Reload settings and products
+          await initializeApp();
+          setTimeout(() => statusNode.textContent = '', 3000);
+        } else {
+          const errData = await res.json();
+          throw new Error(errData.error || 'Restore API returned error.');
+        }
+      } catch (err) {
+        console.error('Failed to restore backup:', err);
+        statusNode.textContent = 'Hata: Dosya formatı geçersiz.';
+        statusNode.style.color = 'var(--color-danger)';
+        showNotification('Geri yükleme başarısız oldu.', 'danger');
+      }
+    };
+    reader.readAsText(file);
+  } catch (err) {
+    console.error('File read error:', err);
+    statusNode.textContent = 'Dosya okuma hatası.';
+    statusNode.style.color = 'var(--color-danger)';
+  } finally {
+    event.target.value = '';
+  }
+};
+
+// D. Tümünü Seç / Tümünü Bırak (Toggle Visible checkboxes)
+window.toggleSelectAllVisible = function() {
+  const container = document.getElementById('product-list-container');
+  const visibleCheckboxes = container.querySelectorAll('.bulk-select-checkbox');
+  
+  if (visibleCheckboxes.length === 0) return;
+  
+  const allChecked = Array.from(visibleCheckboxes).every(cb => cb.checked);
+  
+  visibleCheckboxes.forEach(cb => {
+    cb.checked = !allChecked;
+  });
+  
+  window.updateBulkActionsBarState();
+};
+
+// E. Update Bulk Actions bottom sticky bar status
+window.updateBulkActionsBarState = function() {
+  const bar = document.getElementById('bulk-actions-bar');
+  const countSpan = document.getElementById('bulk-selected-count');
+  
+  const checkedCheckboxes = document.querySelectorAll('.bulk-select-checkbox:checked');
+  const count = checkedCheckboxes.length;
+  
+  if (countSpan) countSpan.textContent = count;
+  if (bar) {
+    bar.style.display = count > 0 ? 'flex' : 'none';
+  }
+};
+
+// F. Clear current active bulk selections
+window.clearBulkSelection = function() {
+  document.querySelectorAll('.bulk-select-checkbox').forEach(cb => cb.checked = false);
+  window.updateBulkActionsBarState();
+};
+
+// G. Handle Bulk Action select list updates
+window.handleBulkOptionChange = function() {
+  const optionId = document.getElementById('bulk-option-id').value;
+  const customValInput = document.getElementById('bulk-action-custom-value');
+  
+  const optionsWithCustom = ['nailart', 'ombre', 'french', 'charm', 'sticker'];
+  if (customValInput) {
+    customValInput.style.display = optionsWithCustom.includes(optionId) ? 'block' : 'none';
+  }
+};
+
+// H. Apply Bulk Pricing values to checked products
+window.applyBulkPricingActions = async function() {
+  const optionId = document.getElementById('bulk-option-id').value;
+  const actionType = document.getElementById('bulk-action-toggle').value;
+  const customValInput = document.getElementById('bulk-action-custom-value');
+  
+  if (!optionId) {
+    showNotification('Lütfen toplu işlem için bir seçenek seçin.', 'danger');
+    return;
+  }
+  
+  const checkedCheckboxes = document.querySelectorAll('.bulk-select-checkbox:checked');
+  const selectedCodes = Array.from(checkedCheckboxes).map(cb => cb.getAttribute('data-bulk-code'));
+  
+  if (selectedCodes.length === 0) {
+    showNotification('Lütfen işlem uygulanacak ürünleri seçin.', 'danger');
+    return;
+  }
+  
+  let customPrice = undefined;
+  const optionsWithCustom = ['nailart', 'ombre', 'french', 'charm', 'sticker'];
+  if (optionsWithCustom.includes(optionId) && actionType === 'enable') {
+    const val = parseFloat(customValInput.value);
+    if (isNaN(val) || val < 0) {
+      showNotification('Lütfen geçerli bir özel fiyat girin.', 'danger');
+      return;
+    }
+    customPrice = val;
+  }
+  
+  let updatedCount = 0;
+  for (const code of selectedCodes) {
+    const product = state.products.find(p => p.code === code);
+    if (!product) continue;
+    
+    const oldPricing = JSON.parse(JSON.stringify(product.userPricing || { checkedOptions: {}, customPrices: {}, notes: '' }));
+    
+    if (!product.userPricing) {
+      product.userPricing = { checkedOptions: {}, customPrices: {}, notes: '' };
+    }
+    
+    if (actionType === 'enable') {
+      product.userPricing.checkedOptions[optionId] = true;
+      if (customPrice !== undefined) {
+        product.userPricing.customPrices[optionId] = customPrice;
+      }
+    } else {
+      product.userPricing.checkedOptions[optionId] = false;
+      if (optionsWithCustom.includes(optionId)) {
+        delete product.userPricing.customPrices[optionId];
+      }
+    }
+    
+    const newPricing = JSON.parse(JSON.stringify(product.userPricing));
+    historyManager.pushState(product.code, oldPricing, newPricing);
+    
+    const card = document.querySelector(`.product-card[data-code="${code}"]`);
+    if (card) {
+      updateProductCardUI(product);
+    }
+    
+    triggerProductAutoSave(product, false);
+    updatedCount++;
+  }
+  
+  showNotification(`${updatedCount} adet ürüne toplu fiyatlandırma uygulandı!`, 'success');
+  
+  // Clean inputs and reset bar
+  window.clearBulkSelection();
+  document.getElementById('bulk-option-id').value = '';
+  document.getElementById('bulk-action-custom-value').value = '';
+  window.handleBulkOptionChange();
 };

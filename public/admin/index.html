@@ -165,6 +165,18 @@
           <div class="results-counter">
             <span id="filtered-count">0</span> / <span id="total-count">0</span> Ürün
           </div>
+
+          <div class="bulk-select-all-group" style="margin-left: 15px;">
+            <button type="button" id="btn-select-all-visible" class="btn btn-secondary" onclick="toggleSelectAllVisible()" style="padding: 8px 16px; font-size: 12px; height: 48px; display: inline-flex; align-items: center; border-radius: var(--radius-large);">
+              <i class="fa-solid fa-check-double" style="color: var(--color-accent-gold); margin-right: 6px;"></i> <span>Tümünü Seç</span>
+            </button>
+          </div>
+
+          <div class="action-buttons-group" style="margin-left: auto;">
+            <button type="button" id="btn-export-csv" class="btn btn-secondary" onclick="exportProductsToCSV()" title="Excel / CSV Formatında Rapor İndir" style="padding: 10px 20px; font-size: 12px; height: 48px; display: inline-flex; align-items: center; border-radius: var(--radius-large);">
+              <i class="fa-solid fa-file-csv" style="font-size: 16px; color: #4e9f3d; margin-right: 8px;"></i> <span>Rapor İndir</span>
+            </button>
+          </div>
         </div>
 
         <!-- Dynamic Product Grid -->
@@ -173,6 +185,51 @@
           <div class="loading-state">
             <div class="spinner"></div>
             <p>Ürün veritabanı yükleniyor...</p>
+          </div>
+        </div>
+
+        <!-- Bulk Actions Bar -->
+        <div id="bulk-actions-bar" class="bulk-actions-bar-container" style="display: none;">
+          <div class="bulk-info">
+            <i class="fa-solid fa-square-check"></i>
+            <span id="bulk-selected-count">0</span> Seçildi
+          </div>
+          <div class="bulk-controls">
+            <span class="bulk-label">Toplu İşlem:</span>
+            
+            <div class="bulk-option-selector">
+              <select id="bulk-option-id" onchange="handleBulkOptionChange()">
+                <option value="">Seçenek Seçin...</option>
+                <option value="kargo">Kargo (Ekle/Çıkar)</option>
+                <option value="tips">Tips Şekillendirme (Ekle/Çıkar)</option>
+                <option value="base">Base Coat (Ekle/Çıkar)</option>
+                <option value="top">Top Coat (Ekle/Çıkar)</option>
+                <option value="kalici1">Kalıcı 1 (Ekle/Çıkar)</option>
+                <option value="kalici2">Kalıcı 2 (Ekle/Çıkar)</option>
+                <option value="kalici3">Kalıcı 3 (Ekle/Çıkar)</option>
+                <option value="nailart">Nail Art (Ayarla)</option>
+                <option value="ombre">Ombre (Ayarla)</option>
+                <option value="french">French (Ayarla)</option>
+                <option value="charm">Charm (Ayarla)</option>
+                <option value="sticker">Sticker (Ayarla)</option>
+              </select>
+            </div>
+            
+            <div class="bulk-action-fields" style="display: flex; gap: 10px; align-items: center;">
+              <select id="bulk-action-toggle">
+                <option value="enable">Aktif Et (İşaretle)</option>
+                <option value="disable">Pasif Et (Kaldır)</option>
+              </select>
+              <input type="number" id="bulk-action-custom-value" class="custom-price-input" style="display: none; width: 100px; height: 38px; padding: 0 10px; background-color: var(--bg-input); border: 1px solid var(--border-glass); border-radius: var(--radius-medium); color: var(--text-main);" placeholder="Özel Fiyat">
+            </div>
+            
+            <button type="button" id="btn-apply-bulk" class="btn btn-primary" onclick="applyBulkPricingActions()" style="height: 38px; padding: 0 20px; font-size: 13px; border-radius: var(--radius-medium); display: inline-flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Uygula
+            </button>
+            
+            <button type="button" id="btn-clear-bulk" class="btn btn-secondary" onclick="clearBulkSelection()" style="height: 38px; padding: 0 15px; font-size: 13px; border-radius: var(--radius-medium); display: inline-flex; align-items: center; gap: 6px;">
+              Seçimi Kaldır
+            </button>
           </div>
         </div>
       </section>
@@ -205,6 +262,32 @@
                 <i class="fa-solid fa-floppy-disk"></i> Varsayılan Fiyatları Kaydet
               </button>
               <span id="sot-save-status" class="save-status"></span>
+            </div>
+          </div>
+
+          <!-- Backup & Restore Card -->
+          <div class="settings-card settings-section-divider" style="margin-top: 35px;">
+            <div class="card-header">
+              <i class="fa-solid fa-database" style="color: var(--color-accent-gold); font-size: 24px; margin-right: 12px;"></i>
+              <h3>Sistem Verilerini Yedekle ve Geri Yükle</h3>
+            </div>
+            
+            <p class="settings-desc" style="margin-top: 10px; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+              Tüm ürün fiyatlandırma notlarınızı, özel modüler fiyat seçimlerinizi, CRM müşteri kayıtlarını (ve parmak ölçülerini) ve varsayılan SoT fiyat ayarlarınızı tek tıkla yerel bilgisayarınıza yedek dosyası (.json) olarak indirebilir ve dilediğinizde geri yükleyebilirsiniz.
+            </p>
+            
+            <div class="backup-restore-actions" style="display: flex; gap: 20px; align-items: center; margin-top: 25px; flex-wrap: wrap;">
+              <a href="/api/backup" target="_blank" class="btn btn-primary btn-large" style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px; height: 48px; border-radius: var(--radius-large);">
+                <i class="fa-solid fa-download"></i> <span>Tüm Verileri Yedekle (.json)</span>
+              </a>
+              
+              <div class="restore-wrapper" style="display: flex; align-items: center; gap: 12px;">
+                <button type="button" id="btn-trigger-restore" class="btn btn-secondary btn-large" onclick="document.getElementById('restore-file-input').click();" style="height: 48px; border-radius: var(--radius-large); display: inline-flex; align-items: center; gap: 10px;">
+                  <i class="fa-solid fa-upload"></i> <span>Yedek Dosyasından Geri Yükle</span>
+                </button>
+                <input type="file" id="restore-file-input" accept=".json" style="display: none;" onchange="handleRestoreBackup(event);">
+                <span id="restore-status" class="save-status" style="font-weight: 600;"></span>
+              </div>
             </div>
           </div>
         </div>

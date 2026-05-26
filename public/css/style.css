@@ -1980,8 +1980,151 @@ input:checked + .slider:before {
   animation: shake 0.3s ease-in-out;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
 }
+
+/* ==========================================
+   BULK ACTIONS BAR & INTERFACES STYLING
+   ========================================== */
+.bulk-actions-bar-container {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1100px;
+  background: rgba(19, 10, 12, 0.95);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1.5px solid var(--color-accent-gold);
+  border-radius: var(--radius-large);
+  padding: 16px 28px;
+  z-index: 9999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-premium), 0 0 30px rgba(199, 163, 108, 0.25);
+  animation: bulkSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes bulkSlideUp {
+  from { transform: translate(-50%, 100px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.bulk-info {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bulk-info span {
+  background: var(--color-primary);
+  border: 1px solid var(--color-accent);
+  padding: 3px 10px;
+  border-radius: var(--radius-medium);
+  font-size: 13px;
+  color: var(--text-main);
+}
+
+.bulk-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.bulk-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.bulk-option-selector select,
+.bulk-action-fields select {
+  height: 38px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-medium);
+  color: var(--text-main);
+  padding: 0 12px;
+  font-family: var(--font-primary);
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.bulk-option-selector select:focus,
+.bulk-action-fields select:focus {
+  border-color: var(--color-accent);
+}
+
+/* Card Mismatch Warning Actions styling */
+.mismatch-alert-banner {
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch !important;
+  padding: 16px !important;
+}
+
+.mismatch-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mismatch-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-mismatch-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: var(--transition-smooth);
+}
+
+.btn-copy-price {
+  background-color: rgba(199, 163, 108, 0.1);
+  border-color: var(--color-accent-gold);
+  color: var(--color-accent-gold);
+}
+
+.btn-copy-price:hover {
+  background-color: var(--color-accent-gold);
+  color: var(--bg-main);
+}
+
+.btn-edit-site {
+  background-color: rgba(211, 103, 103, 0.1);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.btn-edit-site:hover {
+  background-color: var(--color-accent);
+  color: var(--text-main);
+}
+
+/* Bulk Card Selection Wrapper */
+.bulk-select-wrapper {
+  transition: opacity 0.3s ease;
+}
+
+.bulk-select-checkbox {
+  accent-color: var(--color-accent-gold);
+  outline: none;
+}
+
