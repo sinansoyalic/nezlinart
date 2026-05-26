@@ -882,11 +882,11 @@ function createProductCard(product) {
   bannerActions.appendChild(copyBtn);
 
   const editLink = document.createElement('a');
-  editLink.href = `https://nezlincollection.com/admin/Urunler/UrunListele.aspx?kelime=${product.code}`;
+  editLink.href = 'https://nezlincollection.com/Admin/UrunYonetimi.aspx?lang=tr&adminlang=tr';
   editLink.target = '_blank';
   editLink.className = 'btn-mismatch-action btn-edit-site';
   editLink.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Sitede Düzenle';
-  editLink.title = 'Ticimax Panelinde Bu Ürünü Ara';
+  editLink.title = 'Ticimax Hızlı Fiyat Düzenleme Sayfasını Aç';
   editLink.addEventListener('click', (e) => {
     e.stopPropagation();
   });
