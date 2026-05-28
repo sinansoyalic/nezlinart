@@ -1397,6 +1397,17 @@ input:checked+.slider:before {
 
 /* Premium 9:16 Portrait Aspect Ratio Mobile Optimization */
 @media (max-width: 600px) {
+  /* Scale down all standard text elements relatively by 30% */
+  body, p, span:not(.fa):not(.fas):not(.far):not(.fa-solid), a, label, button, input, select, textarea, td, th {
+    font-size: 10px !important;
+  }
+  h1 { font-size: 28px !important; }
+  h2 { font-size: 18px !important; }
+  h3 { font-size: 15px !important; }
+  h4 { font-size: 13px !important; }
+  h5 { font-size: 11px !important; }
+  h6 { font-size: 10px !important; }
+
   /* Compress general layout padding and gaps */
   .main-content {
     padding: 15px !important;
@@ -1416,7 +1427,7 @@ input:checked+.slider:before {
   }
   
   .header-title h2 {
-    font-size: 20px !important;
+    font-size: 14px !important; /* Scaled down 30% from 20px */
   }
 
   /* Compress product card layout */
@@ -1435,7 +1446,7 @@ input:checked+.slider:before {
   }
 
   .product-name-title {
-    font-size: 15px !important;
+    font-size: 11px !important; /* Scaled down 30% from 15px */
     max-width: 100% !important;
   }
 
@@ -1447,19 +1458,19 @@ input:checked+.slider:before {
   }
 
   .price-item .label {
-    font-size: 9px !important;
+    font-size: 7px !important; /* Scaled down 30% from 9px */
   }
 
   .price-item .value {
-    font-size: 14px !important;
+    font-size: 10px !important; /* Scaled down 30% from 14px */
   }
 
   .price-item.regular .value {
-    font-size: 12px !important;
+    font-size: 8px !important; /* Scaled down 30% from 12px */
   }
 
   .price-item.discount .value {
-    font-size: 16px !important;
+    font-size: 11px !important; /* Scaled down 30% from 16px */
   }
 
   /* Filter card compression */
@@ -1471,12 +1482,12 @@ input:checked+.slider:before {
   .filter-card input, 
   .filter-card select, 
   .filter-card button {
-    font-size: 12px !important;
+    font-size: 9px !important; /* Scaled down 30% from 12px */
     height: 40px !important;
   }
   
   .results-counter {
-    font-size: 11px !important;
+    font-size: 8px !important; /* Scaled down 30% from 11px */
     text-align: center;
   }
 
@@ -1498,13 +1509,13 @@ input:checked+.slider:before {
 
   .cost-table input {
     padding: 4px 6px !important;
-    font-size: 12px !important;
+    font-size: 9px !important; /* Scaled down 30% from 12px */
   }
 
   .cost-table th, 
   .cost-table td {
     padding: 8px 3px !important;
-    font-size: 11px !important;
+    font-size: 8px !important; /* Scaled down 30% from 11px */
   }
   
   /* Ensure custom set cards fit perfectly */
@@ -1512,6 +1523,27 @@ input:checked+.slider:before {
     grid-template-columns: 1fr !important;
     gap: 15px !important;
   }
+  
+  /* Specific admin workspace elements scale-downs */
+  .nav-item span { font-size: 10px !important; }
+  .nav-item i { font-size: 13px !important; }
+  .brand-text h1 { font-size: 14px !important; }
+  .brand-text p { font-size: 8px !important; }
+  .card-header h3 { font-size: 14px !important; }
+  .settings-desc { font-size: 9px !important; }
+  .form-group label { font-size: 9px !important; }
+  .form-input-wrapper input { font-size: 10px !important; }
+  .form-input-wrapper span { font-size: 10px !important; }
+  .save-status { font-size: 9px !important; }
+  .sync-info-item .value { font-size: 11px !important; }
+  .badge { font-size: 8px !important; }
+  .progress-info { font-size: 9px !important; }
+  .logs-console { font-size: 8.5px !important; }
+  .crm-table th { font-size: 8px !important; }
+  .crm-table td { font-size: 9px !important; }
+  .finger-badge .finger-name { font-size: 6px !important; }
+  .finger-badge .finger-val { font-size: 8px !important; }
+  .order-chip { font-size: 8px !important; }
 }
 
 /* History Undo/Redo Controls */

@@ -1386,6 +1386,9 @@ footer {
 }
 
 @media (max-width: 600px) {
+  html {
+    font-size: 11.2px !important; /* Scale all rem/em relative typography down by 30% */
+  }
   .gallery-grid {
     grid-template-columns: 1fr;
   }
