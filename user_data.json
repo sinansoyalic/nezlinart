@@ -42,5 +42,12 @@
       "nailart": 95
     },
     "notes": "Test log note"
+  },
+  "NC104": {
+    "checkedOptions": {
+      "kalici3": true
+    },
+    "customPrices": {},
+    "notes": ""
   }
 }

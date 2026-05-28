@@ -2,6 +2,24 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 
+// Helper: Load local .env variables safely if running locally (Zero Dependency dotenv parser)
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  envContent.split(/\r?\n/).forEach(line => {
+    if (line.trim().startsWith('#') || !line.includes('=')) return;
+    const parts = line.split('=');
+    const key = parts[0].trim();
+    let val = parts.slice(1).join('=').trim();
+    if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+    if (val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
+    if (process.env[key] === undefined) {
+      process.env[key] = val;
+    }
+  });
+}
+
+
 const app = express();
 const PORT = 3000;
 
@@ -319,9 +337,26 @@ app.get('/api/customers', async (req, res) => {
   res.json(customers);
 });
 
+// Helper: Anonymize customer name (Privacy Masking)
+function maskName(fullName) {
+  if (!fullName) return '';
+  return fullName.split(/\s+/).map(word => {
+    if (word.length > 2) {
+      return word.slice(0, 2) + '*'.repeat(word.length - 2);
+    } else if (word.length > 0) {
+      return word.slice(0, 1) + '*'.repeat(word.length - 1);
+    }
+    return '';
+  }).join(' ');
+}
+
 // 2. Müşteri ekle veya güncelle
 app.post('/api/customers', async (req, res) => {
   const customer = req.body;
+  
+  if (customer.name) {
+    customer.name = maskName(customer.name);
+  }
   
   if (!customer.id) {
     customer.id = 'c-' + Date.now();
@@ -358,10 +393,13 @@ app.get('/api/config', async (req, res) => {
 // 2. Save default prices (SoT)
 app.post('/api/config', async (req, res) => {
   const newConfig = req.body;
-  // Convert values to numbers except yuvarlamaTipi which is string
+  // Convert values to numbers except yuvarlamaTipi which is string, and costCalculatorData which is object
   for (const key in newConfig) {
     if (key === 'yuvarlamaTipi') {
       newConfig[key] = String(newConfig[key]);
+    } else if (key === 'costCalculatorData') {
+      // Keep object/array structure intact
+      newConfig[key] = newConfig[key];
     } else {
       newConfig[key] = parseFloat(newConfig[key]) || 0;
     }
@@ -856,20 +894,21 @@ if (require.main === module) {
     console.log(`===========================================================`);
 
     // Suggestion 38: Otomatik Senkronizasyon Zamanlayıcısı (Automated background sync every 30 mins)
-    const AUTO_SYNC_INTERVAL = 30 * 60 * 1000;
-    setInterval(() => {
-      console.log('[Zamanlayıcı] Otomatik arka plan senkronizasyonu kontrol ediliyor...');
-      if (!crawlStatus.isCrawling) {
-        console.log('[Zamanlayıcı] Sessiz otomatik senkronizasyon başlatılıyor...');
-        runScraper().then(() => {
-          console.log('[Zamanlayıcı] Otomatik arka plan senkronizasyonu tamamlandı.');
-        }).catch(err => {
-          console.error('[Zamanlayıcı Hata] Otomatik senkronizasyon başarısız:', err);
-        });
-      } else {
-        console.log('[Zamanlayıcı] Aktif bir senkronizasyon zaten çalışıyor, atlandı.');
-      }
-    }, AUTO_SYNC_INTERVAL);
+    // Otomatik zamanlayıcı Netlify limitlerini ve kotaları korumak amacıyla tamamen devre dışı bırakılmıştır.
+    // const AUTO_SYNC_INTERVAL = 30 * 60 * 1000;
+    // setInterval(() => {
+    //   console.log('[Zamanlayıcı] Otomatik arka plan senkronizasyonu kontrol ediliyor...');
+    //   if (!crawlStatus.isCrawling) {
+    //     console.log('[Zamanlayıcı] Sessiz otomatik senkronizasyon başlatılıyor...');
+    //     runScraper().then(() => {
+    //       console.log('[Zamanlayıcı] Otomatik arka plan senkronizasyonu tamamlandı.');
+    //     }).catch(err => {
+    //       console.error('[Zamanlayıcı Hata] Otomatik senkronizasyon başarısız:', err);
+    //     });
+    //   } else {
+    //     console.log('[Zamanlayıcı] Aktif bir senkronizasyon zaten çalışıyor, atlandı.');
+    //   }
+    // }, AUTO_SYNC_INTERVAL);
   });
 }
 

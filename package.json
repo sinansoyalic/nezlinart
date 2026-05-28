@@ -4,7 +4,8 @@
   "description": "Nezlin Fiyatlandırma Sistemi (NFS) - Localhost Pricing Management & E-Commerce Scraper",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.2",

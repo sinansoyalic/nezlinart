@@ -11,6 +11,8 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/img/NezlinLogoWhite2.png" type="image/png">
 </head>
 <body>
 
@@ -51,6 +53,12 @@
     </div>
   </div>
 
+  <!-- Sidebar Mobile Backdrop & Floating Toggle Button -->
+  <div id="sidebar-backdrop" class="sidebar-backdrop" onclick="toggleMobileSidebar(false)"></div>
+  <button id="mobile-nav-toggle" class="mobile-nav-toggle" style="display: none;" onclick="toggleMobileSidebar(true)" title="Menüyü Aç">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
   <!-- Background Blur Orbs for Luxury Ambient Layout -->
   <div class="glow-orb orb-1"></div>
   <div class="glow-orb orb-2"></div>
@@ -81,13 +89,13 @@
           <i class="fa-solid fa-rotate"></i>
           <span>Veri Eşitleme</span>
         </a>
-        <a href="#" class="nav-item" data-tab="map">
-          <i class="fa-solid fa-map-location-dot"></i>
-          <span>Müşteri Haritası</span>
-        </a>
         <a href="#" class="nav-item" data-tab="customers">
           <i class="fa-solid fa-users-gear"></i>
           <span>Müşteri Detayları</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="cost">
+          <i class="fa-solid fa-calculator"></i>
+          <span>Maliyet Hesaplama</span>
         </a>
       </nav>
 
@@ -107,6 +115,7 @@
         <div class="header-title">
           <h2>Nezlin Fiyatlandırma Sistemi <span class="badge">v1.0</span></h2>
           <p>nezlincollection.com için localhost yönetim paneli</p>
+          <div id="prefix-counters-container" class="prefix-counters-wrapper"></div>
         </div>
         
         <!-- Live Crawler Button in Header -->
@@ -273,7 +282,7 @@
             </div>
             
             <p class="settings-desc" style="margin-top: 10px; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-              Tüm ürün fiyatlandırma notlarınızı, özel modüler fiyat seçimlerinizi, CRM müşteri kayıtlarını (ve parmak ölçülerini) ve varsayılan SoT fiyat ayarlarınızı tek tıkla yerel bilgisayarınıza yedek dosyası (.json) olarak indirebilir ve dilediğinizde geri yükleyebilirsiniz.
+              Tüm ürün yapım aşamalarınızı, özel modüler fiyat seçimlerinizi, CRM müşteri kayıtlarını (ve parmak ölçülerini) ve varsayılan SoT fiyat ayarlarınızı tek tıkla yerel bilgisayarınıza yedek dosyası (.json) olarak indirebilir ve dilediğinizde geri yükleyebilirsiniz.
             </p>
             
             <div class="backup-restore-actions" style="display: flex; gap: 20px; align-items: center; margin-top: 25px; flex-wrap: wrap;">
@@ -358,10 +367,10 @@
               <div class="sync-info-item">
                 <span class="label">Otomatik Zamanlayıcı:</span>
                 <span class="value" style="display: inline-flex; align-items: center; gap: 8px;">
-                  <span class="badge" style="background: rgba(78, 159, 61, 0.15); color: #4e9f3d; font-weight: 700; border: 1px solid rgba(78, 159, 61, 0.25);">
-                    <i class="fa-solid fa-clock" style="margin-right: 4px;"></i> Aktif (30 dk)
+                  <span class="badge badge-danger">
+                    <i class="fa-solid fa-circle-minus"></i> Devre Dışı
                   </span>
-                  <span style="font-size: 11px; color: var(--text-muted);">Arka planda sessiz eşitleme yapar</span>
+                  <span style="font-size: 11px; color: var(--text-muted);">Netlify limitlerini korumak için kapatıldı</span>
                 </span>
               </div>
             </div>
@@ -393,60 +402,6 @@
         </div>
       </section>
 
-      <!-- Active View: Turkey Map Dashboard -->
-      <section id="view-map" class="view-panel">
-        <div class="map-container">
-          <div class="map-card">
-            <div class="card-header">
-              <i class="fa-solid fa-map-location-dot"></i>
-              <h3>Müşteri Sipariş Coğrafyası</h3>
-              <span id="selected-city-title" class="selected-city-badge">Tüm Türkiye</span>
-            </div>
-            <p class="map-desc">
-              Aşağıdaki haritada sipariş aldığınız şehirler <strong>kadife bordo</strong> renkle gösterilmiştir. 
-              Üzerine tıklayarak seçtiğiniz şehre özel sipariş veren müşterilerinizin listesini harita altında süzebilirsiniz.
-            </p>
-            
-            <!-- Turkey SVG Container -->
-            <div id="turkey-map-container" class="turkey-map-svg-wrapper">
-              <!-- SVG Turkey map will be injected dynamically -->
-              <div class="loading-state">
-                <div class="spinner"></div>
-                <p>Türkiye Haritası yükleniyor...</p>
-              </div>
-            </div>
-            
-            <!-- Clicked City Customer Listing -->
-            <div class="city-customers-block" id="city-customers-section">
-              <div class="block-title">
-                <i class="fa-solid fa-users"></i>
-                <h4 id="city-customers-title">Sipariş Veren Müşteriler</h4>
-              </div>
-              <div class="city-customers-table-wrapper">
-                <table class="crm-table">
-                  <thead>
-                    <tr>
-                      <th>Müşteri Adı</th>
-                      <th>Instagram</th>
-                      <th>Telefon</th>
-                      <th>Beden Ölçüleri (mm)</th>
-                      <th>Önceki Siparişler</th>
-                      <th>Adres</th>
-                    </tr>
-                  </thead>
-                  <tbody id="city-customers-list-tbody">
-                    <tr>
-                      <td colspan="6" class="table-empty">Haritadan bir şehre tıklayarak o ildeki siparişleri listeleyin.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </section>
-
       <!-- Active View: Customer CRM Panel -->
       <section id="view-customers" class="view-panel">
         <div class="crm-container">
@@ -471,7 +426,6 @@
                 <thead>
                   <tr>
                     <th>Müşteri Adı</th>
-                    <th>İl</th>
                     <th>Instagram</th>
                     <th>Telefon</th>
                     <th>Beden Ölçüleri (Baş - Serçe / mm)</th>
@@ -483,7 +437,7 @@
                 <tbody id="main-customers-list-tbody">
                   <!-- Will be populated dynamically -->
                   <tr>
-                    <td colspan="8" class="table-empty">Yükleniyor...</td>
+                    <td colspan="7" class="table-empty">Yükleniyor...</td>
                   </tr>
                 </tbody>
               </table>
@@ -491,6 +445,187 @@
           </div>
         </div>
       </section>
+
+      <!-- Active View: Cost Calculator Panel -->
+      <section id="view-cost" class="view-panel">
+        <div class="cost-container">
+          
+          <!-- Cost Calculator Header Action -->
+          <div class="cost-header-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <div class="header-left">
+              <h3 style="font-family: var(--font-primary); font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; font-size: 20px;">
+                <i class="fa-solid fa-calculator" style="color: var(--color-accent-gold);"></i> Maliyet & Set Hesaplayıcı
+              </h3>
+              <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Sarf malzemeleri ve atölye giderlerinizi yönetin, özel paket maliyetleri hesaplayın.</p>
+            </div>
+            <div class="header-right" style="display: flex; gap: 10px;">
+              <button id="btn-create-custom-set" class="btn btn-primary" onclick="openCreateCustomSetModal()" style="height: 40px; display: inline-flex; align-items: center; gap: 6px; font-size: 13px;">
+                <i class="fa-solid fa-folder-plus" style="color: #000;"></i> <span style="color: #000;">Özel Set Oluştur</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Custom Sets Cards Grid -->
+          <div class="custom-sets-section" style="margin-bottom: 30px;">
+            <h4 style="font-family: var(--font-primary); font-weight: 700; color: var(--color-accent-gold); margin-bottom: 15px; font-size: 15px; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-layer-group"></i> Oluşturulan Özel Setler (Maliyet Paketleri)
+            </h4>
+            <div id="cost-sets-grid" class="cost-sets-grid-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+              <!-- Will be dynamically loaded -->
+              <div class="empty-sets-state" style="grid-column: 1 / -1; text-align: center; padding: 30px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border-glass); border-radius: var(--radius-large); color: var(--text-muted); font-size: 13px;">
+                <i class="fa-solid fa-cubes" style="font-size: 24px; color: var(--color-accent-gold); margin-bottom: 10px; display: block;"></i>
+                Henüz oluşturulmuş bir özel set bulunmuyor. Yukarıdaki "Özel Set Oluştur" butonuna basarak sarf malzemelerinden özel paketler oluşturabilirsiniz.
+              </div>
+            </div>
+          </div>
+
+          <!-- Two Column Cost Tables Grid -->
+          <div class="cost-tables-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 25px;">
+            
+            <!-- Consumables (Sarf Malzemeleri) -->
+            <div class="crm-card cost-sheet-card" style="margin-bottom: 0;">
+              <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 15px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <i class="fa-solid fa-box-open" style="font-size: 20px; color: var(--color-accent-gold);"></i>
+                  <h3 style="font-size: 16px; margin: 0;">1. Sarf Malzemeleri (Tek Kullanımlık)</h3>
+                </div>
+                <button class="btn btn-success btn-small" onclick="openAddBranchModal('sarf')" style="padding: 6px 12px; font-size: 12px; height: 32px; display: inline-flex; align-items: center; gap: 4px;">
+                  <i class="fa-solid fa-plus"></i> Ekle
+                </button>
+              </div>
+              
+              <div class="crm-table-wrapper" style="margin-top: 15px; max-height: 400px; overflow-y: auto;">
+                <table class="crm-table cost-table" style="width: 100%; border-collapse: collapse;">
+                  <thead>
+                    <tr>
+                      <th style="padding: 10px 5px; text-align: left;">Malzeme Adı</th>
+                      <th style="padding: 10px 5px; width: 120px; text-align: right;">Birim Fiyat</th>
+                      <th style="padding: 10px 5px; width: 60px; text-align: center;">Sil</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sarf-items-tbody">
+                    <!-- Loaded dynamically -->
+                  </tbody>
+                  <tfoot>
+                    <tr style="border-top: 1.5px solid var(--color-accent-gold); font-weight: 700;">
+                      <td style="padding: 12px 5px; color: var(--color-accent-gold); text-align: left;">GENEL TOPLAM</td>
+                      <td id="sarf-grand-total" style="padding: 12px 5px; text-align: right; color: var(--color-accent-gold); font-size: 14px;">0.00 ₺</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            <!-- Workshop (Atölye) -->
+            <div class="crm-card cost-sheet-card" style="margin-bottom: 0;">
+              <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 15px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <i class="fa-solid fa-screwdriver-wrench" style="font-size: 20px; color: var(--color-accent-gold);"></i>
+                  <h3 style="font-size: 16px; margin: 0;">2. Atölye Giderleri (Ekipman & Aletler)</h3>
+                </div>
+                <button class="btn btn-success btn-small" onclick="openAddBranchModal('atolye')" style="padding: 6px 12px; font-size: 12px; height: 32px; display: inline-flex; align-items: center; gap: 4px;">
+                  <i class="fa-solid fa-plus"></i> Ekle
+                </button>
+              </div>
+              
+              <div class="crm-table-wrapper" style="margin-top: 15px; max-height: 400px; overflow-y: auto;">
+                <table class="crm-table cost-table" style="width: 100%; border-collapse: collapse;">
+                  <thead>
+                    <tr>
+                      <th style="padding: 10px 5px; text-align: left;">Ekipman / Gider Adı</th>
+                      <th style="padding: 10px 5px; width: 80px; text-align: right;">Birim Fiyat</th>
+                      <th style="padding: 10px 5px; width: 55px; text-align: center;">Miktar</th>
+                      <th style="padding: 10px 5px; width: 80px; text-align: right;">Toplam</th>
+                      <th style="padding: 10px 5px; width: 70px; text-align: center;">Ömür (Ay)</th>
+                      <th style="padding: 10px 5px; width: 90px; text-align: right;">Yıllık Mal.</th>
+                      <th style="padding: 10px 5px; width: 40px; text-align: center;">Sil</th>
+                    </tr>
+                  </thead>
+                  <tbody id="atolye-items-tbody">
+                    <!-- Loaded dynamically -->
+                  </tbody>
+                  <tfoot>
+                    <tr style="border-top: 1.5px solid var(--color-accent-gold); font-weight: 700;">
+                      <td style="padding: 12px 5px; color: var(--color-accent-gold); text-align: left;">GENEL TOPLAM</td>
+                      <td colspan="2"></td>
+                      <td id="atolye-grand-total" style="padding: 12px 5px; text-align: right; color: var(--color-accent-gold); font-size: 14px;">0.00 ₺</td>
+                      <td></td>
+                      <td id="atolye-annual-grand-total" style="padding: 12px 5px; text-align: right; color: var(--color-accent-gold); font-size: 14px;">0.00 ₺</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Glassmorphic Add Cost Item (Branch) Modal -->
+      <div id="cost-item-modal" class="modal-overlay" style="display: none; justify-content: center; align-items: center; z-index: 2000;">
+        <div class="modal-card" style="max-width: 400px; background: rgba(19, 10, 12, 0.95); backdrop-filter: blur(20px); border: 1px solid var(--color-accent-gold); border-radius: var(--radius-large); padding: 25px;">
+          <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 id="cost-modal-title" style="margin: 0; font-size: 18px; font-family: var(--font-primary); color: #fff;">Yeni Kalem Ekle</h3>
+            <button class="close-btn" onclick="closeCostItemModal()" style="background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer;">&times;</button>
+          </div>
+          <form id="cost-item-form" onsubmit="event.preventDefault(); handleAddCostItemSubmit();" class="modal-form">
+            <input type="hidden" id="cost-item-type">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 6px;">
+              <label for="cost-item-name" style="font-size: 12px; color: var(--color-accent-gold); font-weight: 600;">Kalem / Malzeme Adı *</label>
+              <input type="text" id="cost-item-name" placeholder="Örn: Portakal Çubuğu" required style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-glass); border-radius: var(--radius-medium); color: #fff;">
+            </div>
+            <div class="form-group" style="margin-top: 15px; display: flex; flex-direction: column; gap: 6px;">
+              <label for="cost-item-price" style="font-size: 12px; color: var(--color-accent-gold); font-weight: 600;">Birim Fiyat (₺) *</label>
+              <input type="number" id="cost-item-price" min="0" step="0.01" value="0.00" required style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-glass); border-radius: var(--radius-medium); color: #fff;">
+            </div>
+            <div id="cost-item-amount-group" class="form-group" style="margin-top: 15px; display: flex; flex-direction: column; gap: 6px;">
+              <label for="cost-item-amount" style="font-size: 12px; color: var(--color-accent-gold); font-weight: 600;">Miktar *</label>
+              <input type="number" id="cost-item-amount" min="1" step="1" value="1" required style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-glass); border-radius: var(--radius-medium); color: #fff;">
+            </div>
+            <div id="cost-item-lifespan-group" class="form-group" style="margin-top: 15px; display: flex; flex-direction: column; gap: 6px;">
+              <label for="cost-item-lifespan" style="font-size: 12px; color: var(--color-accent-gold); font-weight: 600;">Kullanım Ömrü (Ay) *</label>
+              <input type="number" id="cost-item-lifespan" min="1" step="1" value="12" required style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-glass); border-radius: var(--radius-medium); color: #fff;">
+            </div>
+            <div class="modal-actions" style="margin-top: 25px; display: flex; justify-content: flex-end; gap: 10px;">
+              <button type="button" class="btn btn-secondary" onclick="closeCostItemModal()" style="height: 38px; padding: 0 16px; font-size: 13px;">İptal</button>
+              <button type="submit" class="btn btn-success" style="height: 38px; padding: 0 16px; font-size: 13px; background: #4e9f3d; color: #fff;">Ekle</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Glassmorphic Create Custom Set Modal -->
+      <div id="custom-set-modal" class="modal-overlay" style="display: none; justify-content: center; align-items: center; z-index: 2000;">
+        <div class="modal-card" style="width: 400px; max-width: 90vw; height: 711px; max-height: 90vh; background: rgba(19, 10, 12, 0.95); backdrop-filter: blur(20px); border: 1px solid var(--color-accent-gold); border-radius: var(--radius-large); padding: 25px; display: flex; flex-direction: column;">
+          <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-shrink: 0;">
+            <h3 style="margin: 0; font-size: 18px; font-family: var(--font-primary); color: #fff;">Özel Paket / Set Oluştur</h3>
+            <button class="close-btn" onclick="closeCustomSetModal()" style="background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer;">&times;</button>
+          </div>
+          <form id="custom-set-form" onsubmit="event.preventDefault(); handleCreateCustomSetSubmit();" class="modal-form" style="display: flex; flex-direction: column; flex-grow: 1; height: calc(100% - 45px); justify-content: space-between; margin-bottom: 0;">
+            <div style="display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; margin-bottom: 20px;">
+              <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+                <label for="custom-set-name" style="font-size: 12px; color: var(--color-accent-gold); font-weight: 600;">Paket / Set Adı *</label>
+                <input type="text" id="custom-set-name" placeholder="Örn: Ekonomik Kutu Seti" required style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-glass); border-radius: var(--radius-medium); color: #fff;">
+              </div>
+              
+              <div class="form-group" style="margin-top: 20px; display: flex; flex-direction: column; gap: 6px; flex-grow: 1; overflow: hidden;">
+                <label style="margin-bottom: 6px; display: block; color: var(--color-accent-gold); font-size: 12px; font-weight: 600; flex-shrink: 0;">Dahil Edilecek Sarf Malzemeleri Seçin:</label>
+                <div id="custom-set-items-selection" style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border-glass); border-radius: var(--radius-large); padding: 12px 3px; background: rgba(0,0,0,0.25);">
+                  <!-- Checkboxes loaded dynamically from Sarf list -->
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 10px; flex-shrink: 0; margin-top: 0;">
+              <button type="button" class="btn btn-secondary" onclick="closeCustomSetModal()" style="height: 38px; padding: 0 16px; font-size: 13px;">İptal</button>
+              <button type="submit" class="btn btn-success" style="height: 38px; padding: 0 16px; font-size: 13px; background: #4e9f3d; color: #fff;">Seti Oluştur</button>
+            </div>
+          </form>
+        </div>
+      </div>
 
       <!-- Glassmorphic CRM Modal Form -->
       <div id="customer-modal" class="modal-overlay" style="display: none;">
@@ -502,18 +637,10 @@
           <form id="customer-form" class="modal-form">
             <input type="hidden" id="customer-id-input">
             
-            <div class="form-row-2">
-              <div class="form-group">
-                <label for="c-name">Müşteri Adı *</label>
-                <input type="text" id="c-name" placeholder="Ad Soyad" required>
-              </div>
-              <div class="form-group">
-                <label for="c-city">Şehir (İl Plaka Kodu) *</label>
-                <select id="c-city" required>
-                  <!-- Will be populated dynamically with 81 cities -->
-                </select>
-              </div>
-            </div>
+            <div class="form-group">
+               <label for="c-name">Müşteri Adı *</label>
+               <input type="text" id="c-name" placeholder="Ad Soyad" required>
+             </div>
             
             <div class="form-row-2">
               <div class="form-group">
@@ -576,6 +703,27 @@
               <button type="submit" class="btn btn-success">Müşteriyi Kaydet</button>
             </div>
           </form>
+        </div>
+      </div>
+
+      <!-- Premium Netlify Scraper Warning Modal -->
+      <div id="netlify-warning-modal" class="modal-overlay" style="display: none; justify-content: center; align-items: center; z-index: 2000;">
+        <div class="modal-card" style="max-width: 500px; text-align: center; padding: 30px; border: 1px solid rgba(199, 163, 108, 0.35); box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+          <div style="font-size: 50px; color: var(--color-accent-gold); margin-bottom: 20px;">
+            <i class="fa-solid fa-cloud-bolt"></i>
+          </div>
+          <h3 style="font-family: var(--font-primary); font-weight: 700; color: #fff; margin-bottom: 15px; font-size: 20px;">☁️ Bulut Modu Aktif - Eşitleme Uyarısı</h3>
+          <p style="font-size: 13px; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px; text-align: left;">
+            Netlify ücretsiz plan sunucu limitleri (maksimum 10 saniye işlem saniyeleri) ve kotaları korumak için <strong>"Veri Çek" (Scraper)</strong> işlemini yerel bilgisayarınızdan (<strong>localhost:3000</strong>) yapmanız önerilir.
+          </p>
+          <div style="background: rgba(199, 163, 108, 0.08); border-left: 3px solid var(--color-accent-gold); padding: 15px; border-radius: 6px; text-align: left; font-size: 12px; line-height: 1.5; color: var(--text-main); margin-bottom: 25px;">
+            <i class="fa-solid fa-circle-info" style="color: var(--color-accent-gold); margin-right: 6px;"></i>
+            Hem bu web sitesi hem de yerel uygulamanız <strong>aynı Supabase Cloud veritabanına</strong> bağlıdır. Yerel bilgisayarınızda yaptığınız veri eşitlemeleri anında buraya yansır ve Netlify kotalarınızı harcamaz!
+          </div>
+          <div style="display: flex; gap: 15px; justify-content: center;">
+            <button type="button" class="btn btn-secondary" style="padding: 10px 20px; font-size: 13px;" onclick="closeNetlifyWarningModal()">İptal Et & Nasıl Yapılır?</button>
+            <button type="button" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px; background: var(--color-accent-gold); color: #000;" onclick="proceedWithNetlifyCrawl()">Yine de Sunucuda Çalıştır</button>
+          </div>
         </div>
       </div>
 

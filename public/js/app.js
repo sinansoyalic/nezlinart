@@ -146,25 +146,23 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   if (kdvNode) kdvNode.textContent = `${pricing.kdv.toFixed(2)} ₺`;
   if (grandNode) grandNode.textContent = `${pricing.roundedGrandTotal.toFixed(2)} ₺`;
 
-  const sellingPrice = product.discountedPrice > 0 ? product.discountedPrice : product.undiscountedPrice;
+  const normalPrice = product.undiscountedPrice;
   const tolerance = state.config.toleransLimit !== undefined ? parseFloat(state.config.toleransLimit) : 10.0;
-  const isMismatch = Math.abs(pricing.roundedGrandTotal - sellingPrice) >= tolerance;
-  const warningBanner = document.getElementById(`mismatch-warning-${code}`);
-  if (warningBanner) {
-    warningBanner.style.display = isMismatch ? 'flex' : 'none';
-    if (isMismatch) {
-      const pNode = warningBanner.querySelector('.mismatch-banner-content p');
-      if (pNode) {
-        pNode.innerHTML = `Eşleşmiyor! Sitedeki: <strong>${sellingPrice.toFixed(2)} ₺</strong> | Önerilen: <strong>${pricing.roundedGrandTotal.toFixed(2)} ₺</strong>`;
-      }
-      const copyBtn = warningBanner.querySelector('.btn-copy-price');
-      if (copyBtn) {
-        copyBtn.onclick = (e) => {
-          e.stopPropagation();
-          copyToClipboard(pricing.roundedGrandTotal.toFixed(2), product.code);
-        };
-      }
-    }
+  const isMismatch = Math.abs(pricing.roundedGrandTotal - normalPrice) >= tolerance;
+  
+  // Update warning exclamation button visibility
+  const mismatchBtn = document.getElementById(`mismatch-btn-${code}`);
+  if (mismatchBtn) {
+    mismatchBtn.style.display = isMismatch ? 'inline-flex' : 'none';
+  }
+
+  // Update copy button handler with new price
+  const copyBtn = document.getElementById(`copy-btn-${code}`);
+  if (copyBtn) {
+    copyBtn.onclick = (e) => {
+      e.stopPropagation();
+      copyToClipboard(pricing.roundedGrandTotal.toFixed(2), code);
+    };
   }
 }
 
@@ -307,16 +305,21 @@ function initNavigation() {
 
       state.activeTab = tabId;
 
+      // Close mobile sidebar on navigation click
+      if (typeof window.toggleMobileSidebar === 'function') {
+        window.toggleMobileSidebar(false);
+      }
+
       // Special Tab Actions
       if (tabId === 'sot') {
         renderSoTSettingsForm();
         loadAuditTrail(); // Refresh logs when SOT tab is visited
       } else if (tabId === 'pricing') {
         renderProductGrid();
-      } else if (tabId === 'map') {
-        initTurkeyMap();
       } else if (tabId === 'customers') {
         renderCustomersTable();
+      } else if (tabId === 'cost') {
+        renderCostCalculator();
       }
     });
   });
@@ -354,6 +357,7 @@ async function loadConfig() {
   try {
     const res = await fetch('/api/config');
     state.config = await res.json();
+    initCostState(); // Gider hesaplayıcı varsayılanlarını yükle
   } catch (err) {
     console.error('Error loading config:', err);
     showNotification('Varsayılan fiyat listesi yüklenemedi.', 'danger');
@@ -378,6 +382,9 @@ async function loadProducts() {
 
     // Process Categories
     extractCategories();
+    
+    // Render Prefix Counters under Subtitle
+    renderPrefixCounters();
     
     // Render
     renderProductGrid();
@@ -415,6 +422,34 @@ function extractCategories() {
     opt.value = cat;
     opt.textContent = cat;
     filterSelect.appendChild(opt);
+  });
+}
+
+function renderPrefixCounters() {
+  const container = document.getElementById('prefix-counters-container');
+  if (!container) return;
+
+  const counts = {};
+  state.products.forEach(product => {
+    if (product.code) {
+      const match = product.code.match(/^[A-Za-z]+/);
+      if (match) {
+        const prefix = match[0].toUpperCase();
+        counts[prefix] = (counts[prefix] || 0) + 1;
+      } else {
+        counts['DİĞER'] = (counts['DİĞER'] || 0) + 1;
+      }
+    }
+  });
+
+  const sortedPrefixes = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+
+  container.innerHTML = '';
+  sortedPrefixes.forEach(prefix => {
+    const badge = document.createElement('span');
+    badge.className = 'prefix-badge';
+    badge.innerHTML = `${prefix}: <strong>${counts[prefix]}</strong>`;
+    container.appendChild(badge);
   });
 }
 
@@ -558,11 +593,11 @@ function renderProductGrid() {
     // 2. Category Match
     const matchesCategory = state.filters.category === 'all' || product.category === state.filters.category;
 
-    // 3. Calculated Grand Total and Selling Price Mismatch with a dynamic tolerance limit
+    // 3. Calculated Grand Total and Normal Price Mismatch with a dynamic tolerance limit
     const grandTotal = calculateProductGrandTotal(product);
-    const sellingPrice = product.discountedPrice > 0 ? product.discountedPrice : product.undiscountedPrice;
+    const normalPrice = product.undiscountedPrice;
     const tolerance = state.config.toleransLimit !== undefined ? parseFloat(state.config.toleransLimit) : 10.0;
-    const hasMismatch = Math.abs(grandTotal - sellingPrice) >= tolerance;
+    const hasMismatch = Math.abs(grandTotal - normalPrice) >= tolerance;
     
     const matchesMismatch = !state.filters.onlyMismatch || hasMismatch;
 
@@ -652,9 +687,9 @@ function createProductCard(product) {
   card.appendChild(bulkSelectWrapper);
 
   const pricing = calculateDetailedPricing(product);
-  const sellingPrice = product.discountedPrice > 0 ? product.discountedPrice : product.undiscountedPrice;
+  const normalPrice = product.undiscountedPrice;
   const tolerance = state.config.toleransLimit !== undefined ? parseFloat(state.config.toleransLimit) : 10.0;
-  const isMismatch = Math.abs(pricing.roundedGrandTotal - sellingPrice) >= tolerance;
+  const isMismatch = Math.abs(pricing.roundedGrandTotal - normalPrice) >= tolerance;
   const userPricing = product.userPricing || { checkedOptions: {}, customPrices: {}, notes: '' };
 
   // 1. Build Top Section (2 Columns)
@@ -851,7 +886,20 @@ function createProductCard(product) {
       <span id="kdv-total-${product.code}">${pricing.kdv.toFixed(2)} ₺</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
-      <span class="label" style="font-size: 13px; font-weight: 700; color: var(--text-main);">ÖNERİLEN TOPLAM</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="label" style="font-size: 13px; font-weight: 700; color: var(--text-main); margin-right: 4px;">ÖNERİLEN TOPLAM</span>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <button type="button" id="mismatch-btn-${product.code}" class="card-action-btn btn-warning-price" title="Fiyat Uyuşmuyor! Analiz İçin Tıklayın" style="display: ${isMismatch ? 'inline-flex' : 'none'};" onclick="openMismatchPopover('${product.code}')">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </button>
+          <button type="button" id="copy-btn-${product.code}" class="card-action-btn" title="Yeni Fiyatı Panoya Kopyala" onclick="copyToClipboard('${pricing.roundedGrandTotal.toFixed(2)}', '${product.code}')">
+            <i class="fa-regular fa-copy"></i>
+          </button>
+          <a href="https://nezlincollection.com/Admin/UrunYonetimi.aspx?lang=tr&adminlang=tr" target="_blank" class="card-action-btn" title="Ticimax Hızlı Fiyat Düzenleme Sayfasını Aç" onclick="event.stopPropagation();">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+      </div>
       <span class="value" id="grand-total-${product.code}" style="font-size: 20px; font-weight: 800; color: var(--color-accent-gold); text-shadow: 0 0 10px rgba(199,163,108,0.2);">${pricing.roundedGrandTotal.toFixed(2)} ₺</span>
     </div>
   `;
@@ -859,56 +907,21 @@ function createProductCard(product) {
   pricingSection.appendChild(optionsTable);
   card.appendChild(pricingSection);
 
-  // 3. Price Mismatch Warning alert box (with "Kopyala ve Git" Copy & Edit actions)
-  const warningBanner = document.createElement('div');
-  warningBanner.className = 'mismatch-alert-banner';
-  warningBanner.id = `mismatch-warning-${product.code}`;
-  warningBanner.style.display = isMismatch ? 'flex' : 'none';
-  
-  const bannerContent = document.createElement('div');
-  bannerContent.className = 'mismatch-banner-content';
-  bannerContent.innerHTML = `
-    <i class="fa-solid fa-triangle-exclamation"></i>
-    <p>Eşleşmiyor! Sitedeki: <strong>${sellingPrice.toFixed(2)} ₺</strong> | Önerilen: <strong>${pricing.roundedGrandTotal.toFixed(2)} ₺</strong></p>
-  `;
-  warningBanner.appendChild(bannerContent);
-
-  const bannerActions = document.createElement('div');
-  bannerActions.className = 'mismatch-actions';
-  
-  const copyBtn = document.createElement('button');
-  copyBtn.type = 'button';
-  copyBtn.className = 'btn-mismatch-action btn-copy-price';
-  copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> Kopyala';
-  copyBtn.title = 'Yeni Fiyatı Panoya Kopyala';
-  copyBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    copyToClipboard(pricing.roundedGrandTotal.toFixed(2), product.code);
-  });
-  bannerActions.appendChild(copyBtn);
-
-  const editLink = document.createElement('a');
-  editLink.href = 'https://nezlincollection.com/Admin/UrunYonetimi.aspx?lang=tr&adminlang=tr';
-  editLink.target = '_blank';
-  editLink.className = 'btn-mismatch-action btn-edit-site';
-  editLink.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Sitede Düzenle';
-  editLink.title = 'Ticimax Hızlı Fiyat Düzenleme Sayfasını Aç';
-  editLink.addEventListener('click', (e) => {
-    e.stopPropagation();
-  });
-  bannerActions.appendChild(editLink);
-
-  warningBanner.appendChild(bannerActions);
-  card.appendChild(warningBanner);
+  // 3. Create Price Mismatch Analysis Popover Overlay (Hidden by default)
+  const popover = document.createElement('div');
+  popover.className = 'mismatch-popover';
+  popover.id = `mismatch-popover-${product.code}`;
+  popover.style.display = 'none';
+  card.appendChild(popover);
 
   // 4. Notes Custom Text Area
   const notesSection = document.createElement('div');
   notesSection.className = 'notes-textarea-section';
-  notesSection.innerHTML = `<label for="notes-${product.code}"><i class="fa-regular fa-comment-dots"></i> Fiyatlandırma Notları</label>`;
+  notesSection.innerHTML = `<label for="notes-${product.code}"><i class="fa-regular fa-comment-dots"></i> Yapım Aşamaları</label>`;
   
   const textarea = document.createElement('textarea');
   textarea.id = `notes-${product.code}`;
-  textarea.placeholder = 'Ürünün bu özel fiyata sahip olmasıyla ilgili detayları girin...';
+  textarea.placeholder = 'Ürünün yapım aşamalarını ve detaylarını girin...';
   textarea.value = userPricing.notes || '';
   
   let oldPricingNotes = null;
@@ -1164,6 +1177,18 @@ function initSyncController() {
 }
 
 async function triggerCrawlerSync() {
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  if (!isLocal) {
+    const modal = document.getElementById('netlify-warning-modal');
+    if (modal) {
+      modal.style.display = 'flex';
+      return;
+    }
+  }
+  executeCrawlerSync();
+}
+
+async function executeCrawlerSync() {
   const logsNode = document.getElementById('sync-logs');
   const btn = document.getElementById('trigger-sync-btn');
   const quickBtn = document.getElementById('quick-sync-btn');
@@ -1187,6 +1212,19 @@ async function triggerCrawlerSync() {
     quickBtn.disabled = false;
   }
 }
+
+// Netlify Scraper Warning Modal Actions
+window.closeNetlifyWarningModal = function() {
+  const modal = document.getElementById('netlify-warning-modal');
+  if (modal) modal.style.display = 'none';
+  showNotification('Eşitleme iptal edildi. Localhost üzerinden kotaları harcamadan eşitleyebilirsiniz.', 'success');
+};
+
+window.proceedWithNetlifyCrawl = function() {
+  const modal = document.getElementById('netlify-warning-modal');
+  if (modal) modal.style.display = 'none';
+  executeCrawlerSync();
+};
 
 function pollCrawlerStatus() {
   const btn = document.getElementById('trigger-sync-btn');
@@ -1313,257 +1351,17 @@ function getCodeSortPriority(code) {
   return 4; // Other codes
 }
 
-// ==========================================================================
-// MÜŞTERİ COĞRAFYASI & TÜRKİYE HARİTASI KONTROLÖRÜ
-// ==========================================================================
-const TURKEY_CITIES = {
-  "01": "Adana", "02": "Adıyaman", "03": "Afyonkarahisar", "04": "Ağrı", "05": "Amasya",
-  "06": "Ankara", "07": "Antalya", "08": "Artvin", "09": "Aydın", "10": "Balıkesir",
-  "11": "Bilecik", "12": "Bingöl", "13": "Bitlis", "14": "Bolu", "15": "Burdur",
-  "16": "Bursa", "17": "Çanakkale", "18": "Çankırı", "19": "Çorum", "20": "Denizli",
-  "21": "Diyarbakır", "22": "Edirne", "23": "Elazığ", "24": "Erzincan", "25": "Erzurum",
-  "26": "Eskişehir", "27": "Gaziantep", "28": "Giresun", "29": "Gümüşhane", "30": "Hakkari",
-  "31": "Hatay", "32": "Isparta", "33": "Mersin", "34": "İstanbul", "35": "İzmir",
-  "36": "Kars", "37": "Kastamonu", "38": "Kayseri", "39": "Kırklareli", "40": "Kırşehir",
-  "41": "Kocaeli", "42": "Konya", "43": "Kütahya", "44": "Malatya", "45": "Manisa",
-  "46": "Kahramanmaraş", "47": "Mardin", "48": "Muğla", "49": "Muş", "50": "Nevşehir",
-  "51": "Niğde", "52": "Ordu", "53": "Rize", "54": "Sakarya", "55": "Samsun",
-  "56": "Siirt", "57": "Sinop", "58": "Sivas", "59": "Tekirdağ", "60": "Tokat",
-  "61": "Trabzon", "62": "Tunceli", "63": "Şanlıurfa", "64": "Uşak", "65": "Van",
-  "66": "Yozgat", "67": "Zonguldak", "68": "Aksaray", "69": "Bayburt", "70": "Karaman",
-  "71": "Kırıkkale", "72": "Batman", "73": "Şırnak", "74": "Bartın", "75": "Ardahan",
-  "76": "Iğdır", "77": "Yalova", "78": "Karabük", "79": "Kilis", "80": "Osmaniye",
-  "81": "Düzce"
-};
-
 // 1. Müşterileri REST API'den Çek
 async function loadCustomers() {
   try {
     const res = await fetch('/api/customers');
     state.customers = await res.json();
-    populateCityDropdown();
     initCrmController(); // Initialize CRM Modal Events
   } catch (err) {
     console.error('Error loading customers:', err);
     showNotification('Müşteri veritabanı yüklenemedi.', 'danger');
   }
 }
-
-// 2. Şehir Form Seçim Kutusunu Doldur
-function populateCityDropdown() {
-  const select = document.getElementById('c-city');
-  if (!select) return;
-  select.innerHTML = '<option value="" disabled selected>Şehir Seçin</option>';
-  Object.entries(TURKEY_CITIES).forEach(([code, name]) => {
-    const opt = document.createElement('option');
-    opt.value = code;
-    opt.textContent = `(${code}) ${name}`;
-    select.appendChild(opt);
-  });
-}
-
-// 3. Harita Sekmesi ve Haritayı Başlatma
-let isMapLoaded = false;
-async function initTurkeyMap() {
-  const container = document.getElementById('turkey-map-container');
-  if (!container) return;
-
-  state.activeCityCode = null;
-  document.getElementById('selected-city-title').textContent = 'Tüm Türkiye';
-  renderCityCustomersList();
-
-  if (isMapLoaded) {
-    updateMapHighlights();
-    return;
-  }
-
-  try {
-    container.innerHTML = `<div class="loading-state"><div class="spinner"></div><p>Türkiye Haritası yükleniyor...</p></div>`;
-    const res = await fetch('/img/turkey.svg');
-    if (!res.ok) throw new Error('Harita SVG dosyası yüklenemedi.');
-    const svgText = await res.text();
-    
-    container.innerHTML = svgText;
-    isMapLoaded = true;
-    
-    updateMapHighlights();
-    setupMapInteractivity();
-  } catch (err) {
-    console.error('Error rendering Turkey Map:', err);
-    container.innerHTML = `
-      <div class="loading-state">
-        <i class="fa-solid fa-triangle-exclamation" style="font-size: 32px; color: var(--color-danger)"></i>
-        <p>Harita yüklenirken hata oluştu. Lütfen sunucuyu kontrol edin.</p>
-        <button class="btn btn-primary" onclick="initTurkeyMap()"><i class="fa-solid fa-rotate"></i> Yeniden Dene</button>
-      </div>
-    `;
-  }
-}
-
-// 4. Sipariş Alan Şehirlerin Haritada Boyanması
-function updateMapHighlights() {
-  if (!isMapLoaded) return;
-  const svg = document.querySelector('#turkey-map-container svg');
-  if (!svg) return;
-
-  // Sipariş olan benzersiz plakaları topla
-  const activeCities = new Set(state.customers.map(c => c.cityCode));
-
-  const groups = svg.querySelectorAll('g[data-plate]');
-  groups.forEach(g => {
-    const plate = String(g.getAttribute('data-plate')).padStart(2, '0');
-    g.classList.remove('city-has-orders', 'city-active');
-    
-    // Eğer müşterisi varsa bordo yap
-    if (activeCities.has(plate)) {
-      g.classList.add('city-has-orders');
-    }
-    // Eğer aktif tıklanmış şehir ise gold yap
-    if (state.activeCityCode === plate) {
-      g.classList.add('city-active');
-    }
-  });
-}
-
-// 5. Harita Şehir Tıklama Olayları ve Araç İpuçları (Tooltips)
-function setupMapInteractivity() {
-  const svg = document.querySelector('#turkey-map-container svg');
-  if (!svg) return;
-
-  const tooltip = document.getElementById('map-tooltip');
-
-  const groups = svg.querySelectorAll('g[data-plate]');
-  groups.forEach(g => {
-    const plate = String(g.getAttribute('data-plate')).padStart(2, '0');
-    const cityName = TURKEY_CITIES[plate] || 'Bilinmeyen İl';
-
-    // Remove native browser tooltip overlay
-    g.removeAttribute('title');
-
-    // Hover Enter
-    g.addEventListener('mouseenter', () => {
-      const count = state.customers.filter(c => c.cityCode === plate).length;
-      
-      let tooltipContent = `<strong style="color: var(--color-accent-gold); font-size: 13px;">${cityName}</strong>`;
-      tooltipContent += `<div style="font-size: 10px; color: var(--text-muted); margin-top:2px;">Plaka Kodu: ${plate}</div>`;
-      if (count > 0) {
-        tooltipContent += `<div style="margin-top: 5px; color: var(--color-accent); font-weight: 700;"><i class="fa-solid fa-circle-check"></i> ${count} Sipariş / Müşteri</div>`;
-      } else {
-        tooltipContent += `<div style="margin-top: 5px; color: var(--text-muted);"><i class="fa-solid fa-circle-minus"></i> Sipariş Yok</div>`;
-      }
-
-      if (tooltip) {
-        tooltip.innerHTML = tooltipContent;
-        tooltip.style.display = 'block';
-        tooltip.style.opacity = '1';
-      }
-    });
-
-    // Hover Move
-    g.addEventListener('mousemove', (e) => {
-      if (tooltip) {
-        tooltip.style.left = `${e.clientX}px`;
-        tooltip.style.top = `${e.clientY}px`;
-      }
-    });
-
-    // Hover Leave
-    g.addEventListener('mouseleave', () => {
-      if (tooltip) {
-        tooltip.style.display = 'none';
-        tooltip.style.opacity = '0';
-      }
-    });
-
-    g.addEventListener('click', () => {
-      // Toggle active
-      if (state.activeCityCode === plate) {
-        state.activeCityCode = null;
-        document.getElementById('selected-city-title').textContent = 'Tüm Türkiye';
-      } else {
-        state.activeCityCode = plate;
-        document.getElementById('selected-city-title').textContent = cityName;
-      }
-
-      // Sadece seçilen şehre aktiflik sınıfını ata
-      groups.forEach(group => {
-        const p = String(group.getAttribute('data-plate')).padStart(2, '0');
-        group.classList.remove('city-active');
-        if (state.activeCityCode === p) {
-          group.classList.add('city-active');
-        }
-      });
-
-      // Update tooltip immediately to reflect active city state change
-      g.dispatchEvent(new Event('mouseenter'));
-
-      renderCityCustomersList();
-    });
-  });
-}
-
-// 6. Harita Altındaki Müşterileri Filtreleyerek Listeleme
-function renderCityCustomersList() {
-  const tbody = document.getElementById('city-customers-list-tbody');
-  if (!tbody) return;
-
-  const filtered = state.activeCityCode 
-    ? state.customers.filter(c => c.cityCode === state.activeCityCode)
-    : state.customers;
-
-  const titleNode = document.getElementById('city-customers-title');
-  if (titleNode) {
-    const cityName = state.activeCityCode ? TURKEY_CITIES[state.activeCityCode] : 'Tüm Türkiye';
-    titleNode.textContent = `${cityName} Sipariş Veren Müşteriler (${filtered.length})`;
-  }
-
-  if (filtered.length === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6" class="table-empty">Bu ilde sipariş veren kayıtlı müşteri bulunamadı.</td>
-      </tr>
-    `;
-    return;
-  }
-
-  tbody.innerHTML = '';
-  filtered.forEach(c => {
-    const tr = document.createElement('tr');
-    
-    // Beden ölçü kutuları (mm)
-    const sizesHtml = `
-      <div class="finger-sizes-grid">
-        <div class="finger-badge" title="Baş Parmak"><span class="finger-name">BAŞ</span><span class="finger-val">${c.sizes?.thumb || 10}mm</span></div>
-        <div class="finger-badge" title="İşaret Parmağı"><span class="finger-name">İŞAR</span><span class="finger-val">${c.sizes?.index || 10}mm</span></div>
-        <div class="finger-badge" title="Orta Parmak"><span class="finger-name">ORTA</span><span class="finger-val">${c.sizes?.middle || 10}mm</span></div>
-        <div class="finger-badge" title="Yüzük Parmağı"><span class="finger-name">YÜZ</span><span class="finger-val">${c.sizes?.ring || 10}mm</span></div>
-        <div class="finger-badge" title="Serçe Parmağı"><span class="finger-name">SERÇ</span><span class="finger-val">${c.sizes?.pinky || 10}mm</span></div>
-      </div>
-    `;
-
-    // Geçmiş sipariş çipleri
-    const ordersHtml = c.previousOrders && c.previousOrders.length > 0
-      ? `<div class="order-chips-wrapper">${c.previousOrders.map(code => `<span class="order-chip">${code}</span>`).join('')}</div>`
-      : '<span class="text-muted">—</span>';
-
-    tr.innerHTML = `
-      <td style="font-weight: 700; color: var(--text-main);">${c.name}</td>
-      <td>
-        ${c.instagram ? `
-          <a href="https://instagram.com/${c.instagram}" target="_blank" class="insta-link">
-            <i class="fa-brands fa-instagram"></i> @${c.instagram}
-          </a>
-        ` : '<span class="text-muted">—</span>'}
-      </td>
-      <td>${c.phone ? `<span class="phone-badge">${c.phone}</span>` : '<span class="text-muted">—</span>'}</td>
-      <td>${sizesHtml}</td>
-      <td>${ordersHtml}</td>
-      <td style="color: var(--text-muted); font-size:12px;">${c.address || '<span class="text-muted">—</span>'}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
 // ==========================================================================
 // MÜŞTERİ DETAYLARI (CRM) TABLOSU VE MODAL CRUD İŞLEMLERİ
 // ==========================================================================
@@ -1574,7 +1372,7 @@ function renderCustomersTable() {
   if (state.customers.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="8" class="table-empty">Henüz hiç kayıtlı müşteri yok. Sağ üstten "Yeni Müşteri Ekle" butonuna basarak ekleyebilirsiniz.</td>
+        <td colspan="7" class="table-empty">Henüz hiç kayıtlı müşteri yok. Sağ üstten "Yeni Müşteri Ekle" butonuna basarak ekleyebilirsiniz.</td>
       </tr>
     `;
     return;
@@ -1583,7 +1381,6 @@ function renderCustomersTable() {
   tbody.innerHTML = '';
   state.customers.forEach(c => {
     const tr = document.createElement('tr');
-    const cityName = TURKEY_CITIES[c.cityCode] || `Plaka ${c.cityCode}`;
 
     const sizesHtml = `
       <div class="finger-sizes-grid">
@@ -1601,7 +1398,6 @@ function renderCustomersTable() {
 
     tr.innerHTML = `
       <td style="font-weight: 700; color: var(--text-main);">${c.name}</td>
-      <td><span class="badge" style="background: rgba(199, 163, 108, 0.15); color: var(--color-accent-gold); font-size:11px; font-weight:700;">${cityName}</span></td>
       <td>
         ${c.instagram ? `
           <a href="https://instagram.com/${c.instagram}" target="_blank" class="insta-link">
@@ -1626,6 +1422,19 @@ function renderCustomersTable() {
     `;
     tbody.appendChild(tr);
   });
+}
+
+// Helper: Anonymize customer name (Privacy Masking)
+function maskName(fullName) {
+  if (!fullName) return '';
+  return fullName.split(/\s+/).map(word => {
+    if (word.length > 2) {
+      return word.slice(0, 2) + '*'.repeat(word.length - 2);
+    } else if (word.length > 0) {
+      return word.slice(0, 1) + '*'.repeat(word.length - 1);
+    }
+    return '';
+  }).join(' ');
 }
 
 // 7. CRM Olayları ve Modal Tetikleyicileri
@@ -1661,8 +1470,9 @@ function initCrmController() {
       e.preventDefault();
 
       const id = document.getElementById('customer-id-input').value;
-      const name = document.getElementById('c-name').value.trim();
-      const cityCode = document.getElementById('c-city').value;
+      const rawName = document.getElementById('c-name').value.trim();
+      const name = maskName(rawName);
+      const cityCode = ''; // No city requested
       const instagram = document.getElementById('c-instagram').value.replace('@', '').trim();
       const phone = document.getElementById('c-phone').value.trim();
       const ordersRaw = document.getElementById('c-orders').value;
@@ -1725,7 +1535,6 @@ window.openEditCustomerModal = function(id) {
   document.getElementById('customer-id-input').value = c.id;
   
   document.getElementById('c-name').value = c.name;
-  document.getElementById('c-city').value = c.cityCode;
   document.getElementById('c-instagram').value = c.instagram || '';
   document.getElementById('c-phone').value = c.phone || '';
   document.getElementById('c-orders').value = c.previousOrders ? c.previousOrders.join(', ') : '';
@@ -1777,15 +1586,53 @@ window.copyToClipboard = function(text, code) {
   });
 };
 
+// A.1 Open pricing mismatch analysis popover
+window.openMismatchPopover = function(code) {
+  const product = state.products.find(p => p.code === code);
+  if (!product) return;
+  const pricing = calculateDetailedPricing(product);
+  const normalPrice = product.undiscountedPrice;
+  const diff = pricing.roundedGrandTotal - normalPrice;
+  const diffPercent = normalPrice > 0 ? (diff / normalPrice) * 100 : 0;
+  
+  const popover = document.getElementById(`mismatch-popover-${code}`);
+  if (popover) {
+    popover.innerHTML = `
+      <div class="mismatch-popover-content">
+        <h5>Fiyat Uyuşmazlık Analizi</h5>
+        <div class="popover-row">
+          <span>Sitedeki Normal Fiyat:</span>
+          <strong>${normalPrice.toFixed(2)} ₺</strong>
+        </div>
+        <div class="popover-row">
+          <span>Önerilen Toplam:</span>
+          <strong>${pricing.roundedGrandTotal.toFixed(2)} ₺</strong>
+        </div>
+        <div class="popover-divider"></div>
+        <div class="popover-row difference">
+          <span>Fiyat Farkı:</span>
+          <strong class="${diff >= 0 ? 'positive' : 'negative'}">
+            ${diff >= 0 ? '+' : ''}${diff.toFixed(2)} ₺ (${diff >= 0 ? '+' : ''}${diffPercent.toFixed(1)}%)
+          </strong>
+        </div>
+        <button type="button" class="btn-close-popover" onclick="document.getElementById('mismatch-popover-${code}').style.display = 'none';">
+          <i class="fa-solid fa-xmark"></i> Kapat
+        </button>
+      </div>
+    `;
+    popover.style.display = 'flex';
+  }
+};
+
 // B. Excel/CSV Formatında Dışa Aktarma
 window.exportProductsToCSV = function() {
   const bom = "\uFEFF";
-  let csvContent = bom + "Ürün Kodu;Ürün Adı;Kategori;Normal Fiyat (Site);Satış Fiyatı (Site);Seçenek Maliyeti;Net Kar;KDV;Önerilen Genel Toplam;Fiyat Farkı;Fiyatlandırma Notları\n";
+  let csvContent = bom + "Ürün Kodu;Ürün Adı;Kategori;Normal Fiyat (Site);Satış Fiyatı (Site);Seçenek Maliyeti;Net Kar;KDV;Önerilen Genel Toplam;Fiyat Farkı;Yapım Aşamaları\n";
   
   state.products.forEach(product => {
     const pricing = calculateDetailedPricing(product);
-    const sellingPrice = product.discountedPrice > 0 ? product.discountedPrice : product.undiscountedPrice;
-    const diff = pricing.roundedGrandTotal - sellingPrice;
+    const normalPrice = product.undiscountedPrice;
+    const diff = pricing.roundedGrandTotal - normalPrice;
     const userPricing = product.userPricing || { notes: '' };
     const notesClean = (userPricing.notes || '').replace(/[\n\r;]/g, ' ');
     
@@ -2157,11 +2004,560 @@ window.loadAuditTrail = async function() {
       tbody.appendChild(tr);
     });
   } catch (err) {
-    console.error('Audit trail render failed:', err);
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="4" class="table-empty" style="color: var(--color-danger);"><i class="fa-solid fa-triangle-exclamation"></i> Değişiklik geçmişi yüklenirken hata oluştu.</td>
-      </tr>
-    `;
+    console.error('Audit trail load failed:', err);
   }
 };
+
+// Helper: Initialize default Cost data under state.config
+function initCostState() {
+  if (!state.config) state.config = {};
+  
+  if (!state.config.costCalculatorData) {
+    state.config.costCalculatorData = {
+      sarf: [
+        { id: "s1", name: "Sıvı Yapıştırıcı", price: 0 },
+        { id: "s2", name: "1 Adet Mini Buffer", price: 0 },
+        { id: "s3", name: "1 Adet Mini Törpü", price: 0 },
+        { id: "s4", name: "2 Adet Tüysüz Mendil", price: 0 },
+        { id: "s5", name: "2 Adet Alkollü Mendil", price: 0 },
+        { id: "s6", name: "2 Adet Mini Rulo Zımpara", price: 0 },
+        { id: "s7", name: "Portakal Çubuğu", price: 0 },
+        { id: "s8", name: "Sticker Yapıştırıcı", price: 0 }
+      ],
+      atolye: [
+        { id: "a1", name: "Örnek Atölye Ekipmanı", price: 0, amount: 1, lifespan: 12 }
+      ],
+      sets: []
+    };
+  } else {
+    // Ensure all required fields exist
+    if (!state.config.costCalculatorData.sarf) state.config.costCalculatorData.sarf = [];
+    if (!state.config.costCalculatorData.atolye) state.config.costCalculatorData.atolye = [];
+    if (!state.config.costCalculatorData.sets) state.config.costCalculatorData.sets = [];
+  }
+}
+
+// Main: Render the Cost Calculator Panel
+window.renderCostCalculator = function() {
+  initCostState();
+  
+  const sarfTbody = document.getElementById('sarf-items-tbody');
+  const atolyeTbody = document.getElementById('atolye-items-tbody');
+  
+  if (!sarfTbody || !atolyeTbody) return;
+  
+  const data = state.config.costCalculatorData;
+  
+  // 1. Render Consumables (Sarf) - ONLY Name, Price and Delete
+  sarfTbody.innerHTML = '';
+  let sarfTotal = 0;
+  data.sarf.forEach((item, index) => {
+    sarfTotal += (item.price || 0);
+    
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="padding: 10px 5px;"><input type="text" value="${item.name}" onchange="updateCostItem('sarf', ${index}, 'name', this.value)" style="width: 100%; font-weight: 500;"></td>
+      <td style="padding: 10px 5px;"><input type="number" min="0" step="0.01" value="${item.price.toFixed(2)}" onchange="updateCostItem('sarf', ${index}, 'price', parseFloat(this.value) || 0)" style="width: 100%; text-align: right; font-family: monospace;"></td>
+      <td style="padding: 10px 5px; text-align: center;"><button type="button" class="btn-delete-set" onclick="deleteCostItem('sarf', '${item.id}')" style="background: none; border: none; color: #d9534f; cursor: pointer; padding: 4px; font-size: 14px;"><i class="fa-solid fa-trash-can"></i></button></td>
+    `;
+    sarfTbody.appendChild(tr);
+  });
+  document.getElementById('sarf-grand-total').textContent = `${sarfTotal.toFixed(2)} ₺`;
+  
+  // 2. Render Workshop (Atölye)
+  atolyeTbody.innerHTML = '';
+  let atolyeTotal = 0;
+  let atolyeAnnualTotal = 0;
+  data.atolye.forEach((item, index) => {
+    const total = (item.price || 0) * (item.amount || 1);
+    const lifespan = item.lifespan || 12;
+    const annualCost = (total * 12) / lifespan;
+    
+    atolyeTotal += total;
+    atolyeAnnualTotal += annualCost;
+    
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="padding: 10px 5px;"><input type="text" value="${item.name}" onchange="updateCostItem('atolye', ${index}, 'name', this.value)" style="width: 100%; font-weight: 500;"></td>
+      <td style="padding: 10px 5px;"><input type="number" min="0" step="0.01" value="${item.price.toFixed(2)}" onchange="updateCostItem('atolye', ${index}, 'price', parseFloat(this.value) || 0)" style="width: 100%; text-align: right; font-family: monospace;"></td>
+      <td style="padding: 10px 5px;"><input type="number" min="1" step="1" value="${item.amount}" onchange="updateCostItem('atolye', ${index}, 'amount', parseInt(this.value) || 1)" style="width: 100%; text-align: center;"></td>
+      <td style="padding: 10px 5px; text-align: right; font-weight: 600; font-family: monospace; color: var(--text-main); font-size: 13px;">${total.toFixed(2)} ₺</td>
+      <td style="padding: 10px 5px;"><input type="number" min="1" step="1" value="${lifespan}" onchange="updateCostItem('atolye', ${index}, 'lifespan', parseInt(this.value) || 1)" style="width: 100%; text-align: center;"></td>
+      <td style="padding: 10px 5px; text-align: right; font-weight: 600; font-family: monospace; color: var(--color-accent-gold); font-size: 13px;">${annualCost.toFixed(2)} ₺</td>
+      <td style="padding: 10px 5px; text-align: center;"><button type="button" class="btn-delete-set" onclick="deleteCostItem('atolye', '${item.id}')" style="background: none; border: none; color: #d9534f; cursor: pointer; padding: 4px; font-size: 14px;"><i class="fa-solid fa-trash-can"></i></button></td>
+    `;
+    atolyeTbody.appendChild(tr);
+  });
+  document.getElementById('atolye-grand-total').textContent = `${atolyeTotal.toFixed(2)} ₺`;
+  const atolyeAnnualEl = document.getElementById('atolye-annual-grand-total');
+  if (atolyeAnnualEl) atolyeAnnualEl.textContent = `${atolyeAnnualTotal.toFixed(2)} ₺`;
+  
+  // 3. Render Custom Sets
+  renderCustomSetsCards();
+};
+
+// Render custom sets cards grid
+function renderCustomSetsCards() {
+  const grid = document.getElementById('cost-sets-grid');
+  if (!grid) return;
+  
+  const data = state.config.costCalculatorData;
+  
+  if (!data.sets || data.sets.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-sets-state" style="grid-column: 1 / -1; text-align: center; padding: 30px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border-glass); border-radius: var(--radius-large); color: var(--text-muted); font-size: 13px;">
+        <i class="fa-solid fa-cubes" style="font-size: 24px; color: var(--color-accent-gold); margin-bottom: 10px; display: block;"></i>
+        Henüz oluşturulmuş bir özel set bulunmuyor. Yukarıdaki "Özel Set Oluştur" butonuna basarak sarf malzemelerinden özel paketler oluşturabilirsiniz.
+      </div>
+    `;
+    return;
+  }
+  
+  grid.innerHTML = '';
+  data.sets.forEach(set => {
+    const setList = [];
+    let setTotal = 0;
+    
+    // Support new selectedItems with custom quantities and old selectedIds fallback
+    const itemsList = set.selectedItems || (set.selectedIds || []).map(id => ({ id, amount: 1 }));
+    
+    itemsList.forEach(item => {
+      const originalItem = data.sarf.find(sarfItem => sarfItem.id === item.id);
+      if (originalItem) {
+        const itemTotal = (originalItem.price || 0) * (item.amount || 1);
+        setTotal += itemTotal;
+        setList.push({ name: originalItem.name, amount: item.amount, total: itemTotal });
+      }
+    });
+    
+    const card = document.createElement('div');
+    card.className = 'cost-set-card';
+    
+    let itemsHtml = '';
+    setList.forEach(item => {
+      itemsHtml += `
+        <div class="set-item-row">
+          <span>${item.name} <span style="color: var(--text-muted); font-size: 10px;">(${item.amount} Adet)</span></span>
+          <strong style="font-family: monospace;">${item.total.toFixed(2)} ₺</strong>
+        </div>
+      `;
+    });
+    
+    card.innerHTML = `
+      <div class="set-header">
+        <div>
+          <h5 class="set-title">${set.name}</h5>
+          <span style="font-size: 11px; color: var(--text-muted);"><i class="fa-solid fa-list-check"></i> ${setList.length} Kalem</span>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" class="btn-delete-set" onclick="openEditCustomSetModal('${set.id}')" title="Seti Düzenle" style="background: none; border: none; color: var(--color-accent-gold); cursor: pointer; padding: 4px; font-size: 14px;"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button type="button" class="btn-delete-set" onclick="deleteCustomSet('${set.id}')" title="Seti Sil" style="background: none; border: none; color: #d9534f; cursor: pointer; padding: 4px; font-size: 14px;"><i class="fa-solid fa-trash-can"></i></button>
+        </div>
+      </div>
+      <div class="set-items-list">
+        ${itemsHtml || '<div style="font-style: italic; color: var(--color-danger);">Hiçbir malzeme seçilmedi</div>'}
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; margin-top: auto;">
+        <span style="font-size: 11px; font-weight: 700; color: var(--color-accent-gold);">SET MALİYETİ</span>
+        <h4 class="set-price">${setTotal.toFixed(2)} ₺</h4>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// Inline input value updates
+window.updateCostItem = function(type, index, field, value) {
+  const data = state.config.costCalculatorData;
+  if (!data || !data[type] || !data[type][index]) return;
+  
+  data[type][index][field] = value;
+  
+  // Live recalculate sums
+  const sarfTbody = document.getElementById('sarf-items-tbody');
+  const atolyeTbody = document.getElementById('atolye-items-tbody');
+  
+  if (sarfTbody && atolyeTbody) {
+    // 1. Consumables grand total
+    let sarfTotal = 0;
+    data.sarf.forEach((item) => {
+      sarfTotal += (item.price || 0);
+    });
+    document.getElementById('sarf-grand-total').textContent = `${sarfTotal.toFixed(2)} ₺`;
+    
+    // 2. Workshop total
+    let atolyeTotal = 0;
+    let atolyeAnnualTotal = 0;
+    data.atolye.forEach((item, idx) => {
+      const total = (item.price || 0) * (item.amount || 1);
+      const lifespan = item.lifespan || 12;
+      const annualCost = (total * 12) / lifespan;
+      atolyeTotal += total;
+      atolyeAnnualTotal += annualCost;
+      
+      const tr = atolyeTbody.children[idx];
+      if (tr) {
+        const totalTd = tr.children[3];
+        if (totalTd) totalTd.textContent = `${total.toFixed(2)} ₺`;
+        
+        const annualTd = tr.children[5];
+        if (annualTd) annualTd.textContent = `${annualCost.toFixed(2)} ₺`;
+      }
+    });
+    document.getElementById('atolye-grand-total').textContent = `${atolyeTotal.toFixed(2)} ₺`;
+    const atolyeAnnualEl = document.getElementById('atolye-annual-grand-total');
+    if (atolyeAnnualEl) atolyeAnnualEl.textContent = `${atolyeAnnualTotal.toFixed(2)} ₺`;
+  }
+  
+  // Refresh Sets cards live as well
+  renderCustomSetsCards();
+  
+  // Autosave
+  triggerCostAutosave();
+};
+
+// Add Branch modal actions
+window.openAddBranchModal = function(type) {
+  const modal = document.getElementById('cost-item-modal');
+  const typeInput = document.getElementById('cost-item-type');
+  const nameInput = document.getElementById('cost-item-name');
+  const priceInput = document.getElementById('cost-item-price');
+  const amountInput = document.getElementById('cost-item-amount');
+  const lifespanInput = document.getElementById('cost-item-lifespan');
+  const titleNode = document.getElementById('cost-modal-title');
+  const amountGroup = document.getElementById('cost-item-amount-group');
+  const lifespanGroup = document.getElementById('cost-item-lifespan-group');
+  
+  if (!modal) return;
+  
+  typeInput.value = type;
+  nameInput.value = '';
+  priceInput.value = '0.00';
+  amountInput.value = '1';
+  if (lifespanInput) lifespanInput.value = '12';
+  
+  if (type === 'sarf') {
+    if (amountGroup) amountGroup.style.display = 'none';
+    if (lifespanGroup) lifespanGroup.style.display = 'none';
+    titleNode.textContent = 'Yeni Malzeme Ekle';
+  } else {
+    if (amountGroup) amountGroup.style.display = 'flex';
+    if (lifespanGroup) lifespanGroup.style.display = 'flex';
+    titleNode.textContent = 'Yeni Ekipman / Gider Ekle';
+  }
+  
+  modal.style.display = 'flex';
+};
+
+window.closeCostItemModal = function() {
+  const modal = document.getElementById('cost-item-modal');
+  if (modal) modal.style.display = 'none';
+};
+
+window.handleAddCostItemSubmit = function() {
+  const type = document.getElementById('cost-item-type').value;
+  const name = document.getElementById('cost-item-name').value.trim();
+  const price = parseFloat(document.getElementById('cost-item-price').value) || 0;
+  const amount = type === 'sarf' ? 1 : (parseInt(document.getElementById('cost-item-amount').value) || 1);
+  const lifespan = type === 'sarf' ? 12 : (parseInt(document.getElementById('cost-item-lifespan').value) || 12);
+  
+  if (!name) return;
+  
+  const data = state.config.costCalculatorData;
+  const newId = (type === 'sarf' ? 's-' : 'a-') + Date.now();
+  
+  const newItem = { id: newId, name, price };
+  if (type !== 'sarf') {
+    newItem.amount = amount;
+    newItem.lifespan = lifespan;
+  }
+  
+  data[type].push(newItem);
+  
+  closeCostItemModal();
+  renderCostCalculator();
+  triggerCostAutosave();
+  showNotification('Yeni kalem başarıyla eklendi.', 'success');
+};
+
+// Delete cost items
+window.deleteCostItem = function(type, id) {
+  const data = state.config.costCalculatorData;
+  if (!data || !data[type]) return;
+  
+  if (!confirm('Bu kalemi silmek istediğinize emin misiniz?')) return;
+  
+  data[type] = data[type].filter(item => item.id !== id);
+  
+  // If a consumable is deleted, remove it from any Custom Sets
+  if (type === 'sarf') {
+    data.sets.forEach(set => {
+      if (set.selectedItems) {
+        set.selectedItems = set.selectedItems.filter(item => item.id !== id);
+      }
+      if (set.selectedIds) {
+        set.selectedIds = set.selectedIds.filter(selectedId => selectedId !== id);
+      }
+    });
+  }
+  
+  renderCostCalculator();
+  triggerCostAutosave();
+  showNotification('Kalem başarıyla silindi.', 'success');
+};
+
+// Editing set tracking
+let editingSetId = null;
+
+// Create custom set builders modals with amount selector
+window.openCreateCustomSetModal = function() {
+  editingSetId = null; // Reset edit state
+  const modal = document.getElementById('custom-set-modal');
+  const selectionDiv = document.getElementById('custom-set-items-selection');
+  const nameInput = document.getElementById('custom-set-name');
+  const submitBtn = document.querySelector('#custom-set-form button[type="submit"]');
+  const modalTitle = document.querySelector('#custom-set-modal h3');
+  
+  if (!modal || !selectionDiv) return;
+  
+  nameInput.value = '';
+  if (submitBtn) submitBtn.textContent = 'Seti Oluştur';
+  if (modalTitle) modalTitle.textContent = 'Özel Paket / Set Oluştur';
+  
+  const data = state.config.costCalculatorData;
+  
+  if (!data.sarf || data.sarf.length === 0) {
+    selectionDiv.innerHTML = '<div style="font-style: italic; color: var(--color-danger); font-size: 12px; text-align: center;">Önce sarf malzemeleri eklemelisiniz!</div>';
+  } else {
+    selectionDiv.innerHTML = '';
+    data.sarf.forEach(item => {
+      const row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.alignItems = 'center';
+      row.style.justifyContent = 'space-between';
+      row.style.gap = '6px';
+      row.style.color = '#fff';
+      row.style.fontSize = '12px';
+      row.style.padding = '4px 3px';
+      row.style.borderBottom = '1px solid rgba(255,255,255,0.02)';
+      
+      row.innerHTML = `
+        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <input type="checkbox" class="set-select-checkbox" value="${item.id}" style="accent-color: var(--color-accent-gold);" onchange="document.getElementById('set-amount-${item.id}').disabled = !this.checked;">
+          <span>${item.name}</span>
+        </label>
+        <div style="display: flex; align-items: center; gap: 12px; margin-left: auto; flex-shrink: 0;">
+          <span style="color: var(--color-accent-gold); font-family: monospace; font-size: 12px;">${item.price.toFixed(2)} ₺</span>
+          <div style="display: flex; align-items: center; gap: 3px;">
+            <span style="font-size: 10px; color: var(--text-muted);">Miktar:</span>
+            <input type="number" id="set-amount-${item.id}" min="1" step="1" value="1" disabled style="width: 55px; padding: 4px 6px; background: var(--bg-input); border: 1px solid var(--border-glass); border-radius: var(--radius-small); color: #fff; text-align: center; font-size: 11px; outline: none;">
+          </div>
+        </div>
+      `;
+      selectionDiv.appendChild(row);
+    });
+  }
+  
+  modal.style.display = 'flex';
+};
+
+// Open Edit Custom Set Modal
+window.openEditCustomSetModal = function(setId) {
+  const modal = document.getElementById('custom-set-modal');
+  const selectionDiv = document.getElementById('custom-set-items-selection');
+  const nameInput = document.getElementById('custom-set-name');
+  const submitBtn = document.querySelector('#custom-set-form button[type="submit"]');
+  const modalTitle = document.querySelector('#custom-set-modal h3');
+  
+  if (!modal || !selectionDiv) return;
+  
+  const data = state.config.costCalculatorData;
+  const set = data.sets.find(s => s.id === setId);
+  if (!set) return;
+  
+  editingSetId = setId; // Set editing state
+  
+  nameInput.value = set.name;
+  if (submitBtn) submitBtn.textContent = 'Değişiklikleri Kaydet';
+  if (modalTitle) modalTitle.textContent = 'Özel Seti Düzenle';
+  
+  // Populate items checkbox selection
+  selectionDiv.innerHTML = '';
+  const selectedList = set.selectedItems || (set.selectedIds || []).map(id => ({ id, amount: 1 }));
+  
+  data.sarf.forEach(item => {
+    const selectedItem = selectedList.find(si => si.id === item.id);
+    const isChecked = !!selectedItem;
+    const amountVal = selectedItem ? (selectedItem.amount || 1) : 1;
+    
+    const row = document.createElement('div');
+    row.style.display = 'flex';
+    row.style.alignItems = 'center';
+    row.style.justifyContent = 'space-between';
+    row.style.gap = '6px';
+    row.style.color = '#fff';
+    row.style.fontSize = '12px';
+    row.style.padding = '4px 3px';
+    row.style.borderBottom = '1px solid rgba(255,255,255,0.02)';
+    
+    row.innerHTML = `
+      <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+        <input type="checkbox" class="set-select-checkbox" value="${item.id}" ${isChecked ? 'checked' : ''} style="accent-color: var(--color-accent-gold);" onchange="document.getElementById('set-amount-${item.id}').disabled = !this.checked;">
+        <span>${item.name}</span>
+      </label>
+      <div style="display: flex; align-items: center; gap: 12px; margin-left: auto; flex-shrink: 0;">
+        <span style="color: var(--color-accent-gold); font-family: monospace; font-size: 12px;">${item.price.toFixed(2)} ₺</span>
+        <div style="display: flex; align-items: center; gap: 3px;">
+          <span style="font-size: 10px; color: var(--text-muted);">Miktar:</span>
+          <input type="number" id="set-amount-${item.id}" min="1" step="1" value="${amountVal}" ${isChecked ? '' : 'disabled'} style="width: 55px; padding: 4px 6px; background: var(--bg-input); border: 1px solid var(--border-glass); border-radius: var(--radius-small); color: #fff; text-align: center; font-size: 11px; outline: none;">
+        </div>
+      </div>
+    `;
+    selectionDiv.appendChild(row);
+  });
+  
+  modal.style.display = 'flex';
+};
+
+window.closeCustomSetModal = function() {
+  const modal = document.getElementById('custom-set-modal');
+  if (modal) modal.style.display = 'none';
+  editingSetId = null; // Reset state
+};
+
+window.handleCreateCustomSetSubmit = function() {
+  const name = document.getElementById('custom-set-name').value.trim();
+  const checkboxes = document.querySelectorAll('.set-select-checkbox:checked');
+  
+  if (!name) return;
+  
+  const selectedItems = Array.from(checkboxes).map(cb => {
+    const itemId = cb.value;
+    const amountInput = document.getElementById(`set-amount-${itemId}`);
+    const amount = parseInt(amountInput.value) || 1;
+    return { id: itemId, amount };
+  });
+  
+  if (selectedItems.length === 0) {
+    showNotification('Lütfen sete dahil etmek için en az bir malzeme seçin.', 'danger');
+    return;
+  }
+  
+  const data = state.config.costCalculatorData;
+  
+  if (editingSetId) {
+    // We are editing an existing set
+    const setIndex = data.sets.findIndex(s => s.id === editingSetId);
+    if (setIndex !== -1) {
+      data.sets[setIndex].name = name;
+      data.sets[setIndex].selectedItems = selectedItems;
+      showNotification('Özel set başarıyla güncellendi!', 'success');
+    }
+    editingSetId = null; // Clear state
+  } else {
+    // Creating a new set
+    const newSetId = 'set-' + Date.now();
+    data.sets.push({
+      id: newSetId,
+      name,
+      selectedItems
+    });
+    showNotification('Özel set başarıyla oluşturuldu!', 'success');
+  }
+  
+  closeCustomSetModal();
+  renderCostCalculator();
+  triggerCostAutosave();
+};
+
+// Delete Custom Sets
+window.deleteCustomSet = function(setId) {
+  const data = state.config.costCalculatorData;
+  if (!data || !data.sets) return;
+  
+  if (!confirm('Bu özel seti silmek istediğinize emin misiniz?')) return;
+  
+  data.sets = data.sets.filter(set => set.id !== setId);
+  
+  renderCostCalculator();
+  triggerCostAutosave();
+  showNotification('Özel set silindi.', 'success');
+};
+
+// Debounced Autosave for Cost Calculator
+let costAutosaveTimer = null;
+function triggerCostAutosave() {
+  if (costAutosaveTimer) clearTimeout(costAutosaveTimer);
+  
+  costAutosaveTimer = setTimeout(async () => {
+    try {
+      const res = await fetch('/api/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(state.config)
+      });
+      if (res.ok) {
+        console.log('[Autosave] Cost calculator settings successfully saved to Supabase.');
+      } else {
+        throw new Error('Save configuration returned error status.');
+      }
+    } catch (e) {
+      console.error('[Autosave Hata] Gider verileri kaydedilemedi:', e);
+      showNotification('Değişiklikler sunucuya kaydedilemedi.', 'danger');
+    }
+  }, 1000);
+}
+
+// ==========================================
+// MOBILE SIDEBAR TOGGLE & SWIPE GESTURES
+// ==========================================
+window.toggleMobileSidebar = function(isOpen) {
+  const sidebar = document.querySelector('.sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (!sidebar || !backdrop) return;
+  
+  if (isOpen) {
+    sidebar.classList.add('active');
+    backdrop.classList.add('active');
+  } else {
+    sidebar.classList.remove('active');
+    backdrop.classList.remove('active');
+  }
+};
+
+// Swiping gestures implementation
+(function initMobileSwipe() {
+  let touchStartX = 0;
+  let touchStartY = 0;
+  
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  
+  document.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+    
+    // Check if horizontal swipe was significantly larger than vertical drag
+    if (Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+      const sidebar = document.querySelector('.sidebar');
+      const isSidebarOpen = sidebar && sidebar.classList.contains('active');
+      
+      if (diffX > 75) {
+        // Swipe Right: Open menu if swipe started near left edge (startX < 80px)
+        if (!isSidebarOpen && touchStartX < 80) {
+          window.toggleMobileSidebar(true);
+        }
+      } else if (diffX < -75) {
+        // Swipe Left: Close menu if swipe started anywhere and menu is open
+        if (isSidebarOpen) {
+          window.toggleMobileSidebar(false);
+        }
+      }
+    }
+  }, { passive: true });
+})();
