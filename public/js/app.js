@@ -663,29 +663,6 @@ function createProductCard(product) {
   card.className = 'product-card';
   card.setAttribute('data-code', product.code);
 
-  // Bulk selection checkbox (Top Right overlay)
-  const bulkSelectWrapper = document.createElement('div');
-  bulkSelectWrapper.className = 'bulk-select-wrapper';
-  bulkSelectWrapper.style.position = 'absolute';
-  bulkSelectWrapper.style.top = '15px';
-  bulkSelectWrapper.style.right = '15px';
-  bulkSelectWrapper.style.zIndex = '10';
-
-  const bulkCheckbox = document.createElement('input');
-  bulkCheckbox.type = 'checkbox';
-  bulkCheckbox.className = 'bulk-select-checkbox';
-  bulkCheckbox.setAttribute('data-bulk-code', product.code);
-  bulkCheckbox.style.width = '18px';
-  bulkCheckbox.style.height = '18px';
-  bulkCheckbox.style.cursor = 'pointer';
-  
-  bulkCheckbox.addEventListener('change', () => {
-    updateBulkActionsBarState();
-  });
-
-  bulkSelectWrapper.appendChild(bulkCheckbox);
-  card.appendChild(bulkSelectWrapper);
-
   const pricing = calculateDetailedPricing(product);
   const normalPrice = product.undiscountedPrice;
   const tolerance = state.config.toleransLimit !== undefined ? parseFloat(state.config.toleransLimit) : 10.0;
