@@ -132,6 +132,7 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   const profitNode = document.getElementById(`profit-total-${code}`);
   const kdvNode = document.getElementById(`kdv-total-${code}`);
   const grandNode = document.getElementById(`grand-total-${code}`);
+  const trendyolNode = document.getElementById(`trendyol-total-${code}`);
   
   if (costNode) costNode.textContent = `${pricing.cost.toFixed(2)} ₺`;
   if (profitRow) {
@@ -145,6 +146,7 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   }
   if (kdvNode) kdvNode.textContent = `${pricing.kdv.toFixed(2)} ₺`;
   if (grandNode) grandNode.textContent = `${pricing.roundedGrandTotal.toFixed(2)} ₺`;
+  if (trendyolNode) trendyolNode.textContent = `${(pricing.roundedGrandTotal * 1.19).toFixed(2)} ₺`;
 
   const normalPrice = product.undiscountedPrice;
   const tolerance = state.config.toleransLimit !== undefined ? parseFloat(state.config.toleransLimit) : 10.0;
@@ -162,6 +164,15 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
     copyBtn.onclick = (e) => {
       e.stopPropagation();
       copyToClipboard(pricing.roundedGrandTotal.toFixed(2), code);
+    };
+  }
+
+  // Update copy button handler for Trendyol
+  const copyTrendyolBtn = document.getElementById(`copy-trendyol-btn-${code}`);
+  if (copyTrendyolBtn) {
+    copyTrendyolBtn.onclick = (e) => {
+      e.stopPropagation();
+      copyToClipboard((pricing.roundedGrandTotal * 1.19).toFixed(2), `${code} (Trendyol)`);
     };
   }
 }
@@ -878,6 +889,17 @@ function createProductCard(product) {
         </div>
       </div>
       <span class="value" id="grand-total-${product.code}" style="font-size: 20px; font-weight: 800; color: var(--color-accent-gold); text-shadow: 0 0 10px rgba(199,163,108,0.2);">${pricing.roundedGrandTotal.toFixed(2)} ₺</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.05);">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="label" style="font-size: 13px; font-weight: 700; color: #ff5a00; margin-right: 4px;">TRENDYOL FİYATI</span>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <button type="button" id="copy-trendyol-btn-${product.code}" class="card-action-btn" title="Trendyol Fiyatını Panoya Kopyala" onclick="copyToClipboard('${(pricing.roundedGrandTotal * 1.19).toFixed(2)}', '${product.code} (Trendyol)')">
+            <i class="fa-regular fa-copy"></i>
+          </button>
+        </div>
+      </div>
+      <span class="value" id="trendyol-total-${product.code}" style="font-size: 20px; font-weight: 800; color: #ff5a00; text-shadow: 0 0 10px rgba(255,90,0,0.2);">${(pricing.roundedGrandTotal * 1.19).toFixed(2)} ₺</span>
     </div>
   `;
   optionsTable.appendChild(totalRow);
