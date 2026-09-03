@@ -14,6 +14,7 @@ const state = {
     search: '',
     category: 'all',
     onlyMismatch: false,
+    hideOutOfStock: false,
     sort: 'default'
   },
   saveDebouncers: {}
@@ -684,6 +685,14 @@ function initFilters() {
     renderProductGrid();
   });
 
+  const hideOutOfStockFilter = document.getElementById('hide-out-of-stock-filter');
+  if (hideOutOfStockFilter) {
+    hideOutOfStockFilter.addEventListener('change', () => {
+      state.filters.hideOutOfStock = hideOutOfStockFilter.checked;
+      renderProductGrid();
+    });
+  }
+
   const sortSelect = document.getElementById('sort-order');
   if (sortSelect) {
     sortSelect.addEventListener('change', () => {
@@ -724,7 +733,11 @@ function renderProductGrid() {
     
     const matchesMismatch = !state.filters.onlyMismatch || hasMismatch;
 
-    return matchesSearch && matchesCategory && matchesMismatch;
+    // 4. Stock Filter (Stokta Olmayanları Gizle)
+    const isOutOfStock = product.inStock === false || (product.stock !== undefined && product.stock <= 0);
+    const matchesStock = !state.filters.hideOutOfStock || !isOutOfStock;
+
+    return matchesSearch && matchesCategory && matchesMismatch && matchesStock;
   });
 
   // Sort products
@@ -812,7 +825,8 @@ function createProductCard(product) {
 
   const codeBadge = document.createElement('div');
   codeBadge.className = 'product-code';
-  codeBadge.textContent = `KOD: ${product.code}`;
+  const isOutOfStock = product.inStock === false || (product.stock !== undefined && product.stock <= 0);
+  codeBadge.innerHTML = `<span>KOD: ${product.code}</span>${isOutOfStock ? ' <span class="badge-out-of-stock" style="background: rgba(231,76,60,0.15); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-left: 6px;"><i class="fa-solid fa-box-archive"></i> TÜKENDİ</span>' : ''}`;
   detailsWrapper.appendChild(codeBadge);
 
   const titleNode = document.createElement('h4');

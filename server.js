@@ -205,16 +205,28 @@ async function saveConfig(config) {
 
 // 3. Read Products
 async function getProducts() {
+  const localProducts = readJsonFile(PRODUCTS_FILE, []);
+  const localMap = new Map(localProducts.map(p => [p.url, p]));
+
   if (isCloudMode) {
     try {
       const { data, error } = await supabase.from('nfs_products').select('*');
       if (error) throw error;
-      return data || [];
+      if (data && data.length > 0) {
+        return data.map(p => {
+          const local = localMap.get(p.url) || {};
+          return {
+            ...p,
+            stock: p.stock !== undefined ? p.stock : (local.stock !== undefined ? local.stock : 0),
+            inStock: p.inStock !== undefined ? p.inStock : (local.inStock !== undefined ? local.inStock : true)
+          };
+        });
+      }
     } catch (err) {
       console.error('[Supabase Error] Failed to read nfs_products:', err);
     }
   }
-  return readJsonFile(PRODUCTS_FILE, []);
+  return localProducts;
 }
 
 // 4. Save Products
@@ -225,10 +237,13 @@ async function saveProducts(products) {
   if (isCloudMode) {
     try {
       if (products.length === 0) return true;
-      const cleanedProducts = products.map(p => ({
-        ...p,
-        created_at: p.created_at || new Date().toISOString()
-      }));
+      const cleanedProducts = products.map(p => {
+        const { stock, inStock, ...rest } = p;
+        return {
+          ...rest,
+          created_at: p.created_at || new Date().toISOString()
+        };
+      });
       const { error } = await supabase.from('nfs_products').upsert(cleanedProducts);
       if (error) throw error;
       return true;
@@ -897,6 +912,13 @@ async function runScraper() {
           crawlStatus.current = itemIndex;
           crawlStatus.currentProduct = title;
 
+          let stock = 0;
+          let inStock = true;
+          if (model) {
+            stock = model.totalStockAmount !== undefined ? model.totalStockAmount : (model.product ? model.product.stokAdedi : 0);
+            inStock = stock > 0;
+          }
+
           return {
             title,
             code,
@@ -905,6 +927,8 @@ async function runScraper() {
             discountedPrice,
             imageUrl,
             url,
+            stock,
+            inStock,
             lastmod // Store sitemap modification date
           };
         } catch (err) {

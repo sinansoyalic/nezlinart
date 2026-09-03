@@ -163,12 +163,20 @@
             </select>
           </div>
           
-          <div class="checkbox-toggle">
+          <div class="checkbox-toggle" title="Sadece fiyat farkı olan ürünleri göster">
             <label class="switch">
               <input type="checkbox" id="mismatch-filter">
               <span class="slider"></span>
             </label>
-            <span>Sadece Uyuşmazlıkları Göster</span>
+            <span>Sadece Uyuşmazlar</span>
+          </div>
+
+          <div class="checkbox-toggle" title="Tükenmiş / stokta bulunmayan ürünleri gizle">
+            <label class="switch">
+              <input type="checkbox" id="hide-out-of-stock-filter">
+              <span class="slider"></span>
+            </label>
+            <span>Stokta Olmayanları Gizle</span>
           </div>
           
           <div class="results-counter">
@@ -731,6 +739,6 @@
   <!-- Custom Mouse-Following Interactive Tooltip -->
   <div id="map-tooltip" class="map-tooltip-box" style="display: none; opacity: 0;"></div>
 
-  <script src="/js/app.js?v=2.5"></script>
+  <script src="/js/app.js?v=2.6"></script>
 </body>
 </html>

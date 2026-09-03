@@ -8,7 +8,9 @@
     "discountedPrice": 1699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk-tirnak-albumu-8-b53b.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "url": "https://nezlincollection.com/pembe-kumas-pembe-coquette-tirnak-albumu-kumas-halkali-dosya-ta04",
@@ -19,7 +21,9 @@
     "discountedPrice": 649,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/kumas-tirnak-albumu-7972e-.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Ruby Present Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Christmas - NC132",
@@ -29,7 +33,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/ruby-present-483ef0.jpg",
     "url": "https://nezlincollection.com/ruby-present-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-christmas-nc132",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Pine Beauty Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Christmas - NC133",
@@ -39,7 +45,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/pine-beauty-1-468a.jpg",
     "url": "https://nezlincollection.com/pine-beauty-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-christmas-nc133",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1200,
+    "inStock": true
   },
   {
     "title": "Berry Christmas Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Christmas - NC131",
@@ -49,7 +57,9 @@
     "discountedPrice": 949,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/berry-chrismas-f13-43.jpg",
     "url": "https://nezlincollection.com/berry-christmas-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-christmas-nc131",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Snow Flakes Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Christmas - NC139",
@@ -59,7 +69,9 @@
     "discountedPrice": 1079,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/snow-flakes-2d-869.jpg",
     "url": "https://nezlincollection.com/snow-flakes-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-christmas-nc139",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Royal Winter Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC134",
@@ -69,7 +81,9 @@
     "discountedPrice": 1499,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/royal-winter-7-8f5d.jpg",
     "url": "https://nezlincollection.com/royal-winter-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc134",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Ancestor Blood Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Koi Fish Dragon - NC126",
@@ -79,7 +93,9 @@
     "discountedPrice": 1099,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/ancestor-blood-4f-490.jpg",
     "url": "https://nezlincollection.com/ancestor-blood-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-koi-fish-dragon-nc126",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Office Blue Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC127",
@@ -89,7 +105,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/office-blue-4698-8.jpg",
     "url": "https://nezlincollection.com/office-blue-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc127",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "url": "https://nezlincollection.com/sm-medium-almond-base-coat-ve-top-coat-ile-guclendirilmis-takma-tirnak-gs108",
@@ -100,7 +118,9 @@
     "discountedPrice": 379,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/party-classic-b-481f.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "url": "https://nezlincollection.com/xs-long-square-base-coat-ve-top-coat-ile-guclendirilmis-takma-tirnak-gs101",
@@ -111,7 +131,9 @@
     "discountedPrice": 449,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/gs101-00610-88c1.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "url": "https://nezlincollection.com/xs-medium-almond-base-coat-ve-top-coat-ile-guclendirilmis-takma-tirnak-gs102",
@@ -122,7 +144,9 @@
     "discountedPrice": 299,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/gs102-2-c471c272.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "url": "https://nezlincollection.com/xs-long-square-base-coat-ve-top-coat-ile-guclendirilmis-takma-tirnak-gs103",
@@ -133,7 +157,9 @@
     "discountedPrice": 349,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/gs103--6ba4be6d6.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 1,
+    "inStock": true
   },
   {
     "url": "https://nezlincollection.com/xs-long-square-gs104",
@@ -144,7 +170,9 @@
     "discountedPrice": 349,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/gs104-9200c4-719.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 1,
+    "inStock": true
   },
   {
     "url": "https://nezlincollection.com/sm-medium-square-base-coat-ve-top-coat-ile-guclendirilmis-takma-tirnak-gs105",
@@ -155,7 +183,9 @@
     "discountedPrice": 449,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/gs105--826b-6b69.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "url": "https://nezlincollection.com/sm-medium-square-base-coat-ve-top-coat-ile-guclendirilmis-takma-tirnak-gs106",
@@ -166,7 +196,9 @@
     "discountedPrice": 449,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/gs106-c-b07a-178.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "SM Medium Almond - Base coat ve Top Coat İle Güçlendirilmiş Takma Tırnak - GS107",
@@ -176,7 +208,9 @@
     "discountedPrice": 349,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/gs107-7-a4af41f6.jpg",
     "url": "https://nezlincollection.com/sm-medium-almond-base-coat-ve-top-coat-ile-guclendirilmis-takma-tirnak-gs107",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Pretty Witch Lace Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC117",
@@ -186,7 +220,9 @@
     "discountedPrice": 1299,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/shiny-claws-66-4a1.jpg",
     "url": "https://nezlincollection.com/pretty-witch-lace-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc117",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Jaguar Paws Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art French Blooming - NC118",
@@ -196,7 +232,9 @@
     "discountedPrice": 899,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/jaguar-paws-263-bf.jpg",
     "url": "https://nezlincollection.com/jaguar-paws-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-french-blooming-nc118",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1200,
+    "inStock": true
   },
   {
     "title": "Creepy Evening Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Doll - NC108",
@@ -206,7 +244,9 @@
     "discountedPrice": 1799,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/creepy-evening-88d761.jpg",
     "url": "https://nezlincollection.com/creepy-evening-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-doll-nc108",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Eyes On Protez Jel Takma Tırnak -El Yapımı Kalıcı Oje Nail Art Ghostface Blood Halloween - NC124",
@@ -216,7 +256,9 @@
     "discountedPrice": 1399,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/eyes-on-22240-.jpg",
     "url": "https://nezlincollection.com/eyes-on-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-ghostface-blood-halloween-nc124",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1196,
+    "inStock": true
   },
   {
     "title": "Curious Ghosts Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Halloween - NC120",
@@ -226,7 +268,9 @@
     "discountedPrice": 1199,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/curious-ghosts-4a86-9.jpg",
     "url": "https://nezlincollection.com/curious-ghosts-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-halloween-nc120",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Tiny Eyes Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Ghost Halloween - NC109",
@@ -236,7 +280,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/tiny-eyes-38-295.jpg",
     "url": "https://nezlincollection.com/tiny-eyes-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-ghost-halloween-nc109",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Bloody Skeletons Protez Jel Takma Tırnak -El Yapımı Kalıcı Oje Nail Art Creepy Halloween - NC125",
@@ -246,7 +292,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/bloody-skeletons-1ea-49.jpg",
     "url": "https://nezlincollection.com/bloody-skeletons-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-creepy-halloween-nc125",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 12000,
+    "inStock": true
   },
   {
     "title": "Berry Season Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art 3D Forest - NC136",
@@ -256,7 +304,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cherry-season-4674-9.jpg",
     "url": "https://nezlincollection.com/berry-season-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-3d-forest-nc136",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Soft Dreams Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art French Ombre - NC135",
@@ -266,7 +316,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/soft-dreams-f75dcf.jpg",
     "url": "https://nezlincollection.com/soft-dreams-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-french-ombre-nc135",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "French Touch Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC119",
@@ -276,7 +328,9 @@
     "discountedPrice": 849,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/french-touch-595e03.jpg",
     "url": "https://nezlincollection.com/french-touch-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc119",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Fairy Leaves Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Gold Chrome - NC104",
@@ -286,7 +340,9 @@
     "discountedPrice": 1449,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/fairy-leaves-protez-jel-takma-tirnak-e-aa35-0.jpg",
     "url": "https://nezlincollection.com/fairy-leaves-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-gold-chrome-nc104",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Northern Spring Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC114",
@@ -296,7 +352,9 @@
     "discountedPrice": 1149,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/northern-spring-b9ff-8.jpg",
     "url": "https://nezlincollection.com/northern-spring-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc114",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1190,
+    "inStock": true
   },
   {
     "title": "Angelic Charm Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail French Diamond Haç - NC101",
@@ -306,7 +364,9 @@
     "discountedPrice": 1799,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/angelic-charm-protez-jel-takma-tirnak--d90caf.jpg",
     "url": "https://nezlincollection.com/angelic-charm-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-french-diamond-hac-nc101",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1194,
+    "inStock": true
   },
   {
     "title": "Cutesy Lace Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Pink Coquette Ribbon Star - NC106",
@@ -316,7 +376,9 @@
     "discountedPrice": 1079,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/childhood-days-21-89a.jpg",
     "url": "https://nezlincollection.com/cutesy-lace-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-pink-coquette-ribbon-star-nc106",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Liquid Gold Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Mirror Chrome Effect - NC107",
@@ -326,7 +388,9 @@
     "discountedPrice": 599,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/metal-elegance-8efcc-.jpg",
     "url": "https://nezlincollection.com/liquid-gold-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-mirror-chrome-effect-nc107",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Bat Blood Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Halloween - NC123",
@@ -336,7 +400,9 @@
     "discountedPrice": 1899,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/bat-blood-f4e822.jpg",
     "url": "https://nezlincollection.com/bat-blood-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-halloween-nc123",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Don't Touch Me Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Diamond Chrome - NC128",
@@ -346,7 +412,9 @@
     "discountedPrice": 849,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/dont-touch-me-90-9ce.jpg",
     "url": "https://nezlincollection.com/dont-touch-me-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-diamond-chrome-nc128",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 11999,
+    "inStock": true
   },
   {
     "title": "Blooming Flowers Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art 3D Gold Chrome - NC138",
@@ -356,7 +424,9 @@
     "discountedPrice": 1099,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/pink-panther--7121d.jpg",
     "url": "https://nezlincollection.com/blooming-flowers-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-3d-gold-chrome-nc138",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119992,
+    "inStock": true
   },
   {
     "title": "Kitty Cat Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Star Charm Hello Sticker - NC137",
@@ -366,7 +436,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/fairy-stars-2-4057.jpg",
     "url": "https://nezlincollection.com/kitty-cat-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-star-charm-hello-sticker-nc137",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Old Stars Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Y2K French Star Blooming - NC139",
@@ -376,7 +448,9 @@
     "discountedPrice": 899,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/good-old-stars-8f4363.jpg",
     "url": "https://nezlincollection.com/old-stars-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-y2k-french-star-blooming-nc139",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1200,
+    "inStock": true
   },
   {
     "title": "French Twist Protez Jel Takma Tırnak -El Yapımı Kalıcı Oje Nail Art Ombre Diamond Wedding Day -NC116",
@@ -386,7 +460,9 @@
     "discountedPrice": 1299,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/my-day-0e9-91.jpg",
     "url": "https://nezlincollection.com/french-twist-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-ombre-diamond-wedding-day-nc116",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Daisy Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art 3D Flowers French - NC115",
@@ -396,7 +472,9 @@
     "discountedPrice": 1349,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/blossom-day-24d9-4.jpg",
     "url": "https://nezlincollection.com/daisy-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-3d-flowers-french-nc115",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "url": "https://nezlincollection.com/protez-takma-tirnak-saklama-kutusu-seffaf-",
@@ -407,7 +485,9 @@
     "discountedPrice": 129,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/seffaf-tirnak-kutusu-f-901f.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 24,
+    "inStock": true
   },
   {
     "url": "https://nezlincollection.com/sivi-yapistirici-protez-takma-tirnak-10-gr",
@@ -418,7 +498,9 @@
     "discountedPrice": 99,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/sivi-yapistirici-5-ml--bab3-.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 997,
+    "inStock": true
   },
   {
     "url": "https://nezlincollection.com/sticker-yapistirici",
@@ -429,7 +511,9 @@
     "discountedPrice": 89,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/sticker-yapistirici-3ab639.jpg",
     "lastmod": "2025-11-30",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Sugar Lace Protez Jel Takma Tırnak -El Yapımı Kalıcı Oje Nail Art Pink Coquette Ribbon Star -NC140",
@@ -439,7 +523,9 @@
     "discountedPrice": 1079,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/childhood-days-ii-4f49-8.jpg",
     "url": "https://nezlincollection.com/sugar-lace-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-pink-coquette-ribbon-star-nc140",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Love Letter Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Glitter Star - NC141",
@@ -449,7 +535,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/childhood-days-iii-9-ea27.jpg",
     "url": "https://nezlincollection.com/love-letter-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-glitter-star-nc141",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Gemmy Ring Protez Jel Takma Tırnak -El Yapımı Kalıcı Oje Nail Art Diamond Chrome- NC142",
@@ -459,7 +547,9 @@
     "discountedPrice": 1049,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/gemmy-ring-0b-4f8.jpg",
     "url": "https://nezlincollection.com/gemmy-ring-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-diamond-chrome-nc142",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "url": "https://nezlincollection.com/protez-takma-tirnak-hazirlik-kiti-manikur-seti",
@@ -470,7 +560,9 @@
     "discountedPrice": 149,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/baslangic-seti-d8e42e.jpg",
     "lastmod": "2026-05-25",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 998,
+    "inStock": true
   },
   {
     "title": "Krem Bej Coquette Tırnak Albümü Kapitone Kumaş - Halkalı Dosya TA05",
@@ -480,7 +572,9 @@
     "discountedPrice": 899,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/kumas-tirnak-albumu-ta05--9031-.jpg",
     "url": "https://nezlincollection.com/krem-bej-coquette-tirnak-albumu-kapitone-kumas-halkali-dosya-ta05",
-    "lastmod": "2026-06-11"
+    "lastmod": "2026-06-11",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Pembe Coquette Tırnak Albümü Kapitone Kumaş - Halkalı Dosya TA06",
@@ -490,7 +584,9 @@
     "discountedPrice": 899,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/kumas-tirnak-albumu-ta06-5b7bb8.jpg",
     "url": "https://nezlincollection.com/pembe-coquette-tirnak-albumu-kapitone-kumas-halkali-dosya-ta06",
-    "lastmod": "2026-06-11"
+    "lastmod": "2026-06-11",
+    "stock": 0,
+    "inStock": false
   },
   {
     "url": "https://nezlincollection.com/suya-dayanikli-ekstra-guclu-zararsiz-sticker-yapistirici-protez-jel-takma-tirnak-ak104",
@@ -501,7 +597,9 @@
     "discountedPrice": 249,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/pembe-sticker-yapistirici-9-494f.jpg",
     "lastmod": "2026-02-07",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Gold Marble Protez Jel Takma  Tırnak -El Yapımı  Kalıcı Oje Nail Art Mermer Desenli Chrome -NC143",
@@ -511,7 +609,9 @@
     "discountedPrice": 1079,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/golden-touch-c2091d.jpg",
     "url": "https://nezlincollection.com/gold-marble-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-mermer-desenli-chrome-nc143",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "url": "https://nezlincollection.com/tirnak-bakimi-toz-temizleme-ve-manikur-fircasi-ak107",
@@ -522,7 +622,9 @@
     "discountedPrice": 49,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/tirnak-temizleme-fircasi-3-b75b.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-05-25T12:49:39.872388+00:00"
+    "created_at": "2026-05-25T12:49:39.872388+00:00",
+    "stock": 49,
+    "inStock": true
   },
   {
     "title": "Creepy Game Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art Halloween - NC144",
@@ -532,7 +634,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/creepy-game--624a6.jpg",
     "url": "https://nezlincollection.com/creepy-game-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-halloween-nc144",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Midnight Shimmer Protez Jel Takma  Tırnak -El Yapımı  Kalıcı Oje Nail Art Cat Eye - NC145",
@@ -542,7 +646,9 @@
     "discountedPrice": 739,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-diamond-b-4630.jpg",
     "url": "https://nezlincollection.com/midnight-shimmer-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-nc145",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Lunar Light Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art Cat Eye - NC146",
@@ -552,7 +658,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-platinum-ea450-.jpg",
     "url": "https://nezlincollection.com/lunar-light-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-nc146",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Magic Wand Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art Cat Eye - NC147",
@@ -562,7 +670,9 @@
     "discountedPrice": 749,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-chromium--9684b.jpg",
     "url": "https://nezlincollection.com/magic-wand-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-nc147",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Stellar Flash Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art Cat Eye - NC149",
@@ -572,7 +682,9 @@
     "discountedPrice": 739,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-soft-ruby-e-199a.jpg",
     "url": "https://nezlincollection.com/stellar-flash-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-nc149",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Honey Bunny Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC149",
@@ -582,7 +694,9 @@
     "discountedPrice": 599,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-quartz-eacf63.jpg",
     "url": "https://nezlincollection.com/honey-bunny-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc149",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Bunny Pink Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC150",
@@ -592,7 +706,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-ruby-06f39e.jpg",
     "url": "https://nezlincollection.com/bunny-pink-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc150",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Love Sense Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC151",
@@ -602,7 +718,9 @@
     "discountedPrice": 599,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-love-68bf-e.jpg",
     "url": "https://nezlincollection.com/love-sense-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc151",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119997,
+    "inStock": true
   },
   {
     "title": "Forest Pond Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC152",
@@ -612,7 +730,9 @@
     "discountedPrice": 749,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-emerald-0-afb7.jpg",
     "url": "https://nezlincollection.com/forest-pond-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc152",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Pillow Soft Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC153",
@@ -622,7 +742,9 @@
     "discountedPrice": 769,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-pillow-cdc-47.jpg",
     "url": "https://nezlincollection.com/pillow-soft-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc153",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Soft Quartz Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC154",
@@ -632,7 +754,9 @@
     "discountedPrice": 749,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-soft-quartz-2b-85e.jpg",
     "url": "https://nezlincollection.com/soft-quartz-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc154",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Baby Blush Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC155",
@@ -642,7 +766,9 @@
     "discountedPrice": 499,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-cotton-candy-583-b1.jpg",
     "url": "https://nezlincollection.com/baby-blush-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc155",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119998,
+    "inStock": true
   },
   {
     "title": "Maroon Love Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC156",
@@ -652,7 +778,9 @@
     "discountedPrice": 749,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-witch-b71-18.jpg",
     "url": "https://nezlincollection.com/maroon-love-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc156",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Forest Green Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC157",
@@ -662,7 +790,9 @@
     "discountedPrice": 599,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-forest-fa-8d7.jpg",
     "url": "https://nezlincollection.com/forest-green-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc157",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Rose Heart Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC158",
@@ -672,7 +802,9 @@
     "discountedPrice": 749,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cat-eye-candy-32f171.jpg",
     "url": "https://nezlincollection.com/rose-heart-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc158",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Retro Grunge Protez Jel Takma Tırnak -El Yapımı Kalıcı Oje Nail Art Gothic Charm -NC159",
@@ -682,7 +814,9 @@
     "discountedPrice": 799,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/nature-contrast--760d-.jpg",
     "url": "https://nezlincollection.com/retro-grunge-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-gothic-charm-nc159",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Cyber Soul Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Ombre French - NC160",
@@ -692,7 +826,9 @@
     "discountedPrice": 899,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/deep-french-0-9bc5.jpg",
     "url": "https://nezlincollection.com/cyber-soul-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-ombre-french-nc160",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Starry Navy Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Ombre Chrome - NC161",
@@ -702,7 +838,9 @@
     "discountedPrice": 1449,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/golden-stars-ac0b11.jpg",
     "url": "https://nezlincollection.com/starry-navy-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-ombre-chrome-nc161",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 105997,
+    "inStock": true
   },
   {
     "title": "Steppe New Year Protez Jel Takma Tırnak -El Yapımı Kalıcı Oje Nail Art Yılbaşı Christmas -NC162",
@@ -712,7 +850,9 @@
     "discountedPrice": 949,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/steppe-new-year--90e5-.jpg",
     "url": "https://nezlincollection.com/steppe-new-year-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-yilbasi-christmas-nc162",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Diamond Drops Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC164",
@@ -722,7 +862,9 @@
     "discountedPrice": 799,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/diamond-drops-fb-78f.jpg",
     "url": "https://nezlincollection.com/diamond-drops-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc164",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Silk Touch Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Ombre - NC165",
@@ -732,7 +874,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/teddy-pawn-0c-499.jpg",
     "url": "https://nezlincollection.com/silk-touch-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-ombre-nc165",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Bloody Witch Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Kırmızı - NC166",
@@ -742,7 +886,9 @@
     "discountedPrice": 749,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/elegant-maroon-9418-f.jpg",
     "url": "https://nezlincollection.com/bloody-witch-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-kirmizi-nc166",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Cherry Red Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC167",
@@ -752,7 +898,9 @@
     "discountedPrice": 749,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cute-elegant-6-4f38.jpg",
     "url": "https://nezlincollection.com/cherry-red-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc167",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC168",
@@ -762,7 +910,9 @@
     "discountedPrice": 729,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/dark-captain-192-ab.jpg",
     "url": "https://nezlincollection.com/protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc168",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 8,
+    "inStock": true
   },
   {
     "title": "Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC169",
@@ -772,7 +922,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/star-cover-b-d689.jpg",
     "url": "https://nezlincollection.com/protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc169",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 10,
+    "inStock": true
   },
   {
     "title": "Vintage New Year Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC174",
@@ -782,7 +934,9 @@
     "discountedPrice": 799,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/vintage-new-year-2ea928.jpg",
     "url": "https://nezlincollection.com/vintage-new-year-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc174",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Helloo Kitty Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Yılbaşı - NC175",
@@ -792,7 +946,9 @@
     "discountedPrice": 1199,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/heyo-kitty-1c30ca.jpg",
     "url": "https://nezlincollection.com/helloo-kitty-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-yilbasi-nc175",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 51000,
+    "inStock": true
   },
   {
     "title": "Soft French Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC216",
@@ -802,7 +958,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-c7-41b.jpg",
     "url": "https://nezlincollection.com/soft-french-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc216",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Starry Void Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Ombre Star - NC215",
@@ -812,7 +970,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-aaf42f.jpg",
     "url": "https://nezlincollection.com/starry-void-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-ombre-star-nc215",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Rare Simplicity Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC214",
@@ -822,7 +982,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-070-fc.jpg",
     "url": "https://nezlincollection.com/rare-simplicity-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc214",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Nebula Mist Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art Cat Eye - NC213",
@@ -832,7 +994,9 @@
     "discountedPrice": 779,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-5-b170.jpg",
     "url": "https://nezlincollection.com/nebula-mist-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-nc213",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Stellar Flare Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art Cat Eye - NC212",
@@ -842,7 +1006,9 @@
     "discountedPrice": 779,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-aad29e.jpg",
     "url": "https://nezlincollection.com/stellar-flare-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-nc212",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Urban Grey Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art Cat Eye - NC211",
@@ -852,7 +1018,9 @@
     "discountedPrice": 599,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-ea639a.jpg",
     "url": "https://nezlincollection.com/urban-grey-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-nc211",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1200,
+    "inStock": true
   },
   {
     "title": "Thin Glow Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Pink - NC210",
@@ -862,7 +1030,9 @@
     "discountedPrice": 599,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-f-72bb.jpg",
     "url": "https://nezlincollection.com/thin-glow-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-pink-nc210",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1198,
+    "inStock": true
   },
   {
     "title": "Sugar Bunny Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC209",
@@ -872,7 +1042,9 @@
     "discountedPrice": 599,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-2-3de0.jpg",
     "url": "https://nezlincollection.com/sugar-bunny-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc209",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Cosmic Dust Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art Cat Eye - NC208",
@@ -882,7 +1054,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-2f2f-e.jpg",
     "url": "https://nezlincollection.com/cosmic-dust-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-nc208",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Goldie French Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Chrome - NC207",
@@ -892,7 +1066,9 @@
     "discountedPrice": 839,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-ae9b2a.jpg",
     "url": "https://nezlincollection.com/goldie-french-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-chrome-nc207",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Magic Wand Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art Cat Eye - NC205",
@@ -902,7 +1078,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-964-ec.jpg",
     "url": "https://nezlincollection.com/magic-wand-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-nc205",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1200,
+    "inStock": true
   },
   {
     "title": "Heart Beat Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art Cat Eye Kırmızı - NC204",
@@ -912,7 +1090,9 @@
     "discountedPrice": 799,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali--d264-.jpg",
     "url": "https://nezlincollection.com/heart-beat-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-kirmizi-nc204",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Fairy Dust Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Cat Eye Chrome - NC203",
@@ -922,7 +1102,9 @@
     "discountedPrice": 899,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-471e-9.jpg",
     "url": "https://nezlincollection.com/fairy-dust-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-chrome-nc203",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Clear Ocean Dots Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC202",
@@ -932,7 +1114,9 @@
     "discountedPrice": 1199,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-4fb-22.jpg",
     "url": "https://nezlincollection.com/clear-ocean-dots-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc202",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Tiny Bloom Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC177",
@@ -942,7 +1126,9 @@
     "discountedPrice": 1449,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-8071a6.jpg",
     "url": "https://nezlincollection.com/tiny-bloom-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc177",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119978,
+    "inStock": true
   },
   {
     "title": "Smily Pumpkins",
@@ -952,7 +1138,9 @@
     "discountedPrice": 1449,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/smily-pumpkins-513ac3.jpg",
     "url": "https://nezlincollection.com/smily-pumpkins",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Timeless Classic Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Kırmızı - NC176",
@@ -962,7 +1150,9 @@
     "discountedPrice": 729,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/protez-jel-takma-tirnak-el-yapimi-kali-0d3893.jpg",
     "url": "https://nezlincollection.com/timeless-classic-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-kirmizi-nc176",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Night Velvet Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC249",
@@ -972,7 +1162,9 @@
     "discountedPrice": 1299,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/night-velvet-protez-jel-takma-tirnak-e-979f-8.jpg",
     "url": "https://nezlincollection.com/night-velvet-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc249",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Wild Touch Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC248",
@@ -982,7 +1174,9 @@
     "discountedPrice": 799,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/wild-touch-protez-jel-takma-tirnak-el--13d-97.jpg",
     "url": "https://nezlincollection.com/wild-touch-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc248",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119993,
+    "inStock": true
   },
   {
     "title": "Soft Blossom Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje 3D Nail Art Ombre - NC242",
@@ -992,7 +1186,9 @@
     "discountedPrice": 1249,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/soft-blossom-protez-jel-takma-tirnak-e-210-46.jpg",
     "url": "https://nezlincollection.com/soft-blossom-protez-jel-takma-tirnak-el-yapimi-kalici-oje-3d-nail-art-ombre-nc242",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Night Wave Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC246",
@@ -1002,7 +1198,9 @@
     "discountedPrice": 799,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/night-wave-protez-jel-takma-tirnak-el--ea302c.jpg",
     "url": "https://nezlincollection.com/night-wave-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc246",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Dirty Ink Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje 3D Nail Art - NC240",
@@ -1012,7 +1210,9 @@
     "discountedPrice": 1079,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/dirty-ink-protez-jel-takma-tirnak-el-y-21fc8-.jpg",
     "url": "https://nezlincollection.com/dirty-ink-protez-jel-takma-tirnak-el-yapimi-kalici-oje-3d-nail-art-nc240",
-    "lastmod": "2026-06-02"
+    "lastmod": "2026-06-02",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Steel Fade Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje 3D Nail Art Ombre - NC239",
@@ -1022,7 +1222,9 @@
     "discountedPrice": 1299,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/steel-fade-protez-jel-takma-tirnak-el--b3c9-6.jpg",
     "url": "https://nezlincollection.com/steel-fade-protez-jel-takma-tirnak-el-yapimi-kalici-oje-3d-nail-art-ombre-nc239",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Steel Fade 2 Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje 3D Nail Art Ombre - NC236",
@@ -1032,7 +1234,9 @@
     "discountedPrice": 1299,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/steel-fade-2-protez-jel-takma-tirnak-e-1955-e.jpg",
     "url": "https://nezlincollection.com/steel-fade-2-protez-jel-takma-tirnak-el-yapimi-kalici-oje-3d-nail-art-ombre-nc236",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Blush Edge Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje 3D Nail Art French - NC238",
@@ -1042,7 +1246,9 @@
     "discountedPrice": 949,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/blush-edge-protez-jel-takma-tirnak-el--571-cc.jpg",
     "url": "https://nezlincollection.com/blush-edge-protez-jel-takma-tirnak-el-yapimi-kalici-oje-3d-nail-art-french-nc238",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Lovely Ribbon Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje 3D Nail Art Coquette - NC237",
@@ -1052,7 +1258,9 @@
     "discountedPrice": 949,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/lovely-ribbon-protez-jel-takma-tirnak--7-2108.jpg",
     "url": "https://nezlincollection.com/lovely-ribbon-protez-jel-takma-tirnak-el-yapimi-kalici-oje-3d-nail-art-coquette-nc237",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Lovely Red Ribbon Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje 3D Nail Art Coquette - NC232",
@@ -1062,7 +1270,9 @@
     "discountedPrice": 799,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/lovely-red-ribbon-protez-jel-takma-tir-a895-9.jpg",
     "url": "https://nezlincollection.com/lovely-red-ribbon-protez-jel-takma-tirnak-el-yapimi-kalici-oje-3d-nail-art-coquette-nc232",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Soft Lace Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Dantel - NC235",
@@ -1072,7 +1282,9 @@
     "discountedPrice": 1439,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/soft-lace-protez-jel-takma-tirnak-el-y-a-a781.jpg",
     "url": "https://nezlincollection.com/soft-lace-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-dantel-nc235",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Soft Bridal Lace Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art Dantel - NC234",
@@ -1082,7 +1294,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/soft-bridal-lace-protez-jel-takma-tirn-394-40.jpg",
     "url": "https://nezlincollection.com/soft-bridal-lace-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-dantel-nc234",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Dark Lace Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC230",
@@ -1092,7 +1306,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/dark-lace-protez-jel-takma-tirnak-el-y-b-931b.jpg",
     "url": "https://nezlincollection.com/dark-lace-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc230",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Wild Leopard French Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC231",
@@ -1102,7 +1318,9 @@
     "discountedPrice": 949,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/wild-leopard-french-protez-jel-takma-t-eb-86d.jpg",
     "url": "https://nezlincollection.com/wild-leopard-french-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc231",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Night Glitter Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC233",
@@ -1112,7 +1330,9 @@
     "discountedPrice": 739,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/night-glitter-protez-jel-takma-tirnak--5b-810.jpg",
     "url": "https://nezlincollection.com/night-glitter-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc233",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Milky Pearl Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje 3D Nail Art İnci Tozu - NC229",
@@ -1122,7 +1342,9 @@
     "discountedPrice": 1199,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/milky-pearl-protez-jel-takma-tirnak-el-aefaa3.jpg",
     "url": "https://nezlincollection.com/milky-pearl-protez-jel-takma-tirnak-el-yapimi-kalici-oje-3d-nail-art-inci-tozu-nc229",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Bridal Glitter Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC228",
@@ -1132,7 +1354,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/bridal-glitter-protez-jel-takma-tirnak-bd-49b.jpg",
     "url": "https://nezlincollection.com/bridal-glitter-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc228",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Rainbow Glitter Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art - NC223",
@@ -1142,7 +1366,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/rainbow-glitter-protez-jel-takma-tirna-20c469.jpg",
     "url": "https://nezlincollection.com/rainbow-glitter-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc223",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119995,
+    "inStock": true
   },
   {
     "title": "Glitter Ombre Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje 3D Nail Art - NC221",
@@ -1152,7 +1378,9 @@
     "discountedPrice": 799,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/glitter-ombre-protez-jel-takma-tirnak--b-d038.jpg",
     "url": "https://nezlincollection.com/glitter-ombre-protez-jel-takma-tirnak-el-yapimi-kalici-oje-3d-nail-art-nc221",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Glitter Star Gold Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje 3D Nail Art - NC220",
@@ -1162,7 +1390,9 @@
     "discountedPrice": 849,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/glitter-star-gold-protez-jel-takma-tir-83-3a3.jpg",
     "url": "https://nezlincollection.com/glitter-star-gold-protez-jel-takma-tirnak-el-yapimi-kalici-oje-3d-nail-art-nc220",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Retro Touch Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC226",
@@ -1172,7 +1402,9 @@
     "discountedPrice": 1149,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/retro-touch-protez-jel-takma-tirnak-el--4b69-.jpg",
     "url": "https://nezlincollection.com/retro-touch-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc226",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119974,
+    "inStock": true
   },
   {
     "title": "Ribbon Charm Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC227",
@@ -1182,7 +1414,9 @@
     "discountedPrice": 599,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/ribbon-charm-protez-jel-takma-tirnak-e-3dd5-b.jpg",
     "url": "https://nezlincollection.com/ribbon-charm-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc227",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Floral Piercing Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art 3D - NC225",
@@ -1192,7 +1426,9 @@
     "discountedPrice": 1949,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/floral-piercing-protez-jel-takma-tirna-43-3ec.jpg",
     "url": "https://nezlincollection.com/floral-piercing-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-3d-nc225",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Red Impact Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC224",
@@ -1202,7 +1438,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/red-impact-protez-jel-takma-tirnak-el--9f6732.jpg",
     "url": "https://nezlincollection.com/red-impact-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc224",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 12000,
+    "inStock": true
   },
   {
     "url": "https://nezlincollection.com/kucuk-seffaf-tirnak-albumu-halkali-dosya-ta01",
@@ -1213,7 +1451,9 @@
     "discountedPrice": 499,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/kucuk-seffaf-tirnak-albumu-ca-487.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-09-03T07:15:56.738+00:00"
+    "created_at": "2026-09-03T07:15:56.738+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "url": "https://nezlincollection.com/tirnak-yagi-5ml",
@@ -1224,7 +1464,9 @@
     "discountedPrice": 129,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/tirnak-yagi-5ml-28-a6b.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-09-03T07:15:56.738+00:00"
+    "created_at": "2026-09-03T07:15:56.738+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "url": "https://nezlincollection.com/buyuk-seffaf-tirnak-albumu-halkali-dosya-ta02",
@@ -1235,7 +1477,9 @@
     "discountedPrice": 559,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk-seffaf-tirnak-albumu-e7c-43.jpg",
     "lastmod": "2026-02-12",
-    "created_at": "2026-09-03T07:15:56.738+00:00"
+    "created_at": "2026-09-03T07:15:56.738+00:00",
+    "stock": 0,
+    "inStock": false
   },
   {
     "title": "Crown Glow Protez Jel Takma  Tırnak - El Yapımı  Kalıcı Oje Nail Art Cat Eye Gold - NC247",
@@ -1245,7 +1489,9 @@
     "discountedPrice": 1249,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/crown-glow-protez-jel-takma-tirnak-el--67a724.jpg",
     "url": "https://nezlincollection.com/crown-glow-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-cat-eye-gold-nc247",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Soft French II Protez Jel Takma Tırnak - El Yapımı Kalıcı Oje Nail Art - NC243",
@@ -1255,7 +1501,9 @@
     "discountedPrice": 699,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/soft-french-2-protez-jel-takma-tirnak--41-116.jpg",
     "url": "https://nezlincollection.com/soft-french-ii-protez-jel-takma-tirnak-el-yapimi-kalici-oje-nail-art-nc243",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119999,
+    "inStock": true
   },
   {
     "title": "Dream - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Ombre - NC218",
@@ -1265,7 +1513,9 @@
     "discountedPrice": 1199,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/ocean-glow-ombre-protez-jel-takma-tirn-9-6f3a.jpg",
     "url": "https://nezlincollection.com/dream-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-ombre-nc218",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Aura - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - 3D Ombre - NC219",
@@ -1275,7 +1525,9 @@
     "discountedPrice": 1649,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/purple-violet-aura-protez-jel-takma-ti-08bd5a.jpg",
     "url": "https://nezlincollection.com/aura-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-3d-ombre-nc219",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 120000,
+    "inStock": true
   },
   {
     "title": "Nebula - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Cat Eye - NC217",
@@ -1285,7 +1537,9 @@
     "discountedPrice": 799,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/nebula-protez-jel-takma-tirnak-el-yapi-f-4105.jpg",
     "url": "https://nezlincollection.com/nebula-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-cat-eye-nc217",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 119998,
+    "inStock": true
   },
   {
     "title": "Custom Nail Design CND104",
@@ -1295,7 +1549,9 @@
     "discountedPrice": 999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/custom-nail-design-a1-49f892cdfce.jpg",
     "url": "https://nezlincollection.com/custom-nail-design-cnd104",
-    "lastmod": "2026-09-02"
+    "lastmod": "2026-09-02",
+    "stock": 19,
+    "inStock": true
   },
   {
     "title": "Silver Web - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Cat Eye - NC250",
@@ -1305,7 +1561,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/purple-violet-aura-protez-jel-takma-ti-04b39.jpg",
     "url": "https://nezlincollection.com/silver-web-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-cat-eye-nc250",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 125000,
+    "inStock": true
   },
   {
     "title": "Thorn - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - NC251",
@@ -1315,7 +1573,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/thorn-el-yapimi-tekrar-kullanilabilir--6411-c.jpg",
     "url": "https://nezlincollection.com/thorn-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-nc251",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 125000,
+    "inStock": true
   },
   {
     "title": "Ballerina - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Cat Eye - NC253",
@@ -1325,7 +1585,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/silver-web-el-yapimi-tekrar-kullanilab-7a-3c0.jpg",
     "url": "https://nezlincollection.com/ballerina-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-cat-eye-nc253",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 125000,
+    "inStock": true
   },
   {
     "title": "Splash - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - NC254",
@@ -1335,7 +1597,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/splash-el-yapimi-tekrar-kullanilabilir-0a-4c0.jpg",
     "url": "https://nezlincollection.com/splash-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-nc254",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 125000,
+    "inStock": true
   },
   {
     "title": "Ballerina II - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - NC255",
@@ -1345,7 +1609,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/ballerina-ii-el-yapimi-tekrar-kullanil-4-441a.jpg",
     "url": "https://nezlincollection.com/ballerina-ii-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-cat-eye-nc250",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 125000,
+    "inStock": true
   },
   {
     "title": "Bloody Dead - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - NC256",
@@ -1355,7 +1621,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/silver-web-el-yapimi-tekrar-kullanilab-8687d1.jpg",
     "url": "https://nezlincollection.com/bloody-dead-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-nc256",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 125000,
+    "inStock": true
   },
   {
     "title": "Oscar Carpet - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - NC257",
@@ -1365,7 +1633,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/oscar-carpet-el-yapimi-tekrar-kullanil-1f1-46.jpg",
     "url": "https://nezlincollection.com/oscar-carpet-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-nc257",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 125000,
+    "inStock": true
   },
   {
     "title": "Cutee - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Cat Eye - NC258",
@@ -1375,7 +1645,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/cutee-el-yapimi-tekrar-kullanilabilir--0b-93e.jpg",
     "url": "https://nezlincollection.com/cutee-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-cat-eye-nc258",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 125000,
+    "inStock": true
   },
   {
     "title": "Bride Haze - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Jel - NC259",
@@ -1385,7 +1657,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/bride-haze-el-yapimi-tekrar-kullanilab-0b-ae4.jpg",
     "url": "https://nezlincollection.com/bride-haze-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-jel-nc259",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 125000,
+    "inStock": true
   },
   {
     "title": "Bride Sky - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Jel - NC260",
@@ -1395,7 +1669,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/bride-sky-el-yapimi-tekrar-kullanilabi-15d1-8.jpg",
     "url": "https://nezlincollection.com/bride-sky-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-jel-nc260",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1000,
+    "inStock": true
   },
   {
     "title": "Rainbow II - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Ombre Glitter - NC261",
@@ -1405,7 +1681,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/glowing-dust-el-yapimi-tekrar-kullanil-6a1-a7.jpg",
     "url": "https://nezlincollection.com/rainbow-ii-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-ombre-glitter-nc261",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1000,
+    "inStock": true
   },
   {
     "title": "Rainbow III - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Ombre Glitter- NC262",
@@ -1415,7 +1693,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/glowing-dust-el-yapimi-tekrar-kullanil-6b142.jpg",
     "url": "https://nezlincollection.com/rainbow-iii-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-ombre-glitter-nc262",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1000,
+    "inStock": true
   },
   {
     "title": "Silver Star - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Ombre - NC263",
@@ -1425,7 +1705,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/silver-star-el-yapimi-tekrar-kullanila--b5d2-.jpg",
     "url": "https://nezlincollection.com/silver-star-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-ombre-nc263",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1000,
+    "inStock": true
   },
   {
     "title": "Gold Favor - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Ombre - NC264",
@@ -1435,7 +1717,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/silver-star-el-yapimi-tekrar-kullanila--7696.jpg",
     "url": "https://nezlincollection.com/gold-favor-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-ombre-nc264",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1000,
+    "inStock": true
   },
   {
     "title": "Olive Beauty - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - NC265",
@@ -1445,7 +1729,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/olive-beauty-el-yapimi-tekrar-kullanil-faae14.jpg",
     "url": "https://nezlincollection.com/olive-beauty-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-nc265",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1000,
+    "inStock": true
   },
   {
     "title": "Tamga Blue - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Cat Eye - NC266",
@@ -1455,7 +1741,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/tamga-blue-el-yapimi-tekrar-kullanilab-8a68c7.jpg",
     "url": "https://nezlincollection.com/tamga-blue-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-cat-eye-nc266",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 125000,
+    "inStock": true
   },
   {
     "title": "Lady Knight - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - Charm - NC267",
@@ -1465,7 +1753,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/lady-knight-el-yapimi-tekrar-kullanila-ec-611.jpg",
     "url": "https://nezlincollection.com/lady-knight-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-charm-nc267",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1000,
+    "inStock": true
   },
   {
     "title": "Dracula Red - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - NC268",
@@ -1475,7 +1765,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/dracula-red-el-yapimi-tekrar-kullanila-4854-b.jpg",
     "url": "https://nezlincollection.com/dracula-red-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-nc268",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 125000,
+    "inStock": true
   },
   {
     "title": "Star Beauty - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - NC269",
@@ -1485,7 +1777,9 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/star-beauty-el-yapimi-tekrar-kullanila-6a5404.jpg",
     "url": "https://nezlincollection.com/star-beauty-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-nc269",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1000,
+    "inStock": true
   },
   {
     "title": "Pisi Pisi - El Yapımı Tekrar Kullanılabilir Protez Takma Tırnak - NC270",
@@ -1495,6 +1789,8 @@
     "discountedPrice": 1999,
     "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=99/75191/uploads/urunresimleri/buyuk/pisi-pisi-el-yapimi-tekrar-kullanilabi-b-9178.jpg",
     "url": "https://nezlincollection.com/pisi-pisi-el-yapimi-tekrar-kullanilabilir-protez-takma-tirnak-nc270",
-    "lastmod": "2026-09-03"
+    "lastmod": "2026-09-03",
+    "stock": 1000,
+    "inStock": true
   }
 ]

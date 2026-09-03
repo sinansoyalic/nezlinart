@@ -58,5 +58,16 @@
     },
     "customPrices": {},
     "notes": ""
+  },
+  "NC250": {
+    "checkedOptions": {
+      "nailart": false,
+      "ombre": false,
+      "charm": false,
+      "french": false,
+      "sticker": false
+    },
+    "customPrices": {},
+    "notes": ""
   }
 }
