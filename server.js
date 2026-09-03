@@ -153,7 +153,7 @@ async function getConfig() {
             obj[row.key] = isNaN(numVal) ? row.value : numVal;
           }
         });
-        if (obj['paketleme'] === undefined) obj['paketleme'] = 20;
+        if (obj['paketleme'] === undefined) obj['paketleme'] = 50;
         if (obj['kargo'] === undefined) obj['kargo'] = 120;
         if (obj['sticker'] === undefined) obj['sticker'] = 20;
         if (obj['kdvOrani'] === undefined) obj['kdvOrani'] = 20;
@@ -169,7 +169,7 @@ async function getConfig() {
   }
   
   return readJsonFile(CONFIG_FILE, {
-    paketleme: 20, kargo: 120, tips: 50, base: 40, top: 40,
+    paketleme: 50, kargo: 120, tips: 50, base: 40, top: 40,
     kalici1: 100, kalici2: 120, kalici3: 150,
     nailart: 80, ombre: 100, french: 90, charm: 30, sticker: 20,
     karOrani: 40, kdvOrani: 20,
