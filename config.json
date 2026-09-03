@@ -1,5 +1,5 @@
 {
-  "kargo": 100,
+  "kargo": 120,
   "tips": 100,
   "base": 100,
   "top": 100,
@@ -12,6 +12,10 @@
   "charm": 100,
   "sticker": 20,
   "karOrani": 40,
+  "kdvOrani": 20,
+  "trendyolKomisyon": 20.67,
+  "iyzicoOrani": 4.29,
+  "digerVergiOrani": 5,
   "toleransLimit": 10,
   "yuvarlamaTipi": "no"
 }

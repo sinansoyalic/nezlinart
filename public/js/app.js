@@ -130,9 +130,15 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   const costNode = document.getElementById(`cost-total-${code}`);
   const profitRow = document.getElementById(`profit-row-${code}`);
   const profitNode = document.getElementById(`profit-total-${code}`);
+  const iyzicoRow = document.getElementById(`iyzico-row-${code}`);
+  const iyzicoNode = document.getElementById(`iyzico-total-${code}`);
+  const digerVergiRow = document.getElementById(`diger-vergi-row-${code}`);
+  const digerVergiNode = document.getElementById(`diger-vergi-total-${code}`);
+  const kdvLabel = document.getElementById(`kdv-label-${code}`);
   const kdvNode = document.getElementById(`kdv-total-${code}`);
   const grandNode = document.getElementById(`grand-total-${code}`);
   const trendyolNode = document.getElementById(`trendyol-total-${code}`);
+  const trendyolLabel = document.getElementById(`trendyol-label-${code}`);
   
   if (costNode) costNode.textContent = `${pricing.cost.toFixed(2)} ₺`;
   if (profitRow) {
@@ -144,9 +150,15 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
     const labelNode = profitRow.querySelector('span:first-child');
     if (labelNode) labelNode.textContent = `Net Kar (%${pricing.karOrani})`;
   }
-  if (kdvNode) kdvNode.textContent = `${pricing.kdv.toFixed(2)} ₺`;
+  if (iyzicoRow) iyzicoRow.style.display = pricing.iyzicoOrani > 0 ? 'flex' : 'none';
+  if (iyzicoNode) iyzicoNode.textContent = `+ ${pricing.iyzico.toFixed(2)} ₺`;
+  if (digerVergiRow) digerVergiRow.style.display = pricing.digerVergiOrani > 0 ? 'flex' : 'none';
+  if (digerVergiNode) digerVergiNode.textContent = `+ ${pricing.digerVergi.toFixed(2)} ₺`;
+  if (kdvLabel) kdvLabel.textContent = `+ %${pricing.kdvOrani} KDV`;
+  if (kdvNode) kdvNode.textContent = `+ ${pricing.kdv.toFixed(2)} ₺`;
   if (grandNode) grandNode.textContent = `${pricing.roundedGrandTotal.toFixed(2)} ₺`;
-  if (trendyolNode) trendyolNode.textContent = `${(pricing.roundedGrandTotal * 1.19).toFixed(2)} ₺`;
+  if (trendyolLabel) trendyolLabel.textContent = `TRENDYOL FİYATI (%${pricing.trendyolKomisyon})`;
+  if (trendyolNode) trendyolNode.textContent = `${pricing.trendyolPrice.toFixed(2)} ₺`;
 
   const normalPrice = product.undiscountedPrice;
   const tolerance = state.config.toleransLimit !== undefined ? parseFloat(state.config.toleransLimit) : 10.0;
@@ -172,7 +184,7 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   if (copyTrendyolBtn) {
     copyTrendyolBtn.onclick = (e) => {
       e.stopPropagation();
-      copyToClipboard((pricing.roundedGrandTotal * 1.19).toFixed(2), `${code} (Trendyol)`);
+      copyToClipboard(pricing.trendyolPrice.toFixed(2), `${code} (Trendyol)`);
     };
   }
 }
@@ -533,18 +545,35 @@ function calculateDetailedPricing(product) {
   const karOrani = state.config.karOrani !== undefined ? parseFloat(state.config.karOrani) : 40;
   const profit = cost * (karOrani / 100);
   const netPrice = cost + profit;
-  const kdv = netPrice * 0.20;
-  const rawGrandTotal = netPrice * 1.20;
+
+  const kdvOrani = state.config.kdvOrani !== undefined ? parseFloat(state.config.kdvOrani) : 20;
+  const iyzicoOrani = state.config.iyzicoOrani !== undefined ? parseFloat(state.config.iyzicoOrani) : 4.29;
+  const digerVergiOrani = state.config.digerVergiOrani !== undefined ? parseFloat(state.config.digerVergiOrani) : 5;
+  const trendyolKomisyon = state.config.trendyolKomisyon !== undefined ? parseFloat(state.config.trendyolKomisyon) : 20.67;
+
+  const iyzico = netPrice * (iyzicoOrani / 100);
+  const digerVergi = netPrice * (digerVergiOrani / 100);
+  const kdv = netPrice * (kdvOrani / 100);
+
+  const rawGrandTotal = netPrice + kdv + iyzico + digerVergi;
   const yuvarlamaTipi = state.config.yuvarlamaTipi || 'no';
   const roundedGrandTotal = roundPrice(rawGrandTotal, yuvarlamaTipi);
-  
+  const trendyolPrice = roundedGrandTotal * (1 + (trendyolKomisyon / 100));
+
   return {
     cost,
     profit,
     netPrice,
     kdv,
+    kdvOrani,
+    iyzico,
+    iyzicoOrani,
+    digerVergi,
+    digerVergiOrani,
     rawGrandTotal,
     roundedGrandTotal,
+    trendyolPrice,
+    trendyolKomisyon,
     karOrani
   };
 }
@@ -869,9 +898,17 @@ function createProductCard(product) {
       <span>Net Kar (%${karOrani})</span>
       <span id="profit-total-${product.code}">+ ${pricing.profit.toFixed(2)} ₺</span>
     </div>
+    <div id="iyzico-row-${product.code}" style="display: ${pricing.iyzicoOrani > 0 ? 'flex' : 'none'}; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+      <span>iyzico Komisyonu (%${pricing.iyzicoOrani})</span>
+      <span id="iyzico-total-${product.code}">+ ${pricing.iyzico.toFixed(2)} ₺</span>
+    </div>
+    <div id="diger-vergi-row-${product.code}" style="display: ${pricing.digerVergiOrani > 0 ? 'flex' : 'none'}; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+      <span>Diğer Vergi Kesintileri (%${pricing.digerVergiOrani})</span>
+      <span id="diger-vergi-total-${product.code}">+ ${pricing.digerVergi.toFixed(2)} ₺</span>
+    </div>
     <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); padding-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.05);">
-      <span>+%20 KDV</span>
-      <span id="kdv-total-${product.code}">${pricing.kdv.toFixed(2)} ₺</span>
+      <span id="kdv-label-${product.code}">+ %${pricing.kdvOrani} KDV</span>
+      <span id="kdv-total-${product.code}">+ ${pricing.kdv.toFixed(2)} ₺</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
       <div style="display: flex; align-items: center; gap: 8px;">
@@ -892,14 +929,14 @@ function createProductCard(product) {
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.05);">
       <div style="display: flex; align-items: center; gap: 8px;">
-        <span class="label" style="font-size: 13px; font-weight: 700; color: #ff5a00; margin-right: 4px;">TRENDYOL FİYATI</span>
+        <span class="label" id="trendyol-label-${product.code}" style="font-size: 13px; font-weight: 700; color: #ff5a00; margin-right: 4px;">TRENDYOL FİYATI (%${pricing.trendyolKomisyon})</span>
         <div style="display: flex; align-items: center; gap: 6px;">
-          <button type="button" id="copy-trendyol-btn-${product.code}" class="card-action-btn" title="Trendyol Fiyatını Panoya Kopyala" onclick="copyToClipboard('${(pricing.roundedGrandTotal * 1.19).toFixed(2)}', '${product.code} (Trendyol)')">
+          <button type="button" id="copy-trendyol-btn-${product.code}" class="card-action-btn" title="Trendyol Fiyatını Panoya Kopyala" onclick="copyToClipboard('${pricing.trendyolPrice.toFixed(2)}', '${product.code} (Trendyol)')">
             <i class="fa-regular fa-copy"></i>
           </button>
         </div>
       </div>
-      <span class="value" id="trendyol-total-${product.code}" style="font-size: 20px; font-weight: 800; color: #ff5a00; text-shadow: 0 0 10px rgba(255,90,0,0.2);">${(pricing.roundedGrandTotal * 1.19).toFixed(2)} ₺</span>
+      <span class="value" id="trendyol-total-${product.code}" style="font-size: 20px; font-weight: 800; color: #ff5a00; text-shadow: 0 0 10px rgba(255,90,0,0.2);">${pricing.trendyolPrice.toFixed(2)} ₺</span>
     </div>
   `;
   optionsTable.appendChild(totalRow);
@@ -1018,7 +1055,7 @@ function renderSoTSettingsForm() {
   form.innerHTML = '';
 
   const labelMapping = {
-    kargo: 'Kargo Gönderimi',
+    kargo: 'Kargo Gönderimi (Default)',
     tips: 'Tips Şekillendirme',
     base: 'Base Coat',
     top: 'Top Coat',
@@ -1030,6 +1067,10 @@ function renderSoTSettingsForm() {
     french: 'French Çizimi',
     charm: 'Charm Takısı (Default)',
     sticker: 'Sticker (Default)',
+    trendyolKomisyon: 'Trendyol Komisyon Oranı',
+    kdvOrani: 'KDV Oranı',
+    iyzicoOrani: 'iyzico Komisyon Oranı',
+    digerVergiOrani: 'Diğer Vergi Kesintileri',
     karOrani: 'Hedeflenen Net Kar Oranı',
     toleransLimit: 'Uyuşmazlık Tolerans Limiti',
     yuvarlamaTipi: 'Küsurat Yuvarlama Seçeneği'
@@ -1044,6 +1085,14 @@ function renderSoTSettingsForm() {
   compGrid.className = 'sot-section-grid';
   compSection.appendChild(compGrid);
 
+  const taxSection = document.createElement('div');
+  taxSection.className = 'sot-section-wrapper settings-section-divider';
+  taxSection.innerHTML = '<h4 class="sot-section-title"><i class="fa-solid fa-percent"></i> Komisyon & Vergi Kesintileri</h4>';
+  
+  const taxGrid = document.createElement('div');
+  taxGrid.className = 'sot-section-grid';
+  taxSection.appendChild(taxGrid);
+
   const smartSection = document.createElement('div');
   smartSection.className = 'sot-section-wrapper settings-section-divider';
   smartSection.innerHTML = '<h4 class="sot-section-title"><i class="fa-solid fa-brain"></i> Akıllı Fiyatlandırma Parametreleri (Zekâ Modülleri)</h4>';
@@ -1052,9 +1101,13 @@ function renderSoTSettingsForm() {
   smartGrid.className = 'sot-section-grid';
   smartSection.appendChild(smartGrid);
 
+  const taxKeys = ['trendyolKomisyon', 'kdvOrani', 'iyzicoOrani', 'digerVergiOrani'];
+  const smartKeys = ['karOrani', 'toleransLimit', 'yuvarlamaTipi'];
+
   Object.entries(state.config).forEach(([key, val]) => {
-    const isSmart = ['karOrani', 'toleransLimit', 'yuvarlamaTipi'].includes(key);
-    const targetGrid = isSmart ? smartGrid : compGrid;
+    let targetGrid = compGrid;
+    if (taxKeys.includes(key)) targetGrid = taxGrid;
+    else if (smartKeys.includes(key)) targetGrid = smartGrid;
 
     const group = document.createElement('div');
     group.className = 'form-group';
@@ -1093,17 +1146,18 @@ function renderSoTSettingsForm() {
 
       inputWrapper.appendChild(input);
     } else {
+      const isPercent = ['karOrani', 'kdvOrani', 'trendyolKomisyon', 'iyzicoOrani', 'digerVergiOrani'].includes(key);
       const input = document.createElement('input');
       input.type = 'number';
       input.id = `sot-input-${key}`;
       input.name = key;
       input.value = val;
       input.min = '0';
-      input.step = key === 'toleransLimit' ? '1' : '1';
+      input.step = isPercent ? '0.01' : (key === 'toleransLimit' ? '1' : '1');
       input.required = true;
 
       const span = document.createElement('span');
-      span.textContent = key === 'karOrani' ? '%' : '₺';
+      span.textContent = isPercent ? '%' : '₺';
 
       inputWrapper.appendChild(input);
       inputWrapper.appendChild(span);
@@ -1114,6 +1168,7 @@ function renderSoTSettingsForm() {
   });
 
   form.appendChild(compSection);
+  form.appendChild(taxSection);
   form.appendChild(smartSection);
 
   // Attach Save Action
@@ -1670,7 +1725,7 @@ window.openMismatchPopover = function(code) {
 // B. Excel/CSV Formatında Dışa Aktarma
 window.exportProductsToCSV = function() {
   const bom = "\uFEFF";
-  let csvContent = bom + "Ürün Kodu;Ürün Adı;Kategori;Normal Fiyat (Site);Satış Fiyatı (Site);Seçenek Maliyeti;Net Kar;KDV;Önerilen Genel Toplam;Fiyat Farkı;Yapım Aşamaları\n";
+  let csvContent = bom + "Ürün Kodu;Ürün Adı;Kategori;Normal Fiyat (Site);Satış Fiyatı (Site);Seçenek Maliyeti;Net Kar;iyzico;Diğer Vergiler;KDV;Önerilen Genel Toplam;Trendyol Fiyatı;Fiyat Farkı;Yapım Aşamaları\n";
   
   state.products.forEach(product => {
     const pricing = calculateDetailedPricing(product);
@@ -1679,7 +1734,7 @@ window.exportProductsToCSV = function() {
     const userPricing = product.userPricing || { notes: '' };
     const notesClean = (userPricing.notes || '').replace(/[\n\r;]/g, ' ');
     
-    csvContent += `"${product.code}";"${product.title.replace(/"/g, '""')}";"${(product.category || 'Genel').replace(/"/g, '""')}";${product.undiscountedPrice};${product.discountedPrice};${pricing.cost};${pricing.profit};${pricing.kdv};${pricing.roundedGrandTotal};${diff};"${notesClean}"\n`;
+    csvContent += `"${product.code}";"${product.title.replace(/"/g, '""')}";"${(product.category || 'Genel').replace(/"/g, '""')}";${product.undiscountedPrice};${product.discountedPrice};${pricing.cost};${pricing.profit};${pricing.iyzico.toFixed(2)};${pricing.digerVergi.toFixed(2)};${pricing.kdv};${pricing.roundedGrandTotal};${pricing.trendyolPrice.toFixed(2)};${diff};"${notesClean}"\n`;
   });
   
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -1901,6 +1956,10 @@ window.loadAuditTrail = async function() {
       charm: 'Charm',
       sticker: 'Sticker',
       karOrani: 'Net Kar Oranı',
+      kdvOrani: 'KDV Oranı',
+      trendyolKomisyon: 'Trendyol Komisyonu',
+      iyzicoOrani: 'iyzico Komisyonu',
+      digerVergiOrani: 'Diğer Vergi Kesintileri',
       toleransLimit: 'Uyuşmazlık Toleransı',
       yuvarlamaTipi: 'Yuvarlama Seçeneği'
     };
@@ -1946,7 +2005,7 @@ window.loadAuditTrail = async function() {
             if (k === 'yuvarlamaTipi') {
               oldDisp = roundingNames[oldVal] || oldVal;
               newDisp = roundingNames[newVal] || newVal;
-            } else if (k === 'karOrani') {
+            } else if (['karOrani', 'kdvOrani', 'trendyolKomisyon', 'iyzicoOrani', 'digerVergiOrani'].includes(k)) {
               oldDisp = `%${oldVal}`;
               newDisp = `%${newVal}`;
             } else {
