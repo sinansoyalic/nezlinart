@@ -369,9 +369,12 @@
               </div>
             </div>
 
-            <div class="sync-actions-block">
+            <div class="sync-actions-block" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
               <button id="trigger-sync-btn" class="btn btn-primary btn-large">
                 <i class="fa-solid fa-cloud-arrow-down"></i> nezlincollection.com Sitemden Veri Çek
+              </button>
+              <button id="direct-git-push-btn" class="btn btn-success btn-large" style="display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Canlıya Aktar (Git Push)
               </button>
               
               <div class="sync-progress-bar-container" id="sync-progress-container" style="display: none;">

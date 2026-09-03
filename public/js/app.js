@@ -1170,9 +1170,53 @@ function renderSoTSettingsForm() {
 function initSyncController() {
   const headerSyncBtn = document.getElementById('quick-sync-btn');
   const bodySyncBtn = document.getElementById('trigger-sync-btn');
+  const gitPushBtn = document.getElementById('direct-git-push-btn');
   
-  headerSyncBtn.addEventListener('click', triggerCrawlerSync);
-  bodySyncBtn.addEventListener('click', triggerCrawlerSync);
+  if (headerSyncBtn) headerSyncBtn.addEventListener('click', triggerCrawlerSync);
+  if (bodySyncBtn) bodySyncBtn.addEventListener('click', triggerCrawlerSync);
+  if (gitPushBtn) gitPushBtn.addEventListener('click', triggerDirectGitPush);
+}
+
+async function triggerDirectGitPush() {
+  const btn = document.getElementById('direct-git-push-btn');
+  const logsNode = document.getElementById('sync-logs');
+  if (!btn) return;
+
+  const originalContent = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Canlıya Aktarılıyor...';
+  if (logsNode) {
+    logsNode.innerHTML += `\n[${new Date().toLocaleTimeString()}] Canlıya push işlemi başlatıldı (GitHub & Netlify)...\n`;
+    logsNode.scrollTop = logsNode.scrollHeight;
+  }
+
+  try {
+    const res = await fetch('/api/git-push', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: `manual sync: panel update at ${new Date().toLocaleString('tr-TR')}` })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || 'Push işlemi başarısız');
+    }
+
+    if (logsNode) {
+      logsNode.innerHTML += `[${new Date().toLocaleTimeString()}] [Başarılı] Canlı siteye aktarıldı! Netlify otomatik yayına alıyor.\n`;
+      logsNode.scrollTop = logsNode.scrollHeight;
+    }
+    showNotification('Değişiklikler canlıya (GitHub & Netlify) aktarıldı!', 'success');
+  } catch (err) {
+    console.error(err);
+    if (logsNode) {
+      logsNode.innerHTML += `[Hata] Canlıya aktarım başarısız: ${err.message}\n`;
+      logsNode.scrollTop = logsNode.scrollHeight;
+    }
+    showNotification(`Hata: ${err.message}`, 'danger');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalContent;
+  }
 }
 
 async function triggerCrawlerSync() {

@@ -566,7 +566,7 @@ function runGitPush(message = 'feat: sync products and system data to live') {
       return resolve({ skipped: true, reason: 'Sunucusuz (serverless) ortam' });
     }
     const safeMsg = (message || 'feat: automated live sync').replace(/"/g, '\\"');
-    const cmd = `git add products.json config.json server.js && git commit -m "${safeMsg}" && git push origin main`;
+    const cmd = `git add -A && git commit -m "${safeMsg}" && git push origin main`;
     
     exec(cmd, { cwd: __dirname }, (err, stdout, stderr) => {
       if (err) {
