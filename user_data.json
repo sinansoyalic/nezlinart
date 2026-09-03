@@ -28,9 +28,18 @@
   },
   "NC106": {
     "checkedOptions": {
-      "sticker": false
+      "charm": false,
+      "ombre": false,
+      "french": false,
+      "kalici1": true,
+      "kalici2": false,
+      "kalici3": false,
+      "sticker": false,
+      "nailart": false
     },
-    "customPrices": {},
+    "customPrices": {
+      "nailart": 400
+    },
     "notes": ""
   },
   "NC101": {

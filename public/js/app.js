@@ -130,15 +130,25 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   const costNode = document.getElementById(`cost-total-${code}`);
   const profitRow = document.getElementById(`profit-row-${code}`);
   const profitNode = document.getElementById(`profit-total-${code}`);
-  const iyzicoRow = document.getElementById(`iyzico-row-${code}`);
-  const iyzicoNode = document.getElementById(`iyzico-total-${code}`);
   const digerVergiRow = document.getElementById(`diger-vergi-row-${code}`);
   const digerVergiNode = document.getElementById(`diger-vergi-total-${code}`);
   const kdvLabel = document.getElementById(`kdv-label-${code}`);
   const kdvNode = document.getElementById(`kdv-total-${code}`);
+
+  // 1. Web Sitesi
+  const iyzicoRow = document.getElementById(`iyzico-row-${code}`);
+  const iyzicoNode = document.getElementById(`iyzico-total-${code}`);
   const grandNode = document.getElementById(`grand-total-${code}`);
+
+  // 2. Trendyol
+  const trendyolRateLabel = document.getElementById(`trendyol-rate-label-${code}`);
+  const trendyolFee = document.getElementById(`trendyol-fee-${code}`);
   const trendyolNode = document.getElementById(`trendyol-total-${code}`);
-  const trendyolLabel = document.getElementById(`trendyol-label-${code}`);
+
+  // 3. Hepsiburada
+  const hepsiburadaRateLabel = document.getElementById(`hepsiburada-rate-label-${code}`);
+  const hepsiburadaFee = document.getElementById(`hepsiburada-fee-${code}`);
+  const hepsiburadaNode = document.getElementById(`hepsiburada-total-${code}`);
   
   if (costNode) costNode.textContent = `${pricing.cost.toFixed(2)} ₺`;
   if (profitRow) {
@@ -146,19 +156,28 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   }
   if (profitNode) {
     profitNode.textContent = `+ ${pricing.profit.toFixed(2)} ₺`;
-    // Update label text for karOrani
     const labelNode = profitRow.querySelector('span:first-child');
     if (labelNode) labelNode.textContent = `Net Kar (%${pricing.karOrani})`;
   }
-  if (iyzicoRow) iyzicoRow.style.display = pricing.iyzicoOrani > 0 ? 'flex' : 'none';
-  if (iyzicoNode) iyzicoNode.textContent = `+ ${pricing.iyzico.toFixed(2)} ₺`;
   if (digerVergiRow) digerVergiRow.style.display = pricing.digerVergiOrani > 0 ? 'flex' : 'none';
   if (digerVergiNode) digerVergiNode.textContent = `+ ${pricing.digerVergi.toFixed(2)} ₺`;
   if (kdvLabel) kdvLabel.textContent = `+ %${pricing.kdvOrani} KDV`;
   if (kdvNode) kdvNode.textContent = `+ ${pricing.kdv.toFixed(2)} ₺`;
+
+  // Update Web Sitesi elements
+  if (iyzicoRow) iyzicoRow.style.display = pricing.iyzicoOrani > 0 ? 'flex' : 'none';
+  if (iyzicoNode) iyzicoNode.textContent = `+ ${pricing.iyzico.toFixed(2)} ₺`;
   if (grandNode) grandNode.textContent = `${pricing.roundedGrandTotal.toFixed(2)} ₺`;
-  if (trendyolLabel) trendyolLabel.textContent = `TRENDYOL FİYATI (%${pricing.trendyolKomisyon})`;
+
+  // Update Trendyol elements
+  if (trendyolRateLabel) trendyolRateLabel.textContent = `Trendyol Komisyonu (%${pricing.trendyolKomisyon})`;
+  if (trendyolFee) trendyolFee.textContent = `+ ${pricing.trendyolKomisyonAmount.toFixed(2)} ₺`;
   if (trendyolNode) trendyolNode.textContent = `${pricing.trendyolPrice.toFixed(2)} ₺`;
+
+  // Update Hepsiburada elements
+  if (hepsiburadaRateLabel) hepsiburadaRateLabel.textContent = `Hepsiburada Komisyonu (%${pricing.hepsiburadaKomisyon})`;
+  if (hepsiburadaFee) hepsiburadaFee.textContent = `+ ${pricing.hepsiburadaKomisyonAmount.toFixed(2)} ₺`;
+  if (hepsiburadaNode) hepsiburadaNode.textContent = `${pricing.hepsiburadaPrice.toFixed(2)} ₺`;
 
   const normalPrice = product.undiscountedPrice;
   const tolerance = state.config.toleransLimit !== undefined ? parseFloat(state.config.toleransLimit) : 10.0;
@@ -175,7 +194,7 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   if (copyBtn) {
     copyBtn.onclick = (e) => {
       e.stopPropagation();
-      copyToClipboard(pricing.roundedGrandTotal.toFixed(2), code);
+      copyToClipboard(pricing.roundedGrandTotal.toFixed(2), `${code} (Web)`);
     };
   }
 
@@ -185,6 +204,15 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
     copyTrendyolBtn.onclick = (e) => {
       e.stopPropagation();
       copyToClipboard(pricing.trendyolPrice.toFixed(2), `${code} (Trendyol)`);
+    };
+  }
+
+  // Update copy button handler for Hepsiburada
+  const copyHepsiburadaBtn = document.getElementById(`copy-hepsiburada-btn-${code}`);
+  if (copyHepsiburadaBtn) {
+    copyHepsiburadaBtn.onclick = (e) => {
+      e.stopPropagation();
+      copyToClipboard(pricing.hepsiburadaPrice.toFixed(2), `${code} (Hepsiburada)`);
     };
   }
 }
@@ -541,39 +569,62 @@ function roundPrice(price, type) {
 }
 
 function calculateDetailedPricing(product) {
-  const cost = calculateProductTotal(product); // Seçilen modüllerin maliyeti
+  const cost = calculateProductTotal(product); // Seçilen modüllerin maliyeti (Üretim Maliyeti)
   const karOrani = state.config.karOrani !== undefined ? parseFloat(state.config.karOrani) : 40;
   const profit = cost * (karOrani / 100);
   const netPrice = cost + profit;
 
+  // Ortak oranlar (Her kanalda yer alacak: KDV, Diğer Vergiler)
   const kdvOrani = state.config.kdvOrani !== undefined ? parseFloat(state.config.kdvOrani) : 20;
-  const iyzicoOrani = state.config.iyzicoOrani !== undefined ? parseFloat(state.config.iyzicoOrani) : 4.29;
   const digerVergiOrani = state.config.digerVergiOrani !== undefined ? parseFloat(state.config.digerVergiOrani) : 5;
-  const trendyolKomisyon = state.config.trendyolKomisyon !== undefined ? parseFloat(state.config.trendyolKomisyon) : 20.67;
 
-  const iyzico = netPrice * (iyzicoOrani / 100);
   const digerVergi = netPrice * (digerVergiOrani / 100);
   const kdv = netPrice * (kdvOrani / 100);
 
-  const rawGrandTotal = netPrice + kdv + iyzico + digerVergi;
+  // Ortak Baz Satış Fiyatı (Üretim + Net Kar + Diğer Vergiler + KDV)
+  const commonBasePrice = netPrice + digerVergi + kdv;
   const yuvarlamaTipi = state.config.yuvarlamaTipi || 'no';
-  const roundedGrandTotal = roundPrice(rawGrandTotal, yuvarlamaTipi);
-  const trendyolPrice = roundedGrandTotal * (1 + (trendyolKomisyon / 100));
+
+  // 1. WEB SİTESİ KANALI: İyzico sadece Web Sitesi satışlarında hesaplanır
+  const iyzicoOrani = state.config.iyzicoOrani !== undefined ? parseFloat(state.config.iyzicoOrani) : 4.29;
+  const iyzico = netPrice * (iyzicoOrani / 100);
+  const websiteRawTotal = commonBasePrice + iyzico;
+  const roundedGrandTotal = roundPrice(websiteRawTotal, yuvarlamaTipi);
+
+  // 2. TRENDYOL KANALI: İyzico yok, sadece Trendyol komisyonu yer alır
+  const trendyolKomisyon = state.config.trendyolKomisyon !== undefined ? parseFloat(state.config.trendyolKomisyon) : 20.67;
+  const trendyolKomisyonAmount = commonBasePrice * (trendyolKomisyon / 100);
+  const trendyolRawTotal = commonBasePrice + trendyolKomisyonAmount;
+  const trendyolPrice = roundPrice(trendyolRawTotal, yuvarlamaTipi);
+
+  // 3. HEPSİBURADA KANALI: İyzico yok, sadece Hepsiburada komisyonu yer alır
+  const hepsiburadaKomisyon = state.config.hepsiburadaKomisyon !== undefined ? parseFloat(state.config.hepsiburadaKomisyon) : 15;
+  const hepsiburadaKomisyonAmount = commonBasePrice * (hepsiburadaKomisyon / 100);
+  const hepsiburadaRawTotal = commonBasePrice + hepsiburadaKomisyonAmount;
+  const hepsiburadaPrice = roundPrice(hepsiburadaRawTotal, yuvarlamaTipi);
 
   return {
     cost,
     profit,
     netPrice,
+    commonBasePrice,
     kdv,
     kdvOrani,
-    iyzico,
-    iyzicoOrani,
     digerVergi,
     digerVergiOrani,
-    rawGrandTotal,
+    // Web Sitesi
+    iyzico,
+    iyzicoOrani,
+    websiteRawTotal,
     roundedGrandTotal,
-    trendyolPrice,
+    // Trendyol
     trendyolKomisyon,
+    trendyolKomisyonAmount,
+    trendyolPrice,
+    // Hepsiburada
+    hepsiburadaKomisyon,
+    hepsiburadaKomisyonAmount,
+    hepsiburadaPrice,
     karOrani
   };
 }
@@ -898,10 +949,6 @@ function createProductCard(product) {
       <span>Net Kar (%${karOrani})</span>
       <span id="profit-total-${product.code}">+ ${pricing.profit.toFixed(2)} ₺</span>
     </div>
-    <div id="iyzico-row-${product.code}" style="display: ${pricing.iyzicoOrani > 0 ? 'flex' : 'none'}; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
-      <span>iyzico Komisyonu (%${pricing.iyzicoOrani})</span>
-      <span id="iyzico-total-${product.code}">+ ${pricing.iyzico.toFixed(2)} ₺</span>
-    </div>
     <div id="diger-vergi-row-${product.code}" style="display: ${pricing.digerVergiOrani > 0 ? 'flex' : 'none'}; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
       <span>Diğer Vergi Kesintileri (%${pricing.digerVergiOrani})</span>
       <span id="diger-vergi-total-${product.code}">+ ${pricing.digerVergi.toFixed(2)} ₺</span>
@@ -910,33 +957,68 @@ function createProductCard(product) {
       <span id="kdv-label-${product.code}">+ %${pricing.kdvOrani} KDV</span>
       <span id="kdv-total-${product.code}">+ ${pricing.kdv.toFixed(2)} ₺</span>
     </div>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span class="label" style="font-size: 13px; font-weight: 700; color: var(--text-main); margin-right: 4px;">WEB SİTESİ FİYATI</span>
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <button type="button" id="mismatch-btn-${product.code}" class="card-action-btn btn-warning-price" title="Fiyat Uyuşmuyor! Analiz İçin Tıklayın" style="display: ${isMismatch ? 'inline-flex' : 'none'};" onclick="openMismatchPopover('${product.code}')">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-          </button>
-          <button type="button" id="copy-btn-${product.code}" class="card-action-btn" title="Yeni Fiyatı Panoya Kopyala" onclick="copyToClipboard('${pricing.roundedGrandTotal.toFixed(2)}', '${product.code}')">
-            <i class="fa-regular fa-copy"></i>
-          </button>
-          <a href="https://nezlincollection.com/Admin/UrunYonetimi.aspx?lang=tr&adminlang=tr" target="_blank" class="card-action-btn" title="Ticimax Hızlı Fiyat Düzenleme Sayfasını Aç" onclick="event.stopPropagation();">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
-        </div>
+
+    <!-- KANAL 1: WEB SİTESİ SATIŞI (Özel İyzico Oranıyla Beraber Kendi Div'inde) -->
+    <div id="market-channel-website-${product.code}" style="margin-top: 6px; padding: 6px 8px; border-radius: var(--radius-small); background: rgba(199,163,108,0.04); border: 1px solid rgba(199,163,108,0.12);">
+      <div id="iyzico-row-${product.code}" style="display: ${pricing.iyzicoOrani > 0 ? 'flex' : 'none'}; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">
+        <span>iyzico Komisyonu (%${pricing.iyzicoOrani})</span>
+        <span id="iyzico-total-${product.code}">+ ${pricing.iyzico.toFixed(2)} ₺</span>
       </div>
-      <span class="value" id="grand-total-${product.code}" style="font-size: 20px; font-weight: 800; color: var(--color-accent-gold); text-shadow: 0 0 10px rgba(199,163,108,0.2);">${pricing.roundedGrandTotal.toFixed(2)} ₺</span>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="label" style="font-size: 12px; font-weight: 700; color: var(--color-accent-gold); margin-right: 4px;">WEB SİTESİ FİYATI</span>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button type="button" id="mismatch-btn-${product.code}" class="card-action-btn btn-warning-price" title="Fiyat Uyuşmuyor! Analiz İçin Tıklayın" style="display: ${isMismatch ? 'inline-flex' : 'none'};" onclick="openMismatchPopover('${product.code}')">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </button>
+            <button type="button" id="copy-btn-${product.code}" class="card-action-btn" title="Web Sitesi Fiyatını Panoya Kopyala" onclick="copyToClipboard('${pricing.roundedGrandTotal.toFixed(2)}', '${product.code} (Web)')">
+              <i class="fa-regular fa-copy"></i>
+            </button>
+            <a href="https://nezlincollection.com/Admin/UrunYonetimi.aspx?lang=tr&adminlang=tr" target="_blank" class="card-action-btn" title="Ticimax Hızlı Fiyat Düzenleme Sayfasını Aç" onclick="event.stopPropagation();">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </div>
+        <span class="value" id="grand-total-${product.code}" style="font-size: 18px; font-weight: 800; color: var(--color-accent-gold); text-shadow: 0 0 10px rgba(199,163,108,0.2);">${pricing.roundedGrandTotal.toFixed(2)} ₺</span>
+      </div>
     </div>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.05);">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span class="label" id="trendyol-label-${product.code}" style="font-size: 13px; font-weight: 700; color: #ff5a00; margin-right: 4px;">TRENDYOL FİYATI (%${pricing.trendyolKomisyon})</span>
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <button type="button" id="copy-trendyol-btn-${product.code}" class="card-action-btn" title="Trendyol Fiyatını Panoya Kopyala" onclick="copyToClipboard('${pricing.trendyolPrice.toFixed(2)}', '${product.code} (Trendyol)')">
-            <i class="fa-regular fa-copy"></i>
-          </button>
-        </div>
+
+    <!-- KANAL 2: TRENDYOL SATIŞI (Kendi Komisyon Oranıyla Beraber Kendi Div'inde) -->
+    <div id="market-channel-trendyol-${product.code}" style="margin-top: 6px; padding: 6px 8px; border-radius: var(--radius-small); background: rgba(255,90,0,0.04); border: 1px solid rgba(255,90,0,0.15);">
+      <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">
+        <span id="trendyol-rate-label-${product.code}">Trendyol Komisyonu (%${pricing.trendyolKomisyon})</span>
+        <span id="trendyol-fee-${product.code}">+ ${pricing.trendyolKomisyonAmount.toFixed(2)} ₺</span>
       </div>
-      <span class="value" id="trendyol-total-${product.code}" style="font-size: 20px; font-weight: 800; color: #ff5a00; text-shadow: 0 0 10px rgba(255,90,0,0.2);">${pricing.trendyolPrice.toFixed(2)} ₺</span>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="label" id="trendyol-label-${product.code}" style="font-size: 12px; font-weight: 700; color: #ff5a00; margin-right: 4px;">TRENDYOL FİYATI</span>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button type="button" id="copy-trendyol-btn-${product.code}" class="card-action-btn" title="Trendyol Fiyatını Panoya Kopyala" onclick="copyToClipboard('${pricing.trendyolPrice.toFixed(2)}', '${product.code} (Trendyol)')">
+              <i class="fa-regular fa-copy"></i>
+            </button>
+          </div>
+        </div>
+        <span class="value" id="trendyol-total-${product.code}" style="font-size: 18px; font-weight: 800; color: #ff5a00; text-shadow: 0 0 10px rgba(255,90,0,0.2);">${pricing.trendyolPrice.toFixed(2)} ₺</span>
+      </div>
+    </div>
+
+    <!-- KANAL 3: HEPSİBURADA SATIŞI (Kendi Komisyon Oranıyla Beraber Kendi Div'inde) -->
+    <div id="market-channel-hepsiburada-${product.code}" style="margin-top: 6px; padding: 6px 8px; border-radius: var(--radius-small); background: rgba(255,102,0,0.04); border: 1px solid rgba(255,102,0,0.15);">
+      <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">
+        <span id="hepsiburada-rate-label-${product.code}">Hepsiburada Komisyonu (%${pricing.hepsiburadaKomisyon})</span>
+        <span id="hepsiburada-fee-${product.code}">+ ${pricing.hepsiburadaKomisyonAmount.toFixed(2)} ₺</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="label" id="hepsiburada-label-${product.code}" style="font-size: 12px; font-weight: 700; color: #ff6600; margin-right: 4px;">HEPSİBURADA FİYATI</span>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button type="button" id="copy-hepsiburada-btn-${product.code}" class="card-action-btn" title="Hepsiburada Fiyatını Panoya Kopyala" onclick="copyToClipboard('${pricing.hepsiburadaPrice.toFixed(2)}', '${product.code} (Hepsiburada)')">
+              <i class="fa-regular fa-copy"></i>
+            </button>
+          </div>
+        </div>
+        <span class="value" id="hepsiburada-total-${product.code}" style="font-size: 18px; font-weight: 800; color: #ff6600; text-shadow: 0 0 10px rgba(255,102,0,0.2);">${pricing.hepsiburadaPrice.toFixed(2)} ₺</span>
+      </div>
     </div>
   `;
   optionsTable.appendChild(totalRow);
@@ -1068,8 +1150,9 @@ function renderSoTSettingsForm() {
     charm: 'Charm Takısı (Default)',
     sticker: 'Sticker (Default)',
     trendyolKomisyon: 'Trendyol Komisyon Oranı',
+    hepsiburadaKomisyon: 'Hepsiburada Komisyon Oranı',
     kdvOrani: 'KDV Oranı',
-    iyzicoOrani: 'iyzico Komisyon Oranı',
+    iyzicoOrani: 'iyzico Komisyon Oranı (Sadece Web)',
     digerVergiOrani: 'Diğer Vergi Kesintileri',
     karOrani: 'Hedeflenen Net Kar Oranı',
     toleransLimit: 'Uyuşmazlık Tolerans Limiti',
@@ -1101,7 +1184,7 @@ function renderSoTSettingsForm() {
   smartGrid.className = 'sot-section-grid';
   smartSection.appendChild(smartGrid);
 
-  const taxKeys = ['trendyolKomisyon', 'kdvOrani', 'iyzicoOrani', 'digerVergiOrani'];
+  const taxKeys = ['trendyolKomisyon', 'hepsiburadaKomisyon', 'kdvOrani', 'iyzicoOrani', 'digerVergiOrani'];
   const smartKeys = ['karOrani', 'toleransLimit', 'yuvarlamaTipi'];
 
   Object.entries(state.config).forEach(([key, val]) => {
@@ -1146,7 +1229,7 @@ function renderSoTSettingsForm() {
 
       inputWrapper.appendChild(input);
     } else {
-      const isPercent = ['karOrani', 'kdvOrani', 'trendyolKomisyon', 'iyzicoOrani', 'digerVergiOrani'].includes(key);
+      const isPercent = ['karOrani', 'kdvOrani', 'trendyolKomisyon', 'hepsiburadaKomisyon', 'iyzicoOrani', 'digerVergiOrani'].includes(key);
       const input = document.createElement('input');
       input.type = 'number';
       input.id = `sot-input-${key}`;
@@ -1725,7 +1808,7 @@ window.openMismatchPopover = function(code) {
 // B. Excel/CSV Formatında Dışa Aktarma
 window.exportProductsToCSV = function() {
   const bom = "\uFEFF";
-  let csvContent = bom + "Ürün Kodu;Ürün Adı;Kategori;Normal Fiyat (Site);Satış Fiyatı (Site);Üretim Maliyeti;Net Kar;iyzico;Diğer Vergiler;KDV;Web Sitesi Fiyatı;Trendyol Fiyatı;Fiyat Farkı;Yapım Aşamaları\n";
+  let csvContent = bom + "Ürün Kodu;Ürün Adı;Kategori;Normal Fiyat (Site);Satış Fiyatı (Site);Üretim Maliyeti;Net Kar;iyzico;Diğer Vergiler;KDV;Web Sitesi Fiyatı;Trendyol Fiyatı;Hepsiburada Fiyatı;Fiyat Farkı;Yapım Aşamaları\n";
   
   state.products.forEach(product => {
     const pricing = calculateDetailedPricing(product);
@@ -1734,7 +1817,7 @@ window.exportProductsToCSV = function() {
     const userPricing = product.userPricing || { notes: '' };
     const notesClean = (userPricing.notes || '').replace(/[\n\r;]/g, ' ');
     
-    csvContent += `"${product.code}";"${product.title.replace(/"/g, '""')}";"${(product.category || 'Genel').replace(/"/g, '""')}";${product.undiscountedPrice};${product.discountedPrice};${pricing.cost};${pricing.profit};${pricing.iyzico.toFixed(2)};${pricing.digerVergi.toFixed(2)};${pricing.kdv};${pricing.roundedGrandTotal};${pricing.trendyolPrice.toFixed(2)};${diff};"${notesClean}"\n`;
+    csvContent += `"${product.code}";"${product.title.replace(/"/g, '""')}";"${(product.category || 'Genel').replace(/"/g, '""')}";${product.undiscountedPrice};${product.discountedPrice};${pricing.cost};${pricing.profit};${pricing.iyzico.toFixed(2)};${pricing.digerVergi.toFixed(2)};${pricing.kdv};${pricing.roundedGrandTotal};${pricing.trendyolPrice.toFixed(2)};${pricing.hepsiburadaPrice.toFixed(2)};${diff};"${notesClean}"\n`;
   });
   
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -1958,6 +2041,7 @@ window.loadAuditTrail = async function() {
       karOrani: 'Net Kar Oranı',
       kdvOrani: 'KDV Oranı',
       trendyolKomisyon: 'Trendyol Komisyonu',
+      hepsiburadaKomisyon: 'Hepsiburada Komisyonu',
       iyzicoOrani: 'iyzico Komisyonu',
       digerVergiOrani: 'Diğer Vergi Kesintileri',
       toleransLimit: 'Uyuşmazlık Toleransı',
@@ -2005,7 +2089,7 @@ window.loadAuditTrail = async function() {
             if (k === 'yuvarlamaTipi') {
               oldDisp = roundingNames[oldVal] || oldVal;
               newDisp = roundingNames[newVal] || newVal;
-            } else if (['karOrani', 'kdvOrani', 'trendyolKomisyon', 'iyzicoOrani', 'digerVergiOrani'].includes(k)) {
+            } else if (['karOrani', 'kdvOrani', 'trendyolKomisyon', 'hepsiburadaKomisyon', 'iyzicoOrani', 'digerVergiOrani'].includes(k)) {
               oldDisp = `%${oldVal}`;
               newDisp = `%${newVal}`;
             } else {
