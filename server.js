@@ -556,6 +556,44 @@ app.post('/api/login', (req, res) => {
   }
 });
 
+// Helper: Automated Git Commit & Push for Localhost
+const { exec } = require('child_process');
+
+function runGitPush(message = 'feat: sync products and system data to live') {
+  return new Promise((resolve, reject) => {
+    // Skip if running inside Netlify or Lambda
+    if (process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+      return resolve({ skipped: true, reason: 'Sunucusuz (serverless) ortam' });
+    }
+    const safeMsg = (message || 'feat: automated live sync').replace(/"/g, '\\"');
+    const cmd = `git add products.json config.json server.js && git commit -m "${safeMsg}" && git push origin main`;
+    
+    exec(cmd, { cwd: __dirname }, (err, stdout, stderr) => {
+      if (err) {
+        const fullOut = (stdout || '') + (stderr || '');
+        if (fullOut.includes('nothing to commit') || fullOut.includes('working tree clean')) {
+          console.log('[Git Push] Çalışma dizini zaten temiz, yeni değişiklik yok.');
+          return resolve({ success: true, message: 'Değişiklik yok, depo zaten güncel.' });
+        }
+        console.error('[Git Push Hatası]:', stderr || err.message);
+        return reject(new Error(stderr || err.message));
+      }
+      console.log('[Git Push Başarılı]:', stdout);
+      resolve({ success: true, stdout });
+    });
+  });
+}
+
+// 4.2. Direct Git Push to GitHub / Netlify
+app.post('/api/git-push', async (req, res) => {
+  try {
+    const result = await runGitPush(req.body.message || 'feat: manual sync push to live');
+    res.json({ success: true, result });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // 5. Get scraper status
 app.get('/api/fetch-status', (req, res) => {
   res.json(crawlStatus);
@@ -893,6 +931,15 @@ async function runScraper() {
       }
       crawlStatus.lastSync = new Date().toLocaleString('tr-TR');
       console.log(`[Scraper] Smart sync complete. Products: ${finalProductsList.length}`);
+
+      // Suggestion: Otomatik olarak GitHub & Netlify'a pushla (Sadece localhost üzerinde çalışır)
+      try {
+        console.log('[Scraper] Canlıya (GitHub & Netlify) otomatik push başlatılıyor...');
+        await runGitPush(`feat: sync ${finalProductsList.length} products from site`);
+        console.log('[Scraper] Canlıya push işlemi başarıyla tamamlandı.');
+      } catch (pushErr) {
+        console.warn('[Scraper] Otomatik push atlandı veya hata verdi:', pushErr.message);
+      }
     } else {
       throw new Error('Hiçbir ürün bilgisi çekilemedi.');
     }
