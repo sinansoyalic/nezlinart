@@ -156,6 +156,7 @@ async function getConfig() {
         if (obj['paketleme'] === undefined) obj['paketleme'] = 70;
         if (obj['kargo'] === undefined) obj['kargo'] = 120;
         if (obj['sticker'] === undefined) obj['sticker'] = 20;
+        if (obj['baski'] === undefined) obj['baski'] = 50;
         if (obj['kdvOrani'] === undefined) obj['kdvOrani'] = 20;
         if (obj['trendyolKomisyon'] === undefined) obj['trendyolKomisyon'] = 20.67;
         if (obj['hepsiburadaKomisyon'] === undefined) obj['hepsiburadaKomisyon'] = 15;
@@ -171,7 +172,7 @@ async function getConfig() {
   return readJsonFile(CONFIG_FILE, {
     paketleme: 70, kargo: 120, tips: 50, base: 40, top: 40,
     kalici1: 100, kalici2: 120, kalici3: 150,
-    nailart: 80, ombre: 100, french: 90, charm: 30, sticker: 20,
+    nailart: 80, ombre: 100, french: 90, charm: 30, sticker: 20, baski: 50,
     karOrani: 40, kdvOrani: 20,
     trendyolKomisyon: 20.67, hepsiburadaKomisyon: 15,
     iyzicoOrani: 4.29, digerVergiOrani: 5,

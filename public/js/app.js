@@ -83,7 +83,14 @@ function updateProductCardUI(product) {
   const userPricing = product.userPricing || { checkedOptions: {}, customPrices: {}, notes: '' };
 
   PRICING_OPTIONS.forEach(opt => {
-    const isChecked = userPricing.checkedOptions[opt.id] !== false;
+    let isChecked;
+    if (opt.id === 'paketleme' && userPricing.checkedOptions['paketleme'] === undefined && userPricing.checkedOptions['kargo'] !== undefined) {
+      isChecked = userPricing.checkedOptions['kargo'] !== false;
+    } else if (userPricing.checkedOptions[opt.id] !== undefined) {
+      isChecked = !!userPricing.checkedOptions[opt.id];
+    } else {
+      isChecked = opt.defaultOff ? false : true;
+    }
     const checkbox = card.querySelector(`input[type="checkbox"][data-option-id="${opt.id}"]`);
     if (checkbox) {
       checkbox.checked = isChecked;
@@ -116,7 +123,14 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   PRICING_OPTIONS.forEach(opt => {
     const rightVal = document.getElementById(`price-val-${code}-${opt.id}`);
     if (rightVal) {
-      const isChecked = userPricing.checkedOptions[opt.id] !== false;
+      let isChecked;
+      if (opt.id === 'paketleme' && userPricing.checkedOptions['paketleme'] === undefined && userPricing.checkedOptions['kargo'] !== undefined) {
+        isChecked = userPricing.checkedOptions['kargo'] !== false;
+      } else if (userPricing.checkedOptions[opt.id] !== undefined) {
+        isChecked = !!userPricing.checkedOptions[opt.id];
+      } else {
+        isChecked = opt.defaultOff ? false : true;
+      }
       let price = state.config[opt.id] || 0;
       if (opt.hasCustomInput && userPricing.customPrices[opt.id] !== undefined) {
         price = userPricing.customPrices[opt.id];
@@ -232,7 +246,8 @@ const PRICING_OPTIONS = [
   { id: 'ombre', label: 'Ombre', hasCustomInput: true },
   { id: 'french', label: 'French', hasCustomInput: true },
   { id: 'charm', label: 'Charm', hasCustomInput: true },
-  { id: 'sticker', label: 'Sticker', hasCustomInput: true }
+  { id: 'sticker', label: 'Sticker', hasCustomInput: true },
+  { id: 'baski', label: 'Baskı', hasCustomInput: true, defaultOff: true }
 ];
 
 // ==========================================
@@ -514,10 +529,14 @@ function calculateProductTotal(product) {
   const userPricing = product.userPricing || { checkedOptions: {}, customPrices: {} };
 
   PRICING_OPTIONS.forEach(opt => {
-    let isChecked = userPricing.checkedOptions[opt.id] !== false;
+    let isChecked;
     // Backward compatibility: if paketleme is undefined, use existing kargo flag
     if (opt.id === 'paketleme' && userPricing.checkedOptions['paketleme'] === undefined && userPricing.checkedOptions['kargo'] !== undefined) {
       isChecked = userPricing.checkedOptions['kargo'] !== false;
+    } else if (userPricing.checkedOptions[opt.id] !== undefined) {
+      isChecked = !!userPricing.checkedOptions[opt.id];
+    } else {
+      isChecked = opt.defaultOff ? false : true;
     }
     if (isChecked) {
       let price = state.config[opt.id] || 0;
@@ -853,7 +872,14 @@ function createProductCard(product) {
 
   PRICING_OPTIONS.forEach(opt => {
     const row = document.createElement('div');
-    const isChecked = userPricing.checkedOptions[opt.id] !== false;
+    let isChecked;
+    if (opt.id === 'paketleme' && userPricing.checkedOptions['paketleme'] === undefined && userPricing.checkedOptions['kargo'] !== undefined) {
+      isChecked = userPricing.checkedOptions['kargo'] !== false;
+    } else if (userPricing.checkedOptions[opt.id] !== undefined) {
+      isChecked = !!userPricing.checkedOptions[opt.id];
+    } else {
+      isChecked = opt.defaultOff ? false : true;
+    }
     row.className = `option-row ${isChecked ? 'checked' : ''}`;
 
     const left = document.createElement('div');
@@ -1167,6 +1193,7 @@ function renderSoTSettingsForm() {
     french: 'French Çizimi',
     charm: 'Charm Takısı (Default)',
     sticker: 'Sticker (Default)',
+    baski: 'Baskı (Default)',
     trendyolKomisyon: 'Trendyol Komisyon Oranı',
     hepsiburadaKomisyon: 'Hepsiburada Komisyon Oranı',
     kdvOrani: 'KDV Oranı',
@@ -2057,6 +2084,7 @@ window.loadAuditTrail = async function() {
       french: 'French Çizimi',
       charm: 'Charm',
       sticker: 'Sticker',
+      baski: 'Baskı',
       karOrani: 'Net Kar Oranı',
       kdvOrani: 'KDV Oranı',
       trendyolKomisyon: 'Trendyol Komisyonu',
