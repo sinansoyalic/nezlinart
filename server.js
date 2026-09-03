@@ -173,11 +173,14 @@ async function getConfig() {
 
 // 2. Save Config
 async function saveConfig(config) {
+  writeJsonFile(CONFIG_FILE, config);
   if (isCloudMode) {
     try {
+      const now = new Date().toISOString();
       const rows = Object.entries(config).map(([key, val]) => ({
         key,
-        value: typeof val === 'object' ? JSON.stringify(val) : String(val)
+        value: typeof val === 'object' ? JSON.stringify(val) : String(val),
+        created_at: now
       }));
       
       const { error } = await supabase.from('nfs_config').upsert(rows);
@@ -188,7 +191,7 @@ async function saveConfig(config) {
       return false;
     }
   }
-  return writeJsonFile(CONFIG_FILE, config);
+  return true;
 }
 
 // 3. Read Products
@@ -207,10 +210,17 @@ async function getProducts() {
 
 // 4. Save Products
 async function saveProducts(products) {
+  // Always keep local JSON file synchronized
+  writeJsonFile(PRODUCTS_FILE, products);
+
   if (isCloudMode) {
     try {
       if (products.length === 0) return true;
-      const { error } = await supabase.from('nfs_products').upsert(products);
+      const cleanedProducts = products.map(p => ({
+        ...p,
+        created_at: p.created_at || new Date().toISOString()
+      }));
+      const { error } = await supabase.from('nfs_products').upsert(cleanedProducts);
       if (error) throw error;
       return true;
     } catch (err) {
@@ -218,7 +228,7 @@ async function saveProducts(products) {
       return false;
     }
   }
-  return writeJsonFile(PRODUCTS_FILE, products);
+  return true;
 }
 
 // 5. Read User Data
@@ -248,13 +258,18 @@ async function getUserData() {
 
 // 6. Save Single User Product Selection
 async function saveSingleProductData(code, pricingData) {
+  const userData = readJsonFile(USER_DATA_FILE, {});
+  userData[code] = pricingData;
+  writeJsonFile(USER_DATA_FILE, userData);
+
   if (isCloudMode) {
     try {
       const row = {
         code,
         checkedOptions: pricingData.checkedOptions || {},
         customPrices: pricingData.customPrices || {},
-        notes: pricingData.notes || ''
+        notes: pricingData.notes || '',
+        created_at: new Date().toISOString()
       };
       const { error } = await supabase.from('nfs_user_data').upsert(row);
       if (error) throw error;
@@ -264,10 +279,7 @@ async function saveSingleProductData(code, pricingData) {
       return false;
     }
   }
-  
-  const userData = readJsonFile(USER_DATA_FILE, {});
-  userData[code] = pricingData;
-  return writeJsonFile(USER_DATA_FILE, userData);
+  return true;
 }
 
 // 7. Read Customers
@@ -286,17 +298,6 @@ async function getCustomers() {
 
 // 8. Save Customer
 async function saveCustomer(customer) {
-  if (isCloudMode) {
-    try {
-      const { error } = await supabase.from('nfs_customers').upsert(customer);
-      if (error) throw error;
-      return true;
-    } catch (err) {
-      console.error('[Supabase Error] Failed to save nfs_customers:', err);
-      return false;
-    }
-  }
-  
   const customers = readJsonFile(CUSTOMERS_FILE, []);
   const idx = customers.findIndex(c => c.id === customer.id);
   if (idx !== -1) {
@@ -304,11 +305,31 @@ async function saveCustomer(customer) {
   } else {
     customers.push(customer);
   }
-  return writeJsonFile(CUSTOMERS_FILE, customers);
+  writeJsonFile(CUSTOMERS_FILE, customers);
+
+  if (isCloudMode) {
+    try {
+      const row = {
+        ...customer,
+        created_at: customer.created_at || new Date().toISOString()
+      };
+      const { error } = await supabase.from('nfs_customers').upsert(row);
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.error('[Supabase Error] Failed to save nfs_customers:', err);
+      return false;
+    }
+  }
+  return true;
 }
 
 // 9. Delete Customer
 async function deleteCustomer(id) {
+  const customers = readJsonFile(CUSTOMERS_FILE, []);
+  const filtered = customers.filter(c => c.id !== id);
+  writeJsonFile(CUSTOMERS_FILE, filtered);
+
   if (isCloudMode) {
     try {
       const { error } = await supabase.from('nfs_customers').delete().eq('id', id);
@@ -319,11 +340,7 @@ async function deleteCustomer(id) {
       return false;
     }
   }
-  
-  const customers = readJsonFile(CUSTOMERS_FILE, []);
-  const filtered = customers.filter(c => c.id !== id);
-  if (customers.length === filtered.length) return false;
-  return writeJsonFile(CUSTOMERS_FILE, filtered);
+  return true;
 }
 
 // ==========================================
@@ -870,7 +887,10 @@ async function runScraper() {
 
     // Save final combined lists to database
     if (finalProductsList.length > 0) {
-      await saveProducts(finalProductsList);
+      const saveOk = await saveProducts(finalProductsList);
+      if (!saveOk) {
+        throw new Error('Ürünler veritabanına kaydedilemedi.');
+      }
       crawlStatus.lastSync = new Date().toLocaleString('tr-TR');
       console.log(`[Scraper] Smart sync complete. Products: ${finalProductsList.length}`);
     } else {
