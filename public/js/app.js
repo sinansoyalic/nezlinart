@@ -128,6 +128,7 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   const pricing = calculateDetailedPricing(product);
   
   const costNode = document.getElementById(`cost-total-${code}`);
+  const kargoNode = document.getElementById(`kargo-total-${code}`);
   const profitRow = document.getElementById(`profit-row-${code}`);
   const profitNode = document.getElementById(`profit-total-${code}`);
   const digerVergiRow = document.getElementById(`diger-vergi-row-${code}`);
@@ -151,6 +152,7 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
   const hepsiburadaNode = document.getElementById(`hepsiburada-total-${code}`);
   
   if (costNode) costNode.textContent = `${pricing.cost.toFixed(2)} ₺`;
+  if (kargoNode) kargoNode.textContent = `+ ${pricing.kargo.toFixed(2)} ₺`;
   if (profitRow) {
     profitRow.style.display = pricing.karOrani > 0 ? 'flex' : 'none';
   }
@@ -219,7 +221,7 @@ function recalculateCardTotalAndSaveDisplay(product, cardNode) {
 
 // Pricing Option Fields Mapping (Match Backend & UI Names)
 const PRICING_OPTIONS = [
-  { id: 'kargo', label: 'Kargo', hasCustomInput: false },
+  { id: 'paketleme', label: 'Paketleme', hasCustomInput: false },
   { id: 'tips', label: 'Tips Şekillendirme', hasCustomInput: false },
   { id: 'base', label: 'Base', hasCustomInput: false },
   { id: 'top', label: 'Top', hasCustomInput: false },
@@ -512,7 +514,11 @@ function calculateProductTotal(product) {
   const userPricing = product.userPricing || { checkedOptions: {}, customPrices: {} };
 
   PRICING_OPTIONS.forEach(opt => {
-    const isChecked = userPricing.checkedOptions[opt.id] !== false;
+    let isChecked = userPricing.checkedOptions[opt.id] !== false;
+    // Backward compatibility: if paketleme is undefined, use existing kargo flag
+    if (opt.id === 'paketleme' && userPricing.checkedOptions['paketleme'] === undefined && userPricing.checkedOptions['kargo'] !== undefined) {
+      isChecked = userPricing.checkedOptions['kargo'] !== false;
+    }
     if (isChecked) {
       let price = state.config[opt.id] || 0;
       // Check if custom price override is specified
@@ -569,7 +575,9 @@ function roundPrice(price, type) {
 }
 
 function calculateDetailedPricing(product) {
-  const cost = calculateProductTotal(product); // Seçilen modüllerin maliyeti (Üretim Maliyeti)
+  const cost = calculateProductTotal(product); // Seçilen modüllerin maliyeti (Üretim Maliyeti - Paketleme dahil)
+  const kargo = state.config.kargo !== undefined ? parseFloat(state.config.kargo) : 120; // Kargo Bedeli (120 TL Default)
+  
   const karOrani = state.config.karOrani !== undefined ? parseFloat(state.config.karOrani) : 40;
   const profit = cost * (karOrani / 100);
   const netPrice = cost + profit;
@@ -578,16 +586,19 @@ function calculateDetailedPricing(product) {
   const kdvOrani = state.config.kdvOrani !== undefined ? parseFloat(state.config.kdvOrani) : 20;
   const digerVergiOrani = state.config.digerVergiOrani !== undefined ? parseFloat(state.config.digerVergiOrani) : 5;
 
-  const digerVergi = netPrice * (digerVergiOrani / 100);
-  const kdv = netPrice * (kdvOrani / 100);
+  // Ortak maliyet bazı: Üretim Maliyeti + Kargo + Net Kar
+  const subtotalWithKargo = netPrice + kargo;
 
-  // Ortak Baz Satış Fiyatı (Üretim + Net Kar + Diğer Vergiler + KDV)
-  const commonBasePrice = netPrice + digerVergi + kdv;
+  const digerVergi = subtotalWithKargo * (digerVergiOrani / 100);
+  const kdv = subtotalWithKargo * (kdvOrani / 100);
+
+  // Ortak Baz Satış Fiyatı (Üretim Maliyeti + Kargo + Net Kar + Diğer Vergiler + KDV)
+  const commonBasePrice = subtotalWithKargo + digerVergi + kdv;
   const yuvarlamaTipi = state.config.yuvarlamaTipi || 'no';
 
   // 1. WEB SİTESİ KANALI: İyzico sadece Web Sitesi satışlarında hesaplanır
   const iyzicoOrani = state.config.iyzicoOrani !== undefined ? parseFloat(state.config.iyzicoOrani) : 4.29;
-  const iyzico = netPrice * (iyzicoOrani / 100);
+  const iyzico = subtotalWithKargo * (iyzicoOrani / 100);
   const websiteRawTotal = commonBasePrice + iyzico;
   const roundedGrandTotal = roundPrice(websiteRawTotal, yuvarlamaTipi);
 
@@ -605,8 +616,10 @@ function calculateDetailedPricing(product) {
 
   return {
     cost,
+    kargo,
     profit,
     netPrice,
+    subtotalWithKargo,
     commonBasePrice,
     kdv,
     kdvOrani,
@@ -945,6 +958,10 @@ function createProductCard(product) {
       <span>Üretim Maliyeti</span>
       <span id="cost-total-${product.code}">${pricing.cost.toFixed(2)} ₺</span>
     </div>
+    <div id="kargo-row-${product.code}" style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+      <span>Kargo Bedeli</span>
+      <span id="kargo-total-${product.code}">+ ${pricing.kargo.toFixed(2)} ₺</span>
+    </div>
     <div id="profit-row-${product.code}" style="display: ${showProfitRow ? 'flex' : 'none'}; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
       <span>Net Kar (%${karOrani})</span>
       <span id="profit-total-${product.code}">+ ${pricing.profit.toFixed(2)} ₺</span>
@@ -1137,7 +1154,8 @@ function renderSoTSettingsForm() {
   form.innerHTML = '';
 
   const labelMapping = {
-    kargo: 'Kargo Gönderimi (Default)',
+    paketleme: 'Paketleme Malzemeleri (Default)',
+    kargo: 'Kargo Gönderim Bedeli (Default)',
     tips: 'Tips Şekillendirme',
     base: 'Base Coat',
     top: 'Top Coat',
@@ -1808,7 +1826,7 @@ window.openMismatchPopover = function(code) {
 // B. Excel/CSV Formatında Dışa Aktarma
 window.exportProductsToCSV = function() {
   const bom = "\uFEFF";
-  let csvContent = bom + "Ürün Kodu;Ürün Adı;Kategori;Normal Fiyat (Site);Satış Fiyatı (Site);Üretim Maliyeti;Net Kar;iyzico;Diğer Vergiler;KDV;Web Sitesi Fiyatı;Trendyol Fiyatı;Hepsiburada Fiyatı;Fiyat Farkı;Yapım Aşamaları\n";
+  let csvContent = bom + "Ürün Kodu;Ürün Adı;Kategori;Normal Fiyat (Site);Satış Fiyatı (Site);Üretim Maliyeti;Kargo;Net Kar;iyzico;Diğer Vergiler;KDV;Web Sitesi Fiyatı;Trendyol Fiyatı;Hepsiburada Fiyatı;Fiyat Farkı;Yapım Aşamaları\n";
   
   state.products.forEach(product => {
     const pricing = calculateDetailedPricing(product);
@@ -1817,7 +1835,7 @@ window.exportProductsToCSV = function() {
     const userPricing = product.userPricing || { notes: '' };
     const notesClean = (userPricing.notes || '').replace(/[\n\r;]/g, ' ');
     
-    csvContent += `"${product.code}";"${product.title.replace(/"/g, '""')}";"${(product.category || 'Genel').replace(/"/g, '""')}";${product.undiscountedPrice};${product.discountedPrice};${pricing.cost};${pricing.profit};${pricing.iyzico.toFixed(2)};${pricing.digerVergi.toFixed(2)};${pricing.kdv};${pricing.roundedGrandTotal};${pricing.trendyolPrice.toFixed(2)};${pricing.hepsiburadaPrice.toFixed(2)};${diff};"${notesClean}"\n`;
+    csvContent += `"${product.code}";"${product.title.replace(/"/g, '""')}";"${(product.category || 'Genel').replace(/"/g, '""')}";${product.undiscountedPrice};${product.discountedPrice};${pricing.cost};${pricing.kargo};${pricing.profit};${pricing.iyzico.toFixed(2)};${pricing.digerVergi.toFixed(2)};${pricing.kdv};${pricing.roundedGrandTotal};${pricing.trendyolPrice.toFixed(2)};${pricing.hepsiburadaPrice.toFixed(2)};${diff};"${notesClean}"\n`;
   });
   
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -2026,7 +2044,8 @@ window.loadAuditTrail = async function() {
     }
     
     const keyMap = {
-      kargo: 'Kargo Gönderimi',
+      paketleme: 'Paketleme Malzemeleri',
+      kargo: 'Kargo Gönderim Bedeli',
       tips: 'Tips Şekillendirme',
       base: 'Base Coat',
       top: 'Top Coat',
