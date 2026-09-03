@@ -879,7 +879,7 @@ function createProductCard(product) {
     optionsTable.appendChild(row);
   });
 
-  // Calculate & add Total Pricing Display Row with breakdown (Seçenek Maliyeti, Kar Marjı, KDV and Önerilen Genel Toplam)
+  // Calculate & add Total Pricing Display Row with breakdown (Üretim Maliyeti, Kar Marjı, KDV and Web Sitesi Fiyatı)
   const totalRow = document.createElement('div');
   totalRow.className = 'pricing-total-block';
   totalRow.style.flexDirection = 'column';
@@ -891,7 +891,7 @@ function createProductCard(product) {
   
   totalRow.innerHTML = `
     <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
-      <span>Seçenek Maliyeti</span>
+      <span>Üretim Maliyeti</span>
       <span id="cost-total-${product.code}">${pricing.cost.toFixed(2)} ₺</span>
     </div>
     <div id="profit-row-${product.code}" style="display: ${showProfitRow ? 'flex' : 'none'}; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
@@ -912,7 +912,7 @@ function createProductCard(product) {
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
       <div style="display: flex; align-items: center; gap: 8px;">
-        <span class="label" style="font-size: 13px; font-weight: 700; color: var(--text-main); margin-right: 4px;">ÖNERİLEN TOPLAM</span>
+        <span class="label" style="font-size: 13px; font-weight: 700; color: var(--text-main); margin-right: 4px;">WEB SİTESİ FİYATI</span>
         <div style="display: flex; align-items: center; gap: 6px;">
           <button type="button" id="mismatch-btn-${product.code}" class="card-action-btn btn-warning-price" title="Fiyat Uyuşmuyor! Analiz İçin Tıklayın" style="display: ${isMismatch ? 'inline-flex' : 'none'};" onclick="openMismatchPopover('${product.code}')">
             <i class="fa-solid fa-triangle-exclamation"></i>
@@ -1703,7 +1703,7 @@ window.openMismatchPopover = function(code) {
           <strong>${normalPrice.toFixed(2)} ₺</strong>
         </div>
         <div class="popover-row">
-          <span>Önerilen Toplam:</span>
+          <span>Web Sitesi Fiyatı:</span>
           <strong>${pricing.roundedGrandTotal.toFixed(2)} ₺</strong>
         </div>
         <div class="popover-divider"></div>
@@ -1725,7 +1725,7 @@ window.openMismatchPopover = function(code) {
 // B. Excel/CSV Formatında Dışa Aktarma
 window.exportProductsToCSV = function() {
   const bom = "\uFEFF";
-  let csvContent = bom + "Ürün Kodu;Ürün Adı;Kategori;Normal Fiyat (Site);Satış Fiyatı (Site);Seçenek Maliyeti;Net Kar;iyzico;Diğer Vergiler;KDV;Önerilen Genel Toplam;Trendyol Fiyatı;Fiyat Farkı;Yapım Aşamaları\n";
+  let csvContent = bom + "Ürün Kodu;Ürün Adı;Kategori;Normal Fiyat (Site);Satış Fiyatı (Site);Üretim Maliyeti;Net Kar;iyzico;Diğer Vergiler;KDV;Web Sitesi Fiyatı;Trendyol Fiyatı;Fiyat Farkı;Yapım Aşamaları\n";
   
   state.products.forEach(product => {
     const pricing = calculateDetailedPricing(product);
