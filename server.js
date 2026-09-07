@@ -590,20 +590,33 @@ function runGitPush(message = 'feat: sync products and system data to live') {
       return resolve({ skipped: true, reason: 'Sunucusuz (serverless) ortam' });
     }
     const safeMsg = (message || 'feat: automated live sync').replace(/"/g, '\\"');
-    const cmd = `git add -A && git commit -m "${safeMsg}" && git push origin main`;
+    const gitCmd = `git add -A && git commit -m "${safeMsg}" && git push origin main`;
     
-    exec(cmd, { cwd: __dirname }, (err, stdout, stderr) => {
-      if (err) {
-        const fullOut = (stdout || '') + (stderr || '');
-        if (fullOut.includes('nothing to commit') || fullOut.includes('working tree clean')) {
-          console.log('[Git Push] Çalışma dizini zaten temiz, yeni değişiklik yok.');
-          return resolve({ success: true, message: 'Değişiklik yok, depo zaten güncel.' });
-        }
+    exec(gitCmd, { cwd: __dirname }, (err, stdout, stderr) => {
+      const fullOut = (stdout || '') + (stderr || '');
+      if (err && !fullOut.includes('nothing to commit') && !fullOut.includes('working tree clean')) {
         console.error('[Git Push Hatası]:', stderr || err.message);
         return reject(new Error(stderr || err.message));
       }
-      console.log('[Git Push Başarılı]:', stdout);
-      resolve({ success: true, stdout });
+      console.log('[Git Push Başarılı]:', stdout || 'Depo güncel.');
+
+      // Netlify Deploy (CLI)
+      const token = process.env.NETLIFY_AUTH_TOKEN;
+      const siteId = process.env.NETLIFY_SITE_ID || '88864fc5-dcc5-4691-9d5b-84ea213b8c20';
+      if (token) {
+        console.log('[Netlify Deploy] Canlı ortama deploy başlatılıyor...');
+        const deployCmd = `npx netlify-cli deploy --prod --site ${siteId} --dir public --functions netlify/functions --auth ${token}`;
+        exec(deployCmd, { cwd: __dirname }, (depErr, depOut, depStderr) => {
+          if (depErr) {
+            console.error('[Netlify Deploy Hatası]:', depStderr || depErr.message);
+            return reject(new Error('Git başarılı fakat Netlify deploy hatası: ' + (depStderr || depErr.message)));
+          }
+          console.log('[Netlify Deploy Başarılı]');
+          resolve({ success: true, stdout, netlify: true });
+        });
+      } else {
+        resolve({ success: true, stdout, netlify: false });
+      }
     });
   });
 }
