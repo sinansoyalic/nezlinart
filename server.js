@@ -29,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Database File Paths
 const CONFIG_FILE = path.join(__dirname, 'config.json');
 const PRODUCTS_FILE = path.join(__dirname, 'products.json');
+const PUBLIC_PRODUCTS_FILE = path.join(__dirname, 'public', 'products.json');
 const USER_DATA_FILE = path.join(__dirname, 'user_data.json');
 const CUSTOMERS_FILE = path.join(__dirname, 'customers.json');
 const AUDIT_TRAIL_FILE = path.join(__dirname, 'audit_trail.jsonl');
@@ -231,21 +232,32 @@ async function getProducts() {
 
 // 4. Save Products
 async function saveProducts(products) {
-  // Always keep local JSON file synchronized
+  // Always keep local JSON files synchronized
   writeJsonFile(PRODUCTS_FILE, products);
+  writeJsonFile(PUBLIC_PRODUCTS_FILE, products);
 
   if (isCloudMode) {
     try {
       if (products.length === 0) return true;
-      const cleanedProducts = products.map(p => {
-        const { stock, inStock, ...rest } = p;
-        return {
-          ...rest,
-          created_at: p.created_at || new Date().toISOString()
-        };
-      });
-      const { error } = await supabase.from('nfs_products').upsert(cleanedProducts);
-      if (error) throw error;
+      const cleanedProducts = products.map(p => ({
+        url: p.url,
+        title: p.title,
+        code: p.code,
+        category: p.category || 'Genel',
+        undiscountedPrice: Number(p.undiscountedPrice) || 0,
+        discountedPrice: Number(p.discountedPrice) || 0,
+        imageUrl: p.imageUrl || '',
+        lastmod: p.lastmod || '',
+        created_at: p.created_at || new Date().toISOString()
+      }));
+
+      // Upsert in batches of 50
+      const CHUNK_SIZE = 50;
+      for (let i = 0; i < cleanedProducts.length; i += CHUNK_SIZE) {
+        const chunk = cleanedProducts.slice(i, i + CHUNK_SIZE);
+        const { error } = await supabase.from('nfs_products').upsert(chunk);
+        if (error) throw error;
+      }
       return true;
     } catch (err) {
       console.error('[Supabase Error] Failed to save nfs_products:', err);
@@ -910,12 +922,26 @@ async function runScraper() {
             }
           }
 
-          // 6. First Image URL (using og:image)
+          // 6. Image extraction (og:image + productImages model)
           let imageUrl = '';
           const imageMatch = html.match(/<meta\s+property=["']og:image["']\s+itemprop=["']image["']\s+content=["']([^"']+)["']/i) ||
                              html.match(/<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i);
           if (imageMatch) {
             imageUrl = imageMatch[1];
+          }
+
+          const secondaryImages = [];
+          if (model && Array.isArray(model.productImages)) {
+            model.productImages.forEach(img => {
+              const u = img.bigImagePath || img.imagePath;
+              if (u && !secondaryImages.includes(u)) secondaryImages.push(u);
+            });
+          }
+          if (imageUrl && !secondaryImages.includes(imageUrl)) {
+            secondaryImages.unshift(imageUrl);
+          }
+          if (!imageUrl && secondaryImages.length > 0) {
+            imageUrl = secondaryImages[0];
           }
 
           // HTML Entity Decoding for Title and Category
@@ -939,6 +965,7 @@ async function runScraper() {
             undiscountedPrice,
             discountedPrice,
             imageUrl,
+            images: secondaryImages,
             url,
             stock,
             inStock,
